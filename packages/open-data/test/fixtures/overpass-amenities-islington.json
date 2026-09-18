@@ -1,0 +1,446 @@
+{
+  "recordedAt": "2026-09-18T03:17:54.712Z",
+  "request": {
+    "method": "POST",
+    "url": "https://overpass-api.de/api/interpreter",
+    "form": {
+      "data": "[out:json][timeout:25];\n(\n  nwr[\"amenity\"=\"school\"](around:250,51.5385,-0.1025);\n  nwr[\"shop\"=\"supermarket\"](around:250,51.5385,-0.1025);\n  nwr[\"amenity\"~\"^(doctors|hospital|pharmacy|clinic)$\"](around:250,51.5385,-0.1025);\n  nwr[\"leisure\"=\"park\"](around:250,51.5385,-0.1025);\n  node[\"highway\"=\"bus_stop\"](around:250,51.5385,-0.1025);\n  nwr[\"railway\"~\"^(station|halt|tram_stop)$\"](around:250,51.5385,-0.1025);\n  node[\"public_transport\"~\"^(stop_position|platform)$\"](around:250,51.5385,-0.1025);\n);\nout center tags;"
+    }
+  },
+  "response": {
+    "version": 0.6,
+    "generator": "Overpass API 0.7.62.11 87bfad18",
+    "osm3s": {
+      "timestamp_osm_base": "2026-09-18T03:16:49Z",
+      "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+    },
+    "elements": [
+      {
+        "type": "node",
+        "id": 108926,
+        "lat": 51.5384334,
+        "lon": -0.102328,
+        "tags": {
+          "bus": "yes",
+          "local_ref": "N",
+          "name": "St Mary's Church",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "node",
+        "id": 299443505,
+        "lat": 51.5378737,
+        "lon": -0.0994848,
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "64",
+          "addr:postcode": "N1 8LR",
+          "addr:street": "Essex Road",
+          "brand": "Planet Organic",
+          "brand:wikidata": "Q24298870",
+          "brand:wikipedia": "en:Planet Organic",
+          "check_date": "2026-07-24",
+          "fhrs:id": "416733",
+          "name": "Planet Organic",
+          "opening_hours": "Mo-Sa 08:00-19:00; Su 09:00-19:00",
+          "organic": "only",
+          "shop": "supermarket",
+          "source:addr": "FHRS Open Data",
+          "website": "https://www.planetorganic.com/pages/islington"
+        }
+      },
+      {
+        "type": "node",
+        "id": 299610629,
+        "lat": 51.5372774,
+        "lon": -0.1008878,
+        "tags": {
+          "amenity": "pharmacy",
+          "check_date": "2023-07-28",
+          "dispensing": "yes",
+          "healthcare": "pharmacy",
+          "name": "Essex Chemist & Opticians",
+          "shop": "optician"
+        }
+      },
+      {
+        "type": "node",
+        "id": 331534998,
+        "lat": 51.5401675,
+        "lon": -0.1027719,
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "150",
+          "addr:postcode": "N1 1RA",
+          "addr:street": "Upper Street",
+          "addr:suburb": "Islington",
+          "amenity": "pharmacy",
+          "fhrs:id": "417128",
+          "healthcare": "pharmacy",
+          "name": "Clan Pharmacy",
+          "source:addr": "FHRS Open Data",
+          "wheelchair": "no"
+        }
+      },
+      {
+        "type": "node",
+        "id": 469768811,
+        "lat": 51.5382532,
+        "lon": -0.0994054,
+        "tags": {
+          "bus": "yes",
+          "local_ref": "E",
+          "name": "Cross Street",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "node",
+        "id": 469773296,
+        "lat": 51.5391371,
+        "lon": -0.102449,
+        "tags": {
+          "bench": "yes",
+          "bin": "yes",
+          "bus": "yes",
+          "highway": "bus_stop",
+          "lit": "yes",
+          "local_ref": "P",
+          "name": "St Mary's Church",
+          "naptan:AtcoCode": "490008514N2",
+          "naptan:Bearing": "N",
+          "naptan:CommonName": "Islington St. Marys Church",
+          "naptan:Indicator": "Stop P",
+          "naptan:Street": "UPPER STREET",
+          "naptan:verified": "no",
+          "public_transport": "platform",
+          "ref": "53813",
+          "shelter": "yes",
+          "tactile_paving": "no",
+          "wheelchair": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 469773297,
+        "lat": 51.5384266,
+        "lon": -0.1022422,
+        "tags": {
+          "bench": "yes",
+          "bin": "yes",
+          "bus": "yes",
+          "highway": "bus_stop",
+          "lit": "yes",
+          "local_ref": "N",
+          "name": "St Mary's Church",
+          "naptan:AtcoCode": "490008514S1",
+          "naptan:Bearing": "S",
+          "naptan:CommonName": "Islington St. Marys Church",
+          "naptan:Indicator": "Stop N",
+          "naptan:Street": "UPPER STREET",
+          "naptan:verified": "no",
+          "public_transport": "platform",
+          "ref": "71024",
+          "shelter": "yes",
+          "tactile_paving": "no",
+          "wheelchair": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 469776764,
+        "lat": 51.5368655,
+        "lon": -0.1011403,
+        "tags": {
+          "bus": "yes",
+          "local_ref": "A",
+          "name": "Packington Street",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "node",
+        "id": 469788179,
+        "lat": 51.5370106,
+        "lon": -0.1033099,
+        "tags": {
+          "bench": "yes",
+          "bin": "no",
+          "bus": "yes",
+          "highway": "bus_stop",
+          "lit": "yes",
+          "local_ref": "Z",
+          "name": "Theberton Street",
+          "naptan:AtcoCode": "490013261Z",
+          "naptan:Bearing": "N",
+          "naptan:CommonName": "Theberton Street",
+          "naptan:Indicator": "Z",
+          "naptan:Street": "UPPER STREET",
+          "naptan:verified": "no",
+          "public_transport": "platform",
+          "ref": "71076",
+          "shelter": "yes",
+          "tactile_paving": "no",
+          "wheelchair": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 469789955,
+        "lat": 51.5390131,
+        "lon": -0.1006861,
+        "tags": {
+          "bus": "yes",
+          "highway": "bus_stop",
+          "name": "Hail & Ride Cross Street",
+          "naptan:AtcoCode": "490018483W",
+          "naptan:Bearing": "W",
+          "naptan:CommonName": "Cross Street Dagmar Terrace",
+          "naptan:verified": "no",
+          "physically_present": "no",
+          "public_transport": "platform"
+        }
+      },
+      {
+        "type": "node",
+        "id": 469789958,
+        "lat": 51.5375806,
+        "lon": -0.1046992,
+        "tags": {
+          "bus": "yes",
+          "highway": "bus_stop",
+          "name": "Hail & Ride Theberton Street",
+          "naptan:AtcoCode": "490018485E",
+          "naptan:Bearing": "E",
+          "naptan:CommonName": "Theberton Street Gibson Sq",
+          "naptan:verified": "no",
+          "physically_present": "no",
+          "public_transport": "platform"
+        }
+      },
+      {
+        "type": "node",
+        "id": 2080775080,
+        "lat": 51.5369874,
+        "lon": -0.1032185,
+        "tags": {
+          "bus": "yes",
+          "local_ref": "Z",
+          "name": "Theberton Street",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "node",
+        "id": 2653756592,
+        "lat": 51.5376305,
+        "lon": -0.1001681,
+        "tags": {
+          "bus": "yes",
+          "local_ref": "K",
+          "name": "Packington Street",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "node",
+        "id": 3017058652,
+        "lat": 51.539143,
+        "lon": -0.1023621,
+        "tags": {
+          "bus": "yes",
+          "local_ref": "P",
+          "name": "St Mary's Church",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "node",
+        "id": 5796480528,
+        "lat": 51.5381984,
+        "lon": -0.0993517,
+        "tags": {
+          "bench": "yes",
+          "bin": "no",
+          "bus": "yes",
+          "check_date:shelter": "2024-09-12",
+          "highway": "bus_stop",
+          "lit": "yes",
+          "local_ref": "E",
+          "name": "Cross Street",
+          "naptan:AtcoCode": "490005816N1",
+          "naptan:Bearing": "N",
+          "naptan:CommonName": "Cross Street",
+          "naptan:Street": "ESSEX ROAD",
+          "public_transport": "platform",
+          "ref": "75045",
+          "shelter": "yes",
+          "tactile_paving": "no",
+          "wheelchair": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 5810383412,
+        "lat": 51.5368321,
+        "lon": -0.1010947,
+        "tags": {
+          "bench": "yes",
+          "bin": "yes",
+          "bus": "yes",
+          "check_date:shelter": "2024-09-12",
+          "highway": "bus_stop",
+          "local_ref": "A",
+          "name": "Packington Street",
+          "naptan:AtcoCode": "490010709S",
+          "naptan:Bearing": "S",
+          "naptan:CommonName": "Packington Street",
+          "naptan:Street": "ESSEX ROAD",
+          "public_transport": "platform",
+          "ref": "56306",
+          "shelter": "yes",
+          "wheelchair": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 5810383413,
+        "lat": 51.5376571,
+        "lon": -0.1002471,
+        "tags": {
+          "bench": "yes",
+          "bin": "no",
+          "bus": "yes",
+          "check_date:shelter": "2024-09-12",
+          "highway": "bus_stop",
+          "lit": "yes",
+          "local_ref": "K",
+          "name": "Packington Street",
+          "naptan:AtcoCode": "490010709N",
+          "naptan:Bearing": "N",
+          "naptan:CommonName": "Packington Street",
+          "naptan:Street": "ESSEX ROAD",
+          "public_transport": "platform",
+          "ref": "57779",
+          "shelter": "yes",
+          "tactile_paving": "no",
+          "wheelchair": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 8819117409,
+        "lat": 51.5387125,
+        "lon": -0.1040028,
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "6",
+          "addr:street": "Esther Anne Place",
+          "name": "The Boutique Grocer",
+          "shop": "supermarket",
+          "website": "https://boutiquegrocer.co.uk"
+        }
+      },
+      {
+        "type": "way",
+        "id": 4969113,
+        "center": {
+          "lat": 51.5361506,
+          "lon": -0.1030725
+        },
+        "tags": {
+          "barrier": "fence",
+          "fence_type": "metal",
+          "leisure": "park",
+          "name": "Islington Green",
+          "wikidata": "Q6084376",
+          "wikipedia": "en:Islington Green"
+        }
+      },
+      {
+        "type": "way",
+        "id": 24546137,
+        "center": {
+          "lat": 51.5382962,
+          "lon": -0.1013962
+        },
+        "tags": {
+          "leisure": "park"
+        }
+      },
+      {
+        "type": "way",
+        "id": 27547874,
+        "center": {
+          "lat": 51.539887,
+          "lon": -0.1052991
+        },
+        "tags": {
+          "leisure": "park"
+        }
+      },
+      {
+        "type": "way",
+        "id": 27548053,
+        "center": {
+          "lat": 51.5381235,
+          "lon": -0.1056423
+        },
+        "tags": {
+          "leisure": "park",
+          "name": "Gibson Square",
+          "wikidata": "Q66311068"
+        }
+      },
+      {
+        "type": "way",
+        "id": 30495988,
+        "center": {
+          "lat": 51.5371283,
+          "lon": -0.10217
+        },
+        "tags": {
+          "created_by": "Merkaartor 0.12",
+          "leisure": "park",
+          "name": "Andersons Square"
+        }
+      },
+      {
+        "type": "way",
+        "id": 42998927,
+        "center": {
+          "lat": 51.5395676,
+          "lon": -0.1002699
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:postcode": "N1 2EP",
+          "addr:street": "Fowler Road",
+          "addr:suburb": "Islington",
+          "alt_name": "St Mary's CE School",
+          "amenity": "school",
+          "capacity": "210",
+          "check_date": "2026-06-29",
+          "denomination": "anglican",
+          "diocese": "Diocese of London",
+          "education": "school",
+          "isced:level": "0;1",
+          "max_age": "11",
+          "min_age": "4",
+          "name": "St Mary's Church of England Primary School",
+          "phone": "+44 20 7359 1870",
+          "ref:GB:ukprn": "10074734",
+          "ref:GB:uprn": "5300034261",
+          "ref:edubase": "100446",
+          "religion": "christian",
+          "school": "primary",
+          "school:type": "voluntary_aided",
+          "website": "https://www.stmarys.islington.sch.uk/",
+          "wikidata": "Q67147503"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+/*
+ * Theme tokens the app owns. `--breakpoint-panel` is the width at which the Bottom Sheet becomes
+ * a side panel (ADR-0006, Android "expanded"); component styles reference it with
+ * `--theme(--breakpoint-panel)` so the number lives here only. Text uses Tailwind's system font
+ * stack: a web font costs the largest-contentful-paint budget (see `versions.md`, Deviations).
+ */
+@theme {
+  --breakpoint-panel: 840px;
+}

@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-09-18T03:18:12.205Z",
+  "request": {
+    "method": "GET",
+    "url": "https://landregistry.data.gov.uk/data/ppi/transaction-record.json?propertyAddress.postcode=N1+0YW&_pageSize=100&_sort=-transactionDate"
+  },
+  "response": {
+    "format": "linked-data-api",
+    "version": "0.2",
+    "result": {
+      "_about": "https://landregistry.data.gov.uk/data/ppi/transaction-record.json?_pageSize=100&propertyAddress.postcode=N1+0YW&_sort=-transactionDate",
+      "definition": "https://landregistry.data.gov.uk/meta/data/ppi/transaction-record.json?propertyAddress.postcode=N1+0YW&_sort=-transactionDate",
+      "extendedMetadataVersion": "https://landregistry.data.gov.uk/data/ppi/transaction-record.json?_pageSize=100&propertyAddress.postcode=N1+0YW&_metadata=all&_sort=-transactionDate",
+      "first": "https://landregistry.data.gov.uk/data/ppi/transaction-record.json?_pageSize=100&_page=0&propertyAddress.postcode=N1+0YW&_sort=-transactionDate",
+      "isPartOf": {
+        "_about": "https://landregistry.data.gov.uk/data/ppi/transaction-record.json?propertyAddress.postcode=N1+0YW&_sort=-transactionDate",
+        "definition": "https://landregistry.data.gov.uk/meta/data/ppi/transaction-record.json?propertyAddress.postcode=N1+0YW&_sort=-transactionDate",
+        "hasPart": "https://landregistry.data.gov.uk/data/ppi/transaction-record.json?_pageSize=100&propertyAddress.postcode=N1+0YW&_sort=-transactionDate",
+        "type": ["http://purl.org/linked-data/api/vocab#ListEndpoint"]
+      },
+      "items": [],
+      "itemsPerPage": 100,
+      "page": 0,
+      "startIndex": 1,
+      "type": ["http://purl.org/linked-data/api/vocab#Page"]
+    }
+  }
+}

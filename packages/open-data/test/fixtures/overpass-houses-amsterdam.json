@@ -1,0 +1,1805 @@
+{
+  "recordedAt": "2026-09-18T03:17:37.549Z",
+  "request": {
+    "method": "POST",
+    "url": "https://overpass-api.de/api/interpreter",
+    "form": {
+      "data": "[out:json][timeout:25];\nnwr[\"building\"~\"^(house|detached|semidetached_house|terrace|apartments|residential|bungalow)$\"](around:250,52.3676,4.9041);\nout center tags 301;"
+    }
+  },
+  "response": {
+    "version": 0.6,
+    "generator": "Overpass API 0.7.62.11 87bfad18",
+    "osm3s": {
+      "timestamp_osm_base": "2026-09-18T03:15:51Z",
+      "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+    },
+    "elements": [
+      {
+        "type": "way",
+        "id": 268782316,
+        "center": {
+          "lat": 52.3684652,
+          "lon": 4.9026885
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "6",
+          "height": "20.1",
+          "ref:bag": "0363100012171990",
+          "roof:levels": "1",
+          "roof:shape": "double_saltbox",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "2005"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782332,
+        "center": {
+          "lat": 52.3691261,
+          "lon": 4.9050174
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "4",
+          "height": "16.3",
+          "ref:bag": "0363100012181884",
+          "roof:levels": "1",
+          "roof:shape": "double_saltbox",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782336,
+        "center": {
+          "lat": 52.3668689,
+          "lon": 4.9022922
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "4",
+          "colour": "brown",
+          "ref:bag": "0363100012182359",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "start_date": "1929"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782343,
+        "center": {
+          "lat": 52.3691329,
+          "lon": 4.9017226
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.8",
+          "ref:bag": "0363100012182905",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1983"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782347,
+        "center": {
+          "lat": 52.3691682,
+          "lon": 4.901565
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.3",
+          "ref:bag": "0363100012182904",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "2001"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782353,
+        "center": {
+          "lat": 52.3695894,
+          "lon": 4.9032139
+        },
+        "tags": {
+          "building": "house",
+          "height": "6.9",
+          "ref:bag": "0363100012182525",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1805"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782363,
+        "center": {
+          "lat": 52.3691063,
+          "lon": 4.9047609
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "3",
+          "height": "17.6",
+          "ref:bag": "0363100012165559",
+          "roof:levels": "1",
+          "roof:shape": "gambrel",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782377,
+        "center": {
+          "lat": 52.3688375,
+          "lon": 4.9067277
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.6",
+          "ref:bag": "0363100012182647",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1998"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782381,
+        "center": {
+          "lat": 52.3686812,
+          "lon": 4.9023961
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "6",
+          "height": "23.8",
+          "ref:bag": "0363100012171991",
+          "roof:levels": "0",
+          "roof:shape": "flat",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1966"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782424,
+        "center": {
+          "lat": 52.3669623,
+          "lon": 4.9023668
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.3",
+          "ref:bag": "0363100012182356",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1777"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782440,
+        "center": {
+          "lat": 52.3684732,
+          "lon": 4.9025026
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "6",
+          "height": "20.2",
+          "ref:bag": "0363100012182515",
+          "roof:levels": "1",
+          "roof:shape": "double_saltbox",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "2002"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782453,
+        "center": {
+          "lat": 52.3671888,
+          "lon": 4.9027967
+        },
+        "tags": {
+          "building": "apartments",
+          "ref:bag": "0363100012182512",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "start_date": "1985"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782479,
+        "center": {
+          "lat": 52.3691264,
+          "lon": 4.9064153
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "19",
+          "ref:bag": "0363100012170370",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1998"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782486,
+        "center": {
+          "lat": 52.3688939,
+          "lon": 4.9017734
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "9",
+          "height": "30.3",
+          "name": "Gran Vista",
+          "ref:bag": "0363100012165554",
+          "roof:levels": "1",
+          "roof:shape": "flat",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1984",
+          "wikidata": "Q55076466",
+          "wikimedia_commons": "Category:Gran Vista, Amsterdam",
+          "wikipedia": "nl:Gran Vista"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782487,
+        "center": {
+          "lat": 52.3693488,
+          "lon": 4.9053634
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "24.6",
+          "ref:bag": "0363100012170313",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "2007"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782501,
+        "center": {
+          "lat": 52.3691896,
+          "lon": 4.905209
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.3",
+          "ref:bag": "0363100012181885",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782513,
+        "center": {
+          "lat": 52.3686812,
+          "lon": 4.9028027
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "21.8",
+          "ref:bag": "0363100012182518",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "2002"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782516,
+        "center": {
+          "lat": 52.3694467,
+          "lon": 4.9050319
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "5",
+          "ref:bag": "0363100012170314",
+          "roof:levels": "0",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "start_date": "2006"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782523,
+        "center": {
+          "lat": 52.3684758,
+          "lon": 4.9028968
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.9",
+          "ref:bag": "0363100012182516",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1820"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782543,
+        "center": {
+          "lat": 52.3692076,
+          "lon": 4.9052636
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.3",
+          "ref:bag": "0363100012181886",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782578,
+        "center": {
+          "lat": 52.3691587,
+          "lon": 4.9051361
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.2",
+          "ref:bag": "0363100012181887",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783251,
+        "center": {
+          "lat": 52.3668895,
+          "lon": 4.9029662
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "14.4",
+          "ref:bag": "0363100012182451",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1984"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783252,
+        "center": {
+          "lat": 52.3665459,
+          "lon": 4.9029973
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "22.6",
+          "ref:bag": "0363100012171832",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1725"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783253,
+        "center": {
+          "lat": 52.3674221,
+          "lon": 4.9060412
+        },
+        "tags": {
+          "building": "house",
+          "height": "14.7",
+          "ref:bag": "0363100012181866",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1839"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783258,
+        "center": {
+          "lat": 52.3663802,
+          "lon": 4.9024639
+        },
+        "tags": {
+          "building": "apartments",
+          "ref:bag": "0363100012182350",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "start_date": "1968"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783260,
+        "center": {
+          "lat": 52.3665072,
+          "lon": 4.9033264
+        },
+        "tags": {
+          "building": "house",
+          "height": "18",
+          "ref:bag": "0363100012181764",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783266,
+        "center": {
+          "lat": 52.3672059,
+          "lon": 4.9062256
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.4",
+          "ref:bag": "0363100012181869",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1938"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783268,
+        "center": {
+          "lat": 52.3662059,
+          "lon": 4.9020139
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.6",
+          "ref:bag": "0363100012171828",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1792"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783270,
+        "center": {
+          "lat": 52.3668064,
+          "lon": 4.9035421
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "11.6",
+          "ref:bag": "0363100012171840",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1984"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783271,
+        "center": {
+          "lat": 52.3671485,
+          "lon": 4.9060116
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "5",
+          "ref:bag": "0363100012181878",
+          "roof:levels": "1",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "start_date": "1790"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783272,
+        "center": {
+          "lat": 52.3667545,
+          "lon": 4.9026664
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "14.4",
+          "ref:bag": "0363100012171834",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1990"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783273,
+        "center": {
+          "lat": 52.3667067,
+          "lon": 4.9042683
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.8",
+          "ref:bag": "0363100012165558",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1984"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783279,
+        "center": {
+          "lat": 52.3668363,
+          "lon": 4.9039212
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "12.9",
+          "ref:bag": "0363100012182039",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1984"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783280,
+        "center": {
+          "lat": 52.3669622,
+          "lon": 4.9031505
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "14.4",
+          "ref:bag": "0363100012182354",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1984"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783283,
+        "center": {
+          "lat": 52.3671375,
+          "lon": 4.9061489
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "12.2",
+          "ref:bag": "0363100012181868",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783284,
+        "center": {
+          "lat": 52.367102,
+          "lon": 4.9034273
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.5",
+          "ref:bag": "0363100012171839",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1984"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783285,
+        "center": {
+          "lat": 52.3672909,
+          "lon": 4.9057073
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.6",
+          "ref:bag": "0363100012181881",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1795"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783286,
+        "center": {
+          "lat": 52.3662953,
+          "lon": 4.9020189
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.4",
+          "ref:bag": "0363100012171694",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1765"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783287,
+        "center": {
+          "lat": 52.366847,
+          "lon": 4.9041914
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.7",
+          "ref:bag": "0363100012182040",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1984"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783293,
+        "center": {
+          "lat": 52.3687446,
+          "lon": 4.9074263
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "18.9",
+          "ref:bag": "0363100012182646",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1862"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783294,
+        "center": {
+          "lat": 52.3664819,
+          "lon": 4.9024732
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.5",
+          "ref:bag": "0363100012182351",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1820"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783295,
+        "center": {
+          "lat": 52.3675541,
+          "lon": 4.9057636
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.4",
+          "ref:bag": "0363100012181865",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1938"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783297,
+        "center": {
+          "lat": 52.3682101,
+          "lon": 4.9063664
+        },
+        "tags": {
+          "addr:city": "Amsterdam",
+          "building": "apartments",
+          "height": "15.4",
+          "ref:bag": "0363100012170264",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783298,
+        "center": {
+          "lat": 52.3681185,
+          "lon": 4.9074532
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "23.7",
+          "ref:bag": "0363100012182643",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1697"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783299,
+        "center": {
+          "lat": 52.3663992,
+          "lon": 4.9019876
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15",
+          "ref:bag": "0363100012171695",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1847"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783300,
+        "center": {
+          "lat": 52.3683494,
+          "lon": 4.907639
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "20.7",
+          "ref:bag": "0363100012170554",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1981"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783304,
+        "center": {
+          "lat": 52.3673229,
+          "lon": 4.9055729
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.6",
+          "ref:bag": "0363100012181880",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1940"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783314,
+        "center": {
+          "lat": 52.3679398,
+          "lon": 4.9073368
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "18.1",
+          "ref:bag": "0363100012182642",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1865"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783318,
+        "center": {
+          "lat": 52.3664243,
+          "lon": 4.902946
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.3",
+          "ref:bag": "0363100012182347",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1763"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783320,
+        "center": {
+          "lat": 52.3662368,
+          "lon": 4.9019163
+        },
+        "tags": {
+          "building": "house",
+          "height": "15.2",
+          "ref:bag": "0363100012171690",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1820"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783324,
+        "center": {
+          "lat": 52.3664932,
+          "lon": 4.9036199
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "14.8",
+          "ref:bag": "0363100012181979",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783336,
+        "center": {
+          "lat": 52.3672942,
+          "lon": 4.9064305
+        },
+        "tags": {
+          "building": "house",
+          "height": "13.8",
+          "ref:bag": "0363100012182569",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1857"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783337,
+        "center": {
+          "lat": 52.3663704,
+          "lon": 4.9027006
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "19.9",
+          "ref:bag": "0363100012182344",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1802"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783343,
+        "center": {
+          "lat": 52.3662256,
+          "lon": 4.9020908
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.6",
+          "ref:bag": "0363100012182267",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1859"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783344,
+        "center": {
+          "lat": 52.3666767,
+          "lon": 4.9023812
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.7",
+          "ref:bag": "0363100012181763",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1734"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783346,
+        "center": {
+          "lat": 52.3663217,
+          "lon": 4.9019391
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "12.8",
+          "ref:bag": "0363100012171691",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1830"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783350,
+        "center": {
+          "lat": 52.3676274,
+          "lon": 4.9056349
+        },
+        "tags": {
+          "building": "house",
+          "height": "8.1",
+          "ref:bag": "0363100012170254",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1938"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783353,
+        "center": {
+          "lat": 52.3683809,
+          "lon": 4.9064253
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.3",
+          "ref:bag": "0363100012170262",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783356,
+        "center": {
+          "lat": 52.3666053,
+          "lon": 4.9043461
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.1",
+          "ref:bag": "0363100012182036",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783361,
+        "center": {
+          "lat": 52.36644,
+          "lon": 4.9027516
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.5",
+          "ref:bag": "0363100012182345",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1955"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783365,
+        "center": {
+          "lat": 52.3674968,
+          "lon": 4.9058452
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.8",
+          "ref:bag": "0363100012181864",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1815"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783369,
+        "center": {
+          "lat": 52.3664149,
+          "lon": 4.9018951
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "20",
+          "ref:bag": "0363100012171693",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1830"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783370,
+        "center": {
+          "lat": 52.3674592,
+          "lon": 4.9059611
+        },
+        "tags": {
+          "building": "house",
+          "height": "15.4",
+          "ref:bag": "0363100012181863",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1803"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783373,
+        "center": {
+          "lat": 52.366236,
+          "lon": 4.9021678
+        },
+        "tags": {
+          "building": "house",
+          "height": "18.7",
+          "ref:bag": "0363100012182268",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1685"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783375,
+        "center": {
+          "lat": 52.3672364,
+          "lon": 4.9062674
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "18.3",
+          "ref:bag": "0363100012164941",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1772"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783378,
+        "center": {
+          "lat": 52.3671917,
+          "lon": 4.9058928
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "6",
+          "ref:bag": "0363100012181876",
+          "roof:levels": "1",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "start_date": "1984"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783381,
+        "center": {
+          "lat": 52.3673788,
+          "lon": 4.9063382
+        },
+        "tags": {
+          "building": "house",
+          "ref:bag": "0363100012170256",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "start_date": "1843"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783383,
+        "center": {
+          "lat": 52.3678464,
+          "lon": 4.9070341
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.7",
+          "ref:bag": "0363100012182573",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1625"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783384,
+        "center": {
+          "lat": 52.3676228,
+          "lon": 4.9048205
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "7.3",
+          "ref:bag": "0363100012170253",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1997",
+          "wikidata": "Q17297814"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783386,
+        "center": {
+          "lat": 52.3672484,
+          "lon": 4.905776
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.8",
+          "ref:bag": "0363100012181875",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1841"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783387,
+        "center": {
+          "lat": 52.3666007,
+          "lon": 4.9021979
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.2",
+          "ref:bag": "0363100012182270",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1791"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783389,
+        "center": {
+          "lat": 52.3672391,
+          "lon": 4.9058494
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "19.3",
+          "ref:bag": "0363100012181874",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1939"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783390,
+        "center": {
+          "lat": 52.3671966,
+          "lon": 4.9059684
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "5",
+          "height": "14.2",
+          "ref:bag": "0363100012181877",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1809"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783391,
+        "center": {
+          "lat": 52.3684723,
+          "lon": 4.9068733
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "18.6",
+          "ref:bag": "0363100012170263",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1934"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783393,
+        "center": {
+          "lat": 52.3672662,
+          "lon": 4.9063564
+        },
+        "tags": {
+          "building": "house",
+          "height": "12.9",
+          "ref:bag": "0363100012170261",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1820"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783394,
+        "center": {
+          "lat": 52.3664809,
+          "lon": 4.9018366
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.9",
+          "ref:bag": "0363100012182898",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1767"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783400,
+        "center": {
+          "lat": 52.3664498,
+          "lon": 4.9032536
+        },
+        "tags": {
+          "building": "house",
+          "height": "18.3",
+          "ref:bag": "0363100012181765",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1756"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783401,
+        "center": {
+          "lat": 52.3670866,
+          "lon": 4.906086
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.3",
+          "ref:bag": "0363100012181870",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1775"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783404,
+        "center": {
+          "lat": 52.3664505,
+          "lon": 4.9018739
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "20.4",
+          "ref:bag": "0363100012171689",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1829"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783408,
+        "center": {
+          "lat": 52.3668278,
+          "lon": 4.9028576
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.3",
+          "ref:bag": "0363100012171836",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1956"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783409,
+        "center": {
+          "lat": 52.366681,
+          "lon": 4.9024719
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "18.3",
+          "ref:bag": "0363100012171830",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783412,
+        "center": {
+          "lat": 52.3669034,
+          "lon": 4.9033337
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "14.4",
+          "ref:bag": "0363100012171835",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1984"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783418,
+        "center": {
+          "lat": 52.3674118,
+          "lon": 4.9061371
+        },
+        "tags": {
+          "building": "house",
+          "height": "12.5",
+          "ref:bag": "0363100012181872",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1683"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783420,
+        "center": {
+          "lat": 52.3684355,
+          "lon": 4.9065981
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.8",
+          "ref:bag": "0363100012182644",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1981"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783425,
+        "center": {
+          "lat": 52.3665075,
+          "lon": 4.9035374
+        },
+        "tags": {
+          "building": "house",
+          "height": "16.1",
+          "ref:bag": "0363100012181978",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1728"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783430,
+        "center": {
+          "lat": 52.3663015,
+          "lon": 4.9024142
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "14.2",
+          "ref:bag": "0363100012182348",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1952"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783431,
+        "center": {
+          "lat": 52.3677634,
+          "lon": 4.9070035
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.8",
+          "ref:bag": "0363100012182572",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1815"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783436,
+        "center": {
+          "lat": 52.3663148,
+          "lon": 4.9024855
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.8",
+          "ref:bag": "0363100012182349",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1773"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783437,
+        "center": {
+          "lat": 52.3664991,
+          "lon": 4.9033931
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "14.8",
+          "ref:bag": "0363100012171831",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268783438,
+        "center": {
+          "lat": 52.3674616,
+          "lon": 4.9058788
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "17.1",
+          "ref:bag": "0363100012181862",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1765"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268999016,
+        "center": {
+          "lat": 52.3657843,
+          "lon": 4.9055366
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "7",
+          "height": "31.7",
+          "name": "Weesperflat",
+          "ref:bag": "0363100012169740",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1966",
+          "wikidata": "Q2406587",
+          "wikimedia_commons": "Category:Weesperflat",
+          "wikipedia": "nl:Weesperflat"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268999363,
+        "center": {
+          "lat": 52.365648,
+          "lon": 4.9060655
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.3",
+          "ref:bag": "0363100012181853",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1789"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268999771,
+        "center": {
+          "lat": 52.3656361,
+          "lon": 4.9060041
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "15.3",
+          "ref:bag": "0363100012181852",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1930"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268999936,
+        "center": {
+          "lat": 52.3656756,
+          "lon": 4.9061898
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "18.1",
+          "ref:bag": "0363100012181855",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1916"
+        }
+      },
+      {
+        "type": "way",
+        "id": 269000060,
+        "center": {
+          "lat": 52.3655803,
+          "lon": 4.905914
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "16.5",
+          "ref:bag": "0363100012181851",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1905"
+        }
+      },
+      {
+        "type": "relation",
+        "id": 3602130,
+        "center": {
+          "lat": 52.3692056,
+          "lon": 4.9071307
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "21.7",
+          "ref:bag": "0363100012185504",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1998",
+          "type": "multipolygon"
+        }
+      },
+      {
+        "type": "relation",
+        "id": 3602131,
+        "center": {
+          "lat": 52.3687552,
+          "lon": 4.9059973
+        },
+        "tags": {
+          "building": "apartments",
+          "height": "21.7",
+          "ref:bag": "0363100012165616",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "source:height": "3DBAG",
+          "source:height:date": "2025-09-03",
+          "start_date": "1998",
+          "type": "multipolygon"
+        }
+      },
+      {
+        "type": "relation",
+        "id": 3604192,
+        "center": {
+          "lat": 52.3659406,
+          "lon": 4.9038034
+        },
+        "tags": {
+          "building": "house",
+          "heritage": "2",
+          "name": "Corvershof",
+          "ref:bag": "0363100012171837",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "start_date": "1723",
+          "type": "multipolygon",
+          "wikidata": "Q17288525",
+          "wikimedia_commons": "Category:Corvershof"
+        }
+      }
+    ]
+  }
+}

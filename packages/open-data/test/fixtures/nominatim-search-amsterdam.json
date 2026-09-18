@@ -1,0 +1,129 @@
+{
+  "recordedAt": "2026-09-18T03:18:08.266Z",
+  "request": {
+    "method": "GET",
+    "url": "https://nominatim.openstreetmap.org/search?q=Amsterdam&format=jsonv2&limit=5&addressdetails=1"
+  },
+  "response": [
+    {
+      "place_id": 155956660,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 271110,
+      "lat": "52.3730796",
+      "lon": "4.8924534",
+      "category": "boundary",
+      "type": "administrative",
+      "place_rank": 16,
+      "importance": 0.7882100161799769,
+      "addresstype": "city",
+      "name": "Amsterdam",
+      "display_name": "Amsterdam, Noord-Holland, Nederland",
+      "address": {
+        "city": "Amsterdam",
+        "municipality": "Amsterdam",
+        "state": "Noord-Holland",
+        "ISO3166-2-lvl4": "NL-NH",
+        "country": "Nederland",
+        "country_code": "nl"
+      },
+      "boundingbox": ["52.2781742", "52.4310638", "4.7287776", "5.0791622"]
+    },
+    {
+      "place_id": 156639853,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 47811,
+      "lat": "52.3745403",
+      "lon": "4.8979755",
+      "category": "boundary",
+      "type": "administrative",
+      "place_rank": 14,
+      "importance": 0.523417942478546,
+      "addresstype": "municipality",
+      "name": "Amsterdam",
+      "display_name": "Amsterdam, Noord-Holland, Nederland",
+      "address": {
+        "municipality": "Amsterdam",
+        "state": "Noord-Holland",
+        "ISO3166-2-lvl4": "NL-NH",
+        "country": "Nederland",
+        "country_code": "nl"
+      },
+      "boundingbox": ["52.2779766", "52.4310638", "4.7287776", "5.1076933"]
+    },
+    {
+      "place_id": 427710513,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 21381541,
+      "lat": "-37.8364908",
+      "lon": "77.5541730",
+      "category": "place",
+      "type": "island",
+      "place_rank": 17,
+      "importance": 0.5115572623795729,
+      "addresstype": "island",
+      "name": "Île Amsterdam",
+      "display_name": "Île Amsterdam, Îles Saint-Paul et Nouvelle-Amsterdam, Terres australes et antarctiques françaises, France",
+      "address": {
+        "island": "Île Amsterdam",
+        "municipality": "Îles Saint-Paul et Nouvelle-Amsterdam",
+        "state": "Terres australes et antarctiques françaises",
+        "ISO3166-2-lvl3": "FR-TF",
+        "country": "France",
+        "country_code": "fr"
+      },
+      "boundingbox": ["-37.8805609", "-37.7924802", "77.5127831", "77.5970666"]
+    },
+    {
+      "place_id": 353156516,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 3143401,
+      "lat": "42.9362232",
+      "lon": "-74.1905821",
+      "category": "boundary",
+      "type": "administrative",
+      "place_rank": 14,
+      "importance": 0.4668490071334186,
+      "addresstype": "city",
+      "name": "City of Amsterdam",
+      "display_name": "City of Amsterdam, Montgomery County, New York, 12010, United States",
+      "address": {
+        "city": "City of Amsterdam",
+        "county": "Montgomery County",
+        "state": "New York",
+        "ISO3166-2-lvl4": "US-NY",
+        "postcode": "12010",
+        "country": "United States",
+        "country_code": "us"
+      },
+      "boundingbox": ["42.9189870", "42.9659420", "-74.2226820", "-74.1615670"]
+    },
+    {
+      "place_id": 335941819,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 141705,
+      "lat": "38.3497423",
+      "lon": "-94.5891216",
+      "category": "boundary",
+      "type": "administrative",
+      "place_rank": 16,
+      "importance": 0.42012812644844244,
+      "addresstype": "village",
+      "name": "Amsterdam",
+      "display_name": "Amsterdam, Bates County, Missouri, United States",
+      "address": {
+        "village": "Amsterdam",
+        "county": "Bates County",
+        "state": "Missouri",
+        "ISO3166-2-lvl4": "US-MO",
+        "country": "United States",
+        "country_code": "us"
+      },
+      "boundingbox": ["38.3417820", "38.3568250", "-94.5945990", "-94.5835760"]
+    }
+  ]
+}
