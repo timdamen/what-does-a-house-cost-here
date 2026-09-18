@@ -21,6 +21,7 @@
     "@nuxt/icon": "^2.5.1",
     "@nuxt/image": "^2.1.0",
     "@nuxt/ui": "^4.11.1",
+    "@tanstack/vue-virtual": "^3.13.39",
     "maplibre-gl": "^6.10.0",
     "nuxt": "^4.5.2",
     "tailwindcss": "^4.3.3",

@@ -27,6 +27,7 @@ const config = useRuntimeConfig();
 const {
   houses,
   truncated,
+  cap,
   status: housesStatus,
   upstreamError: housesError,
   refresh: refreshHouses,
@@ -72,14 +73,16 @@ async function retry() {
   await Promise.all(refreshes);
 }
 
-const housesSummary = computed(() => {
-  const count = houses.value.length;
-  const priced = mapHouses.value.filter((house) => house.priceSignal).length;
-  const base = count === 1 ? '1 house' : `${count} houses`;
-  const withPrices = pricesStatus.value === 'success' ? `, ${priced} with prices` : '';
-  const capped = truncated.value ? ' (showing the first ' + count + ')' : '';
-  return `${base}${withPrices}${capped}`;
-});
+/** The House behind `h=` in the URL, once the Houses are here; drives the card in the sheet. */
+const selectedHouse = computed<MapHouse | null>(() =>
+  selectedHouseId.value
+    ? (mapHouses.value.find((house) => house.id === selectedHouseId.value) ?? null)
+    : null,
+);
+
+function onCardClose() {
+  void select(null);
+}
 
 const sheetSnap = ref<SheetSnap>('peek');
 const searchOpen = ref(false);
@@ -177,6 +180,16 @@ function onHeaderKeydown(event: KeyboardEvent) {
     </div>
 
     <BottomSheet v-model:snap="sheetSnap">
+      <template v-if="selectedHouse" #card>
+        <HouseCard
+          :house="selectedHouse"
+          :centre="location"
+          :country-code="countryCode"
+          :prices-status="pricesStatus"
+          @close="onCardClose"
+        />
+      </template>
+
       <ErrorRetry
         v-if="upstreamError"
         class="mb-4"
@@ -186,21 +199,26 @@ function onHeaderKeydown(event: KeyboardEvent) {
       />
 
       <section id="houses" aria-labelledby="houses-heading" class="flex flex-col gap-3">
-        <div class="flex min-h-12 items-center justify-between gap-3">
-          <h2 id="houses-heading" class="text-base font-semibold">Houses</h2>
-          <p v-if="housesStatus === 'success'" class="text-muted text-sm" aria-live="polite">
-            {{ housesSummary }}
-          </p>
-          <USkeleton v-else class="h-4 w-36" />
-        </div>
-        <div
-          v-if="housesStatus !== 'success'"
-          class="flex flex-col gap-2"
-          aria-busy="true"
-          data-testid="houses-skeleton"
-        >
-          <USkeleton v-for="n in 4" :key="n" class="h-14 w-full" />
-        </div>
+        <HouseList
+          v-if="housesStatus === 'success'"
+          :houses="mapHouses"
+          :centre="location"
+          :selected-house-id="selectedHouseId"
+          :truncated="truncated"
+          :cap="cap"
+          :country-code="countryCode"
+          :prices-status="pricesStatus"
+          @select="onSelect"
+        />
+        <template v-else>
+          <div class="flex min-h-12 items-center justify-between gap-3">
+            <h2 id="houses-heading" class="text-base font-semibold">Houses</h2>
+            <USkeleton class="h-4 w-36" />
+          </div>
+          <div class="flex flex-col gap-2" aria-busy="true" data-testid="houses-skeleton">
+            <USkeleton v-for="n in 4" :key="n" class="h-14 w-full" />
+          </div>
+        </template>
       </section>
 
       <section
