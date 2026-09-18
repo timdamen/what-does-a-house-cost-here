@@ -2,17 +2,18 @@
 import type { GeocodeResult, GeocodeSearchResult } from '@house-cost/domain';
 
 /**
- * Place search box backed by `GET /api/geocode?q`. A combobox: the input owns keyboard focus,
- * arrow keys move the highlight, Enter selects (or searches at once), Escape closes. Selecting a
- * result writes the rounded Location to the URL.
+ * Place search box backed by `GET /api/geocode?q`. Searches only on submit (Enter or the search
+ * button), never per keystroke: Nominatim's usage policy forbids autocomplete. A combobox: the
+ * input owns keyboard focus, arrow keys move the highlight, Enter selects the highlighted result
+ * or searches, Escape closes. Results stay until the query changes. Selecting a result writes
+ * the rounded Location to the URL.
  */
 const props = withDefaults(
   defineProps<{
-    debounceMs?: number;
     minLength?: number;
     autofocus?: boolean;
   }>(),
-  { debounceMs: 400, minLength: 2, autofocus: false },
+  { minLength: 2, autofocus: false },
 );
 
 const emit = defineEmits<{
@@ -28,7 +29,6 @@ const status = ref<'idle' | 'pending' | 'success' | 'error'>('idle');
 const open = ref(false);
 const highlighted = ref(-1);
 
-let timer: ReturnType<typeof setTimeout> | undefined;
 let requestId = 0;
 let ignoreNextQueryChange = false;
 
@@ -41,7 +41,6 @@ function optionId(index: number) {
 }
 
 function cancelPending() {
-  clearTimeout(timer);
   requestId += 1;
 }
 
@@ -78,18 +77,18 @@ async function search(term: string) {
   open.value = true;
 }
 
-watch(query, (term) => {
+/** Editing the query drops the previous results; nothing is fetched until the next submit. */
+watch(query, () => {
   if (ignoreNextQueryChange) {
     ignoreNextQueryChange = false;
     return;
   }
-  if (term.trim().length < props.minLength) {
-    reset();
-    return;
-  }
-  clearTimeout(timer);
-  timer = setTimeout(() => void search(term), props.debounceMs);
+  reset();
 });
+
+function onSubmit() {
+  void search(query.value);
+}
 
 async function choose(result: GeocodeResult) {
   cancelPending();
@@ -142,34 +141,53 @@ function onBlur() {
   open.value = false;
 }
 
+/** Coming back to the box shows the last results again until the query changes. */
+function onFocus() {
+  if (status.value !== 'idle') open.value = true;
+}
+
 onBeforeUnmount(cancelPending);
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
-    <UInput
-      v-model="query"
-      type="search"
-      role="combobox"
-      aria-label="Search for a place"
-      aria-autocomplete="list"
-      aria-haspopup="listbox"
-      :aria-expanded="open"
-      :aria-controls="listId"
-      :aria-activedescendant="activeDescendant"
-      autocomplete="off"
-      enterkeyhint="search"
-      icon="i-lucide-search"
-      size="xl"
-      placeholder="Town, street or postcode"
-      :autofocus="props.autofocus"
-      :loading="status === 'pending'"
-      :trailing="false"
-      class="w-full"
-      :ui="{ base: 'min-h-12' }"
-      @keydown="onKeydown"
-      @blur="onBlur"
-    />
+  <form class="flex flex-col gap-2" role="search" @submit.prevent="onSubmit">
+    <div class="flex items-start gap-2">
+      <UInput
+        v-model="query"
+        type="search"
+        role="combobox"
+        aria-label="Search for a place"
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
+        :aria-expanded="open"
+        :aria-controls="listId"
+        :aria-activedescendant="activeDescendant"
+        autocomplete="off"
+        enterkeyhint="search"
+        icon="i-lucide-search"
+        size="xl"
+        placeholder="Town, street or postcode"
+        :autofocus="props.autofocus"
+        :loading="status === 'pending'"
+        :trailing="false"
+        class="w-full"
+        :ui="{ base: 'min-h-12' }"
+        @keydown="onKeydown"
+        @focus="onFocus"
+        @blur="onBlur"
+      />
+      <UButton
+        type="submit"
+        icon="i-lucide-search"
+        color="neutral"
+        variant="solid"
+        square
+        aria-label="Search"
+        :disabled="query.trim().length < props.minLength"
+        :ui="{ base: 'min-h-12 min-w-12 justify-center' }"
+        data-testid="place-search-submit"
+      />
+    </div>
 
     <ul
       v-show="open"
@@ -203,5 +221,5 @@ onBeforeUnmount(cancelPending);
         Search is unavailable right now. Please try again in a moment.
       </li>
     </ul>
-  </div>
+  </form>
 </template>
