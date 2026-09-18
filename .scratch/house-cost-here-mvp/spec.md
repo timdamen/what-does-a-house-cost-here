@@ -114,7 +114,7 @@ Before the map UI is built, a short research pass establishes the best mobile ma
 - One app: the Nuxt web app.
 - Two packages: a domain package holding the types, the Data Provider port, geo helpers, and the fixture provider; and an open-data package holding the real adapters (OpenStreetMap, Nominatim, Overpass, and the regional price registers).
 - Shared TypeScript, oxlint, and oxfmt configuration lives at the root and is extended by each workspace.
-- All packages use the latest stable version of every dependency at the time of scaffolding, verified against the registry rather than recalled from memory. Versions are pinned exactly and updated deliberately.
+- All packages use the latest stable version of every dependency at the time of scaffolding, verified against the registry rather than recalled from memory. Versions use caret ranges (`^x.y.z`) on the latest stable release so patch and minor updates are picked up; `packageManager` stays exact.
 
 ### Nuxt and official modules
 

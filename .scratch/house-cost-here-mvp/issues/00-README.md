@@ -7,7 +7,7 @@ Spec: `../spec.md`. One ticket per file, numbered from 01. `Blocked by:` lists t
 These are fixed so tickets running in parallel agree. Change them only through the spec.
 
 - **Layout**: pnpm workspaces. `apps/web` (Nuxt app, package name `@house-cost/web`), `packages/domain` (`@house-cost/domain`), `packages/open-data` (`@house-cost/open-data`).
-- **Versions**: pinned exactly, verified against the registry on 2026-09-17. See `../versions.md`.
+- **Versions**: caret ranges (`^x.y.z`) on the latest stable release, verified against the registry on 2026-09-17. Never exact pins (user decision, 2026-09-17). See `../versions.md`.
 - **Node**: 24 (`.nvmrc` = `24`). Package manager: `pnpm@10.32.1` via `packageManager` field.
 - **Data Provider port** (`@house-cost/domain`): interface `DataProvider` with `searchHouses(area: SearchArea)`, `getNeighbourhoodFacts(location: Location)`, `getPriceSignals(houses: House[])`. Each resolves to `{ data, provenance: { source: string; fetchedAt: string } }` plus any operation-specific fields the ticket defines. A separate small `Geocoder` port has `search(query: string)` (forward geocoding for the place-search box). Fixture implementations of both live in the domain package.
 - **Runtime config** (Nuxt): `dataProvider: 'fixture' | 'open-data'` (env `NUXT_DATA_PROVIDER`, default `fixture` in dev/test, `open-data` in production), `public.mapStyleLight`, `public.mapStyleDark` (env `NUXT_PUBLIC_MAP_STYLE_LIGHT/DARK`), `userAgent` (env `NUXT_USER_AGENT`).

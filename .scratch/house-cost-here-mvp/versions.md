@@ -1,6 +1,6 @@
 # Pinned versions
 
-Verified against the npm registry on 2026-09-17 with `npm view <pkg> version`. Pin exactly (no `^`). Deviations are recorded at the bottom with a reason.
+Verified against the npm registry on 2026-09-17 with `npm view <pkg> version`. Declare each as a caret range on this version (`^x.y.z`), never an exact pin (user decision on 2026-09-17; the spec originally said exact pins). Deviations are recorded at the bottom with a reason.
 
 | Package | Version |
 | --- | --- |
