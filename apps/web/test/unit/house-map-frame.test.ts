@@ -36,10 +36,14 @@ describe('HouseMapFrame', () => {
       '2 houses within 500 m of 52.3676, 4.9041',
     );
     expect(wrapper.find('[data-testid="house-map-stub"]').exists()).toBe(true);
+    // The placeholder is the frame's own node, outside ClientOnly, and carries no count.
+    expect(wrapper.get('[data-testid="map-placeholder"]').text()).toContain(
+      'Houses within 500 m of 52.3676, 4.9041',
+    );
   });
 
   it('shows the placeholder summary, a delayed spinner, and retry on error', async () => {
-    const summary = '2 houses within 500 m of 52.3676, 4.9041';
+    const summary = 'Houses within 500 m of 52.3676, 4.9041';
     const loading = await mountSuspended(MapPlaceholder, { props: { summary } });
 
     expect(loading.text()).toContain(summary);

@@ -47,3 +47,10 @@ declare global {
     __houseMap?: HouseMapTestHook;
   }
 }
+
+/** What the map placeholder shows while `HouseMap` is not ready; `null` once the map is. */
+export interface MapPlaceholderState {
+  status: 'loading' | 'error';
+  /** Extra line under the spinner, e.g. "Loading map (2/3)" or the failure message. */
+  detail?: string;
+}

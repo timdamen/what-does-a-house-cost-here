@@ -16,3 +16,12 @@ export function searchAreaSummary(
 function formatCentre(centre: Location): string {
   return `${centre.lat.toFixed(LOCATION_DECIMALS)}, ${centre.lng.toFixed(LOCATION_DECIMALS)}`;
 }
+
+/**
+ * Count-free description of the Search Area for the map placeholder. Its text never changes
+ * while the map loads, so the paragraph painted with the server HTML stays the page's largest
+ * contentful paint instead of being replaced when the house count arrives (ticket 13).
+ */
+export function searchAreaLabel(centre: Location, radiusMetres: number): string {
+  return `Houses within ${radiusLabel(radiusMetres)} of ${formatCentre(centre)}`;
+}

@@ -27,7 +27,7 @@ import {
   shouldOfferSearchHere,
   zoomForRadius,
 } from '../../app/utils/map/radius';
-import { searchAreaSummary } from '../../app/utils/map/summary';
+import { searchAreaLabel, searchAreaSummary } from '../../app/utils/map/summary';
 import type { MapHouse } from '../../app/utils/map/types';
 
 const house = (id: string, overrides: Partial<MapHouse> = {}): MapHouse => ({
@@ -82,6 +82,10 @@ describe('searchAreaSummary', () => {
     expect(searchAreaSummary({ lat: 1, lng: 2 }, 1000, 1)).toBe(
       '1 house within 1 km of 1.0000, 2.0000',
     );
+  });
+
+  it('labels the placeholder without a count so the text never grows while loading', () => {
+    expect(searchAreaLabel(AMSTERDAM_CENTRE, 500)).toBe('Houses within 500 m of 52.3676, 4.9041');
   });
 });
 
