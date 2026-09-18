@@ -4,14 +4,7 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  modules: [
-    '@nuxt/ui',
-    '@nuxt/image',
-    '@nuxt/fonts',
-    '@nuxt/icon',
-    '@nuxt/scripts',
-    '@nuxt/test-utils/module',
-  ],
+  modules: ['@nuxt/ui', '@nuxt/image', '@nuxt/fonts', '@nuxt/icon', '@nuxt/test-utils/module'],
 
   css: ['~/assets/css/main.css'],
 
@@ -36,5 +29,13 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
     typeCheck: false,
+  },
+
+  vite: {
+    optimizeDeps: {
+      // maplibre-gl spawns its worker from a sibling file that Vite's pre-bundler does not
+      // copy, so the map never loads in dev unless the package is left unoptimised.
+      exclude: ['maplibre-gl'],
+    },
   },
 });
