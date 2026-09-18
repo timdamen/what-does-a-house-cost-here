@@ -33,7 +33,6 @@ describe('useLocation', () => {
     expect(vm.location).toBeNull();
     expect(vm.radius).toBe(500);
     expect(vm.selectedHouseId).toBeNull();
-    expect(vm.radiusOptions).toEqual([250, 500, 1000]);
   });
 
   it('writes a rounded Location to the URL and clears the selection', async () => {

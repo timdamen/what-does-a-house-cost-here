@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Location } from '@house-cost/domain';
 import { haversineMetres } from '@house-cost/domain';
+import type { AsyncDataRequestStatus } from '#app';
 
 import {
   buildingTypeLabel,
@@ -24,7 +25,7 @@ const props = withDefaults(
     house: MapHouse;
     centre: Location;
     countryCode?: string;
-    pricesStatus?: 'idle' | 'pending' | 'success' | 'error';
+    pricesStatus?: AsyncDataRequestStatus;
   }>(),
   { countryCode: undefined, pricesStatus: 'idle' },
 );

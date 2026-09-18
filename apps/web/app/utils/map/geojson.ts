@@ -3,18 +3,18 @@ import { formatPriceAbbreviated, offsetLocation } from '@house-cost/domain';
 
 import type { MapHouse } from './types';
 
-/** `[lng, lat]` as GeoJSON orders it. */
-export type Position = [number, number];
+/** `[lng, lat]` as GeoJSON orders it (its "Position"; that word is the device dot's here). */
+export type LngLat = [number, number];
 
 export interface PointFeature<P> {
   type: 'Feature';
-  geometry: { type: 'Point'; coordinates: Position };
+  geometry: { type: 'Point'; coordinates: LngLat };
   properties: P;
 }
 
 export interface PolygonFeature<P> {
   type: 'Feature';
-  geometry: { type: 'Polygon'; coordinates: Position[][] };
+  geometry: { type: 'Polygon'; coordinates: LngLat[][] };
   properties: P;
 }
 
@@ -31,7 +31,7 @@ export interface HouseFeatureProperties {
   hasPrice: boolean;
 }
 
-export function toPosition(location: Location): Position {
+export function toLngLat(location: Location): LngLat {
   return [location.lng, location.lat];
 }
 
@@ -52,7 +52,7 @@ export function houseFeatureCollection(
       const label = houseLabel(house, locale);
       return {
         type: 'Feature',
-        geometry: { type: 'Point', coordinates: toPosition(house.location) },
+        geometry: { type: 'Point', coordinates: toLngLat(house.location) },
         properties: { id: house.id, label, hasPrice: label !== null },
       };
     }),
@@ -67,7 +67,7 @@ export function circlePolygon(
   radiusMetres: number,
   steps = CIRCLE_STEPS,
 ): PolygonFeature<Record<string, never>> {
-  const ring: Position[] = [];
+  const ring: LngLat[] = [];
   for (let i = 0; i < steps; i += 1) {
     const angle = (i / steps) * 2 * Math.PI;
     const point = offsetLocation(
@@ -75,9 +75,9 @@ export function circlePolygon(
       radiusMetres * Math.cos(angle),
       radiusMetres * Math.sin(angle),
     );
-    ring.push(toPosition(point));
+    ring.push(toLngLat(point));
   }
-  ring.push(ring[0] as Position);
+  ring.push(ring[0] as LngLat);
   return {
     type: 'Feature',
     geometry: { type: 'Polygon', coordinates: [ring] },
@@ -94,7 +94,7 @@ export function pointCollection(
     features: [
       {
         type: 'Feature',
-        geometry: { type: 'Point', coordinates: toPosition(location) },
+        geometry: { type: 'Point', coordinates: toLngLat(location) },
         properties: {},
       },
     ],

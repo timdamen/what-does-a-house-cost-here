@@ -20,15 +20,16 @@ let amsterdamProvenance: Provenance;
 let sydney: Facts;
 
 beforeAll(async () => {
-  const ams = await provider.getNeighbourhoodFacts(AMSTERDAM_CENTRE);
+  const ams = await provider.getNeighbourhoodFacts({ centre: AMSTERDAM_CENTRE, radiusMetres: 500 });
   amsterdam = ams.data;
   amsterdamProvenance = ams.provenance;
-  sydney = (await provider.getNeighbourhoodFacts(SYDNEY_CENTRE)).data;
+  sydney = (await provider.getNeighbourhoodFacts({ centre: SYDNEY_CENTRE, radiusMetres: 500 }))
+    .data;
 });
 
 const HEADINGS = [
   'Where you are',
-  'What homes cost',
+  'What houses cost',
   'Daily life',
   "What's here",
   'About this data',
@@ -60,7 +61,11 @@ describe('NeighbourhoodFacts', () => {
     expect(summary.get('[data-testid="price-typical"]').text()).toMatch(/^€\s?[\d.]+$/);
     expect(summary.get('time').attributes('datetime')).toBe('2026-06-30');
     expect(summary.text()).toMatch(/As of 30 (June|juni) 2026\./);
-    expect(summary.text()).toMatch(/Based on \d+ sales in the last 24 months\./);
+    expect(summary.text()).toMatch(
+      new RegExp(
+        `Based on \\d+ sales in the last ${amsterdam.priceSummary?.windowMonths} months\\.`,
+      ),
+    );
     expect(wrapper.find('[data-testid="no-price-data"]').exists()).toBe(false);
 
     const groups = wrapper.findAll('[data-testid="amenities"] > li');
@@ -78,6 +83,9 @@ describe('NeighbourhoodFacts', () => {
     const mixRows = wrapper.findAll('[data-testid="housing-mix"] li');
     expect(mixRows.length).toBeGreaterThan(1);
     expect(mixRows[0]?.text()).toMatch(/Apartments,\s+\d+\s+\(\d+%\)/);
+    expect(mixRows.map((row) => row.text())).toEqual(
+      expect.arrayContaining([expect.stringMatching(/^Terraced house,/)]),
+    );
 
     const provenance = wrapper.findAll('[data-testid="provenance"] li');
     expect(provenance).toHaveLength(2);
@@ -152,9 +160,10 @@ describe('NeighbourhoodFacts', () => {
     });
 
     const lines = wrapper.findAll('[data-testid="attribution"] li');
+    const year = new Date().getUTCFullYear();
     expect(lines.map((line) => line.text())).toEqual([
       '© OpenStreetMap contributors',
-      'Contains HM Land Registry data © Crown copyright and database right 2026. This data is licensed under the Open Government Licence v3.0.',
+      `Contains HM Land Registry data © Crown copyright and database right ${year}. This data is licensed under the Open Government Licence v3.0.`,
     ]);
     expect(wrapper.get('[data-testid="provenance"]').text()).toContain(
       'Nominatim (OpenStreetMap), OpenStreetMap via Overpass, HM Land Registry Price Paid Data',
@@ -196,6 +205,9 @@ describe('facts helpers', () => {
     expect(attributionsFor(['openstreetmap-overpass']).map((line) => line.id)).toEqual([
       'openstreetmap',
     ]);
+    expect(attributionsFor(['hm-land-registry-ppd'], 2031)[0]?.text).toContain(
+      'database right 2031.',
+    );
     expect(formatIsoDate('2026-06-30', 'en-GB')).toBe('30 June 2026');
     expect(formatIsoDate('not a date', 'en')).toBe('not a date');
   });

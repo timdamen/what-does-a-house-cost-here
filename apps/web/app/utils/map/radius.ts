@@ -1,7 +1,8 @@
-/** Search Radius options in metres (research decision 1). Each step is one zoom level on a phone. */
-export const RADIUS_OPTIONS = [250, 500, 1000] as const;
+import { DEFAULT_RADIUS_METRES } from '@house-cost/domain';
 
-const DEFAULT_RADIUS_METRES = 500;
+/** Search Radius options in metres (research decision 1). Each step is one zoom level on a phone. */
+export const RADIUS_OPTIONS = [250, DEFAULT_RADIUS_METRES, 1000] as const;
+export type RadiusOption = (typeof RADIUS_OPTIONS)[number];
 
 const ZOOM_AT_DEFAULT_RADIUS = 15;
 const MIN_ZOOM = 10;

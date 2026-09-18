@@ -2,6 +2,7 @@
 import type { Location } from '@house-cost/domain';
 import { useVirtualizer } from '@tanstack/vue-virtual';
 import type { ComponentPublicInstance } from 'vue';
+import type { AsyncDataRequestStatus } from '#app';
 
 import {
   buildingTypeLabel,
@@ -29,18 +30,16 @@ const props = withDefaults(
     selectedHouseId?: string | null;
     /** The Data Provider capped the result; the summary says so. */
     truncated?: boolean;
-    cap?: number | null;
     /** ISO 3166-1 alpha-2 for currency and distance formatting. */
     countryCode?: string;
     /** Status of the prices fetch: rows show a placeholder until it settles. */
-    pricesStatus?: 'idle' | 'pending' | 'success' | 'error';
+    pricesStatus?: AsyncDataRequestStatus;
     /** The scrolling ancestor; found by walking up from the list when not given. */
     scrollElement?: HTMLElement | null;
   }>(),
   {
     selectedHouseId: null,
     truncated: false,
-    cap: null,
     countryCode: undefined,
     pricesStatus: 'idle',
     scrollElement: null,

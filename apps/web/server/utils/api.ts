@@ -1,6 +1,10 @@
 import { createHash } from 'node:crypto';
 
-import { isUpstreamError, type UpstreamErrorShape } from '@house-cost/domain';
+import {
+  DEFAULT_RADIUS_METRES,
+  isUpstreamError,
+  type UpstreamErrorShape,
+} from '@house-cost/domain';
 import type { EventHandler, EventHandlerRequest, H3Event } from 'h3';
 import { z } from 'zod';
 
@@ -45,7 +49,9 @@ function queryNumber(): z.ZodPipe<z.ZodString, z.ZodCoercedNumber<string>> {
 export const latitudeSchema = queryNumber().pipe(z.number().min(-90).max(90));
 export const longitudeSchema = queryNumber().pipe(z.number().min(-180).max(180));
 /** Search Radius in metres. The UI offers 250, 500 and 1000; the API tolerates any sane integer. */
-export const radiusSchema = queryNumber().pipe(z.number().int().min(50).max(5000)).default(500);
+export const radiusSchema = queryNumber()
+  .pipe(z.number().int().min(50).max(5000))
+  .default(DEFAULT_RADIUS_METRES);
 
 export const locationSchema = z.object({
   lat: z.number().min(-90).max(90),
