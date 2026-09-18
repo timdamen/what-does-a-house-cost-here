@@ -33,7 +33,8 @@ export const LAYER_IDS = {
 export const IMAGE_IDS = {
   pillLight: 'house-cost-pill-light',
   pillDark: 'house-cost-pill-dark',
-  pillSelected: 'house-cost-pill-selected',
+  pillSelectedLight: 'house-cost-pill-selected-light',
+  pillSelectedDark: 'house-cost-pill-selected-dark',
 } as const;
 
 export type MapTheme = 'light' | 'dark';
@@ -58,7 +59,9 @@ export interface MapPalette {
   amenity: string;
   pill: PillStyle;
   pillSelected: PillStyle;
+  /** Image ids (`IMAGE_IDS`) of this theme's pills; `pillStyleForImage` maps them back. */
   pillImage: string;
+  pillSelectedImage: string;
 }
 
 export const LIGHT_PALETTE: MapPalette = {
@@ -74,6 +77,7 @@ export const LIGHT_PALETTE: MapPalette = {
   pill: { fill: '#ffffff', stroke: '#0f766e' },
   pillSelected: { fill: '#c2410c', stroke: '#ffffff' },
   pillImage: IMAGE_IDS.pillLight,
+  pillSelectedImage: IMAGE_IDS.pillSelectedLight,
 };
 
 const DARK_PALETTE: MapPalette = {
@@ -89,6 +93,7 @@ const DARK_PALETTE: MapPalette = {
   pill: { fill: '#0f172a', stroke: '#2dd4bf' },
   pillSelected: { fill: '#fb923c', stroke: '#0f172a' },
   pillImage: IMAGE_IDS.pillDark,
+  pillSelectedImage: IMAGE_IDS.pillSelectedDark,
 };
 
 export function paletteFor(theme: MapTheme): MapPalette {
@@ -102,8 +107,10 @@ export function pillStyleForImage(imageId: string): PillStyle | undefined {
       return LIGHT_PALETTE.pill;
     case IMAGE_IDS.pillDark:
       return DARK_PALETTE.pill;
-    case IMAGE_IDS.pillSelected:
+    case IMAGE_IDS.pillSelectedLight:
       return LIGHT_PALETTE.pillSelected;
+    case IMAGE_IDS.pillSelectedDark:
+      return DARK_PALETTE.pillSelected;
     default:
       return undefined;
   }
@@ -129,20 +136,24 @@ export function plainSourceSpec(data: GeoJsonData): GeoJSONSourceSpecification {
 const NOT_CLUSTER: ExpressionSpecification = ['!', ['has', 'point_count']];
 const IS_CLUSTER: ExpressionSpecification = ['has', 'point_count'];
 
-/** Unclustered Houses that are not the selected one, split by whether they carry a price. */
-export function houseFilter(hasPrice: boolean, selectedId: string | null): FilterSpecification {
+/**
+ * Unclustered Houses split by whether they carry a price, and by whether they are the selected
+ * one (`'selected'` never matches while nothing is selected) or the rest (`'others'`).
+ */
+export function houseFilter(
+  hasPrice: boolean,
+  which: 'selected' | 'others',
+  selectedId: string | null,
+): FilterSpecification {
   const price: ExpressionSpecification = hasPrice
     ? ['==', ['get', 'hasPrice'], true]
     : ['!=', ['get', 'hasPrice'], true];
-  return ['all', NOT_CLUSTER, price, ['!=', ['get', 'id'], selectedId ?? '']];
-}
-
-/** The selected House only (never matches while nothing is selected). */
-export function selectedFilter(hasPrice: boolean, selectedId: string | null): FilterSpecification {
-  const price: ExpressionSpecification = hasPrice
-    ? ['==', ['get', 'hasPrice'], true]
-    : ['!=', ['get', 'hasPrice'], true];
-  return ['all', NOT_CLUSTER, price, ['==', ['get', 'id'], selectedId ?? '']];
+  const id: ExpressionSpecification = [
+    which === 'selected' ? '==' : '!=',
+    ['get', 'id'],
+    selectedId ?? '',
+  ];
+  return ['all', NOT_CLUSTER, price, id];
 }
 
 /** Layers a tap may hit, in the order `queryRenderedFeatures` is asked for them. */
@@ -231,7 +242,7 @@ export function appLayers(
       id: LAYER_IDS.housePlain,
       type: 'circle',
       source: SOURCE_IDS.houses,
-      filter: houseFilter(false, selectedId),
+      filter: houseFilter(false, 'others', selectedId),
       paint: {
         'circle-color': palette.surface,
         'circle-radius': 7,
@@ -243,7 +254,7 @@ export function appLayers(
       id: LAYER_IDS.housePriced,
       type: 'symbol',
       source: SOURCE_IDS.houses,
-      filter: houseFilter(true, selectedId),
+      filter: houseFilter(true, 'others', selectedId),
       layout: {
         'icon-image': palette.pillImage,
         'icon-text-fit': 'both',
@@ -260,7 +271,7 @@ export function appLayers(
       id: LAYER_IDS.selectedPlain,
       type: 'circle',
       source: SOURCE_IDS.houses,
-      filter: selectedFilter(false, selectedId),
+      filter: houseFilter(false, 'selected', selectedId),
       paint: {
         'circle-color': palette.selected,
         'circle-radius': 11,
@@ -272,9 +283,9 @@ export function appLayers(
       id: LAYER_IDS.selectedPriced,
       type: 'symbol',
       source: SOURCE_IDS.houses,
-      filter: selectedFilter(true, selectedId),
+      filter: houseFilter(true, 'selected', selectedId),
       layout: {
-        'icon-image': IMAGE_IDS.pillSelected,
+        'icon-image': palette.pillSelectedImage,
         'icon-text-fit': 'both',
         'icon-text-fit-padding': [5, 10, 5, 10],
         'icon-allow-overlap': true,
