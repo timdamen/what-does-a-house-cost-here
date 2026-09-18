@@ -58,3 +58,10 @@ Pinned in ticket 02, verified with `npm view` on 2026-09-17:
 | vue-router | 5.3.1 | Direct dependency of `apps/web` so the generated `.nuxt/tsconfig` can resolve `vue-router/volar/sfc-route-blocks` under pnpm's strict `node_modules`. |
 | tailwindcss | 4.3.3 | Direct dependency of `apps/web` so `@import 'tailwindcss'` in `main.css` resolves under pnpm (it is only a transitive dependency of `@nuxt/ui`). |
 | @vue/test-utils | 2.5.1 | Peer of `@nuxt/test-utils` needed by `mountSuspended`. |
+
+Pinned in ticket 04, verified with `npm view` on 2026-09-17:
+
+| Package | Version | Reason |
+| --- | --- | --- |
+| p-limit | 7.3.2 | Concurrency limit in the `@house-cost/open-data` HTTP client (already listed above; now a dependency of `packages/open-data`). |
+| @types/node | 26.6.1 | devDependency of `packages/open-data` so `fetch`, `Response` and `node:fs` (recording script) typecheck under pnpm's strict `node_modules`; same version as `apps/web`. |

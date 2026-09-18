@@ -11,12 +11,15 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "record-fixtures": "node scripts/record-fixtures.ts"
   },
   "dependencies": {
-    "@house-cost/domain": "workspace:*"
+    "@house-cost/domain": "workspace:*",
+    "p-limit": "7.3.2"
   },
   "devDependencies": {
+    "@types/node": "26.6.1",
     "typescript": "6.0.3",
     "vitest": "5.0.1"
   }
