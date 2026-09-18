@@ -25,8 +25,17 @@ function fail(event: { node: { res: { statusCode: number } } }) {
   return UPSTREAM_502;
 }
 
-let housesFail = false;
-registerEndpoint('/api/houses', (event) => (housesFail ? fail(event) : housesResponse()));
+function crash(event: { node: { res: { statusCode: number } } }) {
+  event.node.res.statusCode = 500;
+  return { error: 'boom' };
+}
+
+let housesFail: false | 'upstream' | 'crash' = false;
+registerEndpoint('/api/houses', (event) => {
+  if (housesFail === 'upstream') return fail(event);
+  if (housesFail === 'crash') return crash(event);
+  return housesResponse();
+});
 registerEndpoint('/api/facts', () => factsResponse());
 registerEndpoint('/api/prices', { method: 'POST', handler: () => pricesResponse() });
 
@@ -39,7 +48,7 @@ describe('index page', () => {
     housesFail = false;
     const houses = await provider.searchHouses(AREA);
     housesResponse = () => Promise.resolve(houses);
-    factsResponse = () => provider.getNeighbourhoodFacts(AMSTERDAM_CENTRE);
+    factsResponse = () => provider.getNeighbourhoodFacts(AREA);
     pricesResponse = () => provider.getPriceSignals(houses.data);
   });
 
@@ -90,7 +99,7 @@ describe('index page', () => {
 
   it('shows the retry card when the houses route answers with an Upstream Error', async () => {
     stubGeolocation('unsupported');
-    housesFail = true;
+    housesFail = 'upstream';
     const wrapper = await mountSuspended(App, { route: ROUTE, global: { stubs } });
 
     await vi.waitFor(() => {
@@ -109,6 +118,29 @@ describe('index page', () => {
     await vi.waitFor(() => {
       expect(wrapper.find('[data-testid="error-retry"]').exists()).toBe(false);
       expect(wrapper.find('[data-testid="houses-skeleton"]').exists()).toBe(false);
+    });
+  });
+
+  it('shows the retry card for any failure, such as a 500 without the upstream envelope', async () => {
+    stubGeolocation('unsupported');
+    housesFail = 'crash';
+    const wrapper = await mountSuspended(App, { route: ROUTE, global: { stubs } });
+
+    await vi.waitFor(() => {
+      expect(wrapper.find('[data-testid="error-retry"]').exists()).toBe(true);
+    });
+    const card = wrapper.get('[data-testid="error-retry"]');
+    expect(card.text()).toContain('Could not load this area');
+    expect(card.text()).toContain('Check your connection and try again.');
+    expect(card.text()).not.toContain('Service:');
+    expect(wrapper.get('[data-testid="bottom-sheet"]').attributes('data-snap')).toBe('half');
+
+    housesFail = false;
+    await card.get('button').trigger('click');
+
+    await vi.waitFor(() => {
+      expect(wrapper.find('[data-testid="error-retry"]').exists()).toBe(false);
+      expect(wrapper.text()).toMatch(/\d+ houses/);
     });
   });
 });

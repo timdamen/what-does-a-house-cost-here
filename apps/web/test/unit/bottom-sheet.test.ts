@@ -1,8 +1,15 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import BottomSheet from '../../app/components/BottomSheet.vue';
-import { cycleSnap, nearestSnap, snapHeightsPx, stepSnap } from '../../app/utils/sheet';
+import {
+  cycleSnap,
+  nearestSnap,
+  SHEET_HISTORY_MARKER,
+  SHEET_SNAP_CSS,
+  snapHeightsPx,
+  stepSnap,
+} from '../../app/utils/sheet';
 
 async function mountSheet(snap: 'peek' | 'half' | 'full' = 'peek') {
   const wrapper = await mountSuspended(BottomSheet, {
@@ -22,7 +29,8 @@ describe('BottomSheet', () => {
     const { wrapper, sheet, handle } = await mountSheet();
 
     expect(sheet.attributes('data-snap')).toBe('peek');
-    expect(handle.attributes('aria-label')).toBe('Resize panel (now peek)');
+    expect(sheet.attributes('style')).toContain(`--sheet-peek: ${SHEET_SNAP_CSS.peek}`);
+    expect(handle.attributes('aria-label')).toBe('Resize sheet (now peek)');
     const card = wrapper.get('[data-testid="card"]');
     const body = wrapper.get('#houses');
     expect(card.element.compareDocumentPosition(body.element)).toBe(
@@ -37,7 +45,7 @@ describe('BottomSheet', () => {
     expect(sheet.attributes('data-snap')).toBe('half');
     await handle.trigger('click');
     expect(sheet.attributes('data-snap')).toBe('full');
-    expect(handle.attributes('aria-label')).toBe('Resize panel (now full)');
+    expect(handle.attributes('aria-label')).toBe('Resize sheet (now full)');
     await handle.trigger('click');
     expect(sheet.attributes('data-snap')).toBe('peek');
   });
@@ -91,6 +99,53 @@ describe('BottomSheet', () => {
     await handle.trigger('pointerdown', { pointerId: 2, clientY: 400, pointerType: 'touch' });
     await handle.trigger('pointerup', { pointerId: 2, clientY: 400 });
     await handle.trigger('click');
+    expect(sheet.attributes('data-snap')).toBe('full');
+  });
+});
+
+function popState(state: unknown) {
+  window.dispatchEvent(new PopStateEvent('popstate', { state }));
+}
+
+describe('BottomSheet history (ADR-0006: Back collapses the sheet from full)', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('pushes one marked history entry when the sheet reaches full and collapses to half on Back', async () => {
+    const pushState = vi.spyOn(window.history, 'pushState');
+    const back = vi.spyOn(window.history, 'back').mockImplementation(() => {});
+    const { sheet, handle } = await mountSheet();
+
+    await handle.trigger('keydown', { key: 'Home' });
+    expect(sheet.attributes('data-snap')).toBe('full');
+    expect(pushState).toHaveBeenCalledTimes(1);
+    expect(pushState.mock.calls[0]?.[0]).toMatchObject({ [SHEET_HISTORY_MARKER]: 'full' });
+
+    // The browser's Back: the entry below carries the router's state, not the marker.
+    popState({});
+    await nextTick();
+    expect(sheet.attributes('data-snap')).toBe('half');
+    expect(back).not.toHaveBeenCalled();
+
+    // A popstate the sheet did not cause (nothing pushed) leaves it alone.
+    popState({});
+    await nextTick();
+    expect(sheet.attributes('data-snap')).toBe('half');
+  });
+
+  it('pops its entry again when the sheet leaves full by other means, and reopens on Forward', async () => {
+    vi.spyOn(window.history, 'pushState');
+    const back = vi.spyOn(window.history, 'back').mockImplementation(() => {});
+    const { sheet, handle } = await mountSheet();
+
+    await handle.trigger('keydown', { key: 'Home' });
+    await sheet.trigger('keydown', { key: 'Escape' });
+    expect(sheet.attributes('data-snap')).toBe('half');
+    expect(back).toHaveBeenCalledTimes(1);
+
+    popState({ [SHEET_HISTORY_MARKER]: 'full' });
+    await nextTick();
     expect(sheet.attributes('data-snap')).toBe('full');
   });
 });

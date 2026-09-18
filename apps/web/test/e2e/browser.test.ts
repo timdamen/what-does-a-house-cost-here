@@ -39,13 +39,13 @@ const SYDNEY_LINK = `/?lat=${SYDNEY_CENTRE.lat}&lng=${SYDNEY_CENTRE.lng}`;
 
 const FACTS_HEADINGS = [
   'Where you are',
-  'What homes cost',
+  'What houses cost',
   'Daily life',
   "What's here",
   'About this data',
 ];
 
-/** Sheet heights from `BottomSheet.vue`: `max(96px, 15dvh)`, `50dvh`, `90dvh` of 844 px. */
+/** Sheet heights from `SHEET_SNAP_CSS` (`app/utils/sheet.ts`): `max(96px, 15dvh)`, `50dvh`, `90dvh` of 844 px. */
 const SHEET_HEIGHT_PX = { peek: 126.6, half: 422, full: 759.6 };
 
 interface HookState {
@@ -374,7 +374,7 @@ describe('the one-pager in a phone browser', async () => {
 
       await handle.press('ArrowUp');
       await expect(sheet).toHaveAttribute('data-snap', 'half');
-      await expect(handle).toHaveAttribute('aria-label', 'Resize panel (now half)');
+      await expect(handle).toHaveAttribute('aria-label', 'Resize sheet (now half)');
       await expectSheetHeight(sheet, SHEET_HEIGHT_PX.half);
 
       await handle.press('ArrowUp');
@@ -396,6 +396,20 @@ describe('the one-pager in a phone browser', async () => {
 
       await handle.press('Escape');
       await expect(sheet).toHaveAttribute('data-snap', 'half');
+    });
+
+    it('collapses from full to half on the browser Back button without leaving the page', async () => {
+      const page = await openPage(TOWN_LINK);
+      const { sheet, handle } = sheetOf(page);
+      await handle.press('Home');
+      await expect(sheet).toHaveAttribute('data-snap', 'full');
+
+      await page.goBack();
+
+      await expect(sheet).toHaveAttribute('data-snap', 'half');
+      await expect(page.getByTestId('one-pager')).toBeVisible();
+      expect(query(page).get('lat')).toBe('52.3676');
+      expect(query(page).get('r')).toBe('500');
     });
 
     it('snaps to the nearest point after a touch drag on the handle', async () => {

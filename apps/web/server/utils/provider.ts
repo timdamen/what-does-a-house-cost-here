@@ -8,7 +8,7 @@ import {
 import {
   createNominatimGeocoder,
   createOpenDataProvider,
-  type OpenDataOptions,
+  createOpenDataRuntime,
 } from '@house-cost/open-data';
 import type { H3Event } from 'h3';
 
@@ -75,16 +75,18 @@ function createFailingSet(): ProviderSet {
 /**
  * The real adapters. `userAgent` comes from `runtimeConfig.userAgent` (env `NUXT_USER_AGENT`,
  * default set in `nuxt.config.ts`); the upstream policies require it to identify this deployment.
+ * One runtime feeds both factories, so the provider and the geocoder share the HTTP client (its
+ * concurrency limit) and the Nominatim client (its one-request-per-second gate).
  */
 function createOpenDataSet(event: H3Event): ProviderSet {
   const { userAgent } = useRuntimeConfig(event);
   if (typeof userAgent !== 'string' || userAgent.trim() === '') {
     throw new Error('runtimeConfig.userAgent (NUXT_USER_AGENT) must be a non-empty string');
   }
-  const options: OpenDataOptions = { userAgent, concurrency: OPEN_DATA_CONCURRENCY };
+  const runtime = createOpenDataRuntime({ userAgent, concurrency: OPEN_DATA_CONCURRENCY });
   return {
-    provider: createOpenDataProvider(options),
-    geocoder: createNominatimGeocoder(options),
+    provider: createOpenDataProvider(runtime),
+    geocoder: createNominatimGeocoder(runtime),
   };
 }
 
@@ -101,7 +103,8 @@ function createProviderSet(name: ProviderName, event: H3Event): ProviderSet {
 
 /**
  * Providers are singletons per server instance: the fixture town is generated once and the
- * open-data adapters share one HTTP client so the concurrency limit holds across requests.
+ * open-data runtime is built once, so its concurrency limit and Nominatim gate hold across
+ * requests and across the provider and geocoder.
  */
 function resolveProviderSet(event: H3Event): ProviderSet {
   const name = providerName(event);

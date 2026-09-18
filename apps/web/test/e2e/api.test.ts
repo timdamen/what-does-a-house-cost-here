@@ -52,7 +52,7 @@ describe('api routes with the fixture provider', async () => {
       }
     });
 
-    it('rounds coordinates to four decimals before searching', async () => {
+    it('rounds the Location to four decimals before searching', async () => {
       const exact = await json<HouseSearchResult>(
         await fetch(housesUrl(AMSTERDAM_CENTRE.lat, AMSTERDAM_CENTRE.lng, 250)),
       );
@@ -85,7 +85,7 @@ describe('api routes with the fixture provider', async () => {
       expect(body.error.issues?.[0]?.path).toEqual(['lat']);
     });
 
-    it('rejects a missing coordinate with 400', async () => {
+    it('rejects a missing longitude with 400', async () => {
       const response = await fetch(`/api/houses?lat=${AMSTERDAM_CENTRE.lat}`);
 
       expect(response.status).toBe(400);
@@ -118,6 +118,25 @@ describe('api routes with the fixture provider', async () => {
       ]);
       expect(data.amenities.transport[0]?.walkingMinutes).toBeGreaterThan(0);
       expect(data.housingMix.apartments).toBeGreaterThan(0);
+      expect(data.priceSummary?.windowMonths).toBeGreaterThan(0);
+    });
+
+    it('follows the radius like /api/houses: the housing mix counts the houses of that area', async () => {
+      const mixTotal = async (radius?: number) => {
+        const url = `/api/facts?lat=${AMSTERDAM_CENTRE.lat}&lng=${AMSTERDAM_CENTRE.lng}${radius === undefined ? '' : `&radius=${radius}`}`;
+        const { data } = await json<NeighbourhoodFactsResult>(await fetch(url));
+        return Object.values(data.housingMix).reduce((sum, count) => sum + count, 0);
+      };
+      const houseCount = async (radius: number) =>
+        (
+          await json<HouseSearchResult>(
+            await fetch(housesUrl(AMSTERDAM_CENTRE.lat, AMSTERDAM_CENTRE.lng, radius)),
+          )
+        ).data.length;
+
+      expect(await mixTotal(250)).toBe(await houseCount(250));
+      expect(await mixTotal(250)).toBeLessThan(await mixTotal(500));
+      expect(await mixTotal()).toBe(await mixTotal(500));
     });
 
     it('reports priceSummary null for an area without open price data', async () => {
@@ -130,7 +149,7 @@ describe('api routes with the fixture provider', async () => {
       expect(data.housingMix.apartments).toBeGreaterThan(0);
     });
 
-    it('rejects a non-numeric coordinate with 400', async () => {
+    it('rejects a non-numeric latitude with 400', async () => {
       const response = await fetch('/api/facts?lat=abc&lng=4.9');
 
       expect(response.status).toBe(400);

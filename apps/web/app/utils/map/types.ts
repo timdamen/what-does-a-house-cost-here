@@ -6,18 +6,34 @@ import type { House, Location, PriceSignal } from '@house-cost/domain';
  */
 export type MapHouse = House & { priceSignal?: PriceSignal | null };
 
+/** Asks the map to ease its camera onto a House; a fresh object is a fresh request. */
+export interface CentreRequest {
+  houseId: string;
+}
+
 /** Props shared by `HouseMapFrame.vue` (SSR wrapper) and `HouseMap.client.vue` (the map). */
 export interface HouseMapProps {
   centre: Location;
   radiusMetres: number;
   houses: MapHouse[];
   selectedHouseId?: string | null;
+  /**
+   * Set by a selection from the house list (user story 26): the map centres on that House.
+   * A selection from the map itself only pans when the House is hidden.
+   */
+  centreOn?: CentreRequest | null;
   userPosition?: Location | null;
   amenityFocus?: Location | null;
   /** ISO 3166-1 alpha-2; picks the locale used for the price pills. */
   countryCode?: string;
   /** CSS length of the bottom sheet's peek; controls and attribution stack above it. */
   peekHeight?: string;
+  /**
+   * CSS length of the sheet's current height. The camera keeps what it reveals or centres above
+   * it, so a half-open sheet never hides the House or Amenity just asked for. Defaults to the
+   * peek.
+   */
+  sheetHeight?: string;
   /** Exposes `window.__houseMap` outside dev builds so browser tests can drive the map. */
   testHook?: boolean;
 }

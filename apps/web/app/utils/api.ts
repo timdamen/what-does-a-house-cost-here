@@ -16,9 +16,9 @@ export function housesKey(location: Location | null, radiusMetres: number): stri
   return location ? `houses:${roundedPart(location)}:${radiusMetres}` : 'houses:none';
 }
 
-/** `facts:52.3676:4.9041`, or `facts:none` while there is no Location. */
-export function factsKey(location: Location | null): string {
-  return location ? `facts:${roundedPart(location)}` : 'facts:none';
+/** `facts:52.3676:4.9041:500`, or `facts:none` while there is no Location. */
+export function factsKey(location: Location | null, radiusMetres: number): string {
+  return location ? `facts:${roundedPart(location)}:${radiusMetres}` : 'facts:none';
 }
 
 /** `prices:<digest of the sorted house ids>`, or `prices:none` when there are no Houses. */
