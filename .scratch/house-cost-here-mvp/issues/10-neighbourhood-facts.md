@@ -18,3 +18,7 @@ Spec section "Neighbourhood Facts"; user stories 31 to 38, 44.
 
 - Manual check against both fixture areas.
 - `pnpm quality` green.
+
+## Updates after research (ticket 01)
+
+The facts live inside the bottom sheet's `#neighbourhood` section below the house list (see ticket 08 updates). Amenity taps still emit `focus-amenity`, and the page should collapse the sheet to half so the map is visible when the amenity is focused.

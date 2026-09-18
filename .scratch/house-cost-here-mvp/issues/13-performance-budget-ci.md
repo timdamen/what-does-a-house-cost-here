@@ -19,3 +19,7 @@ User stories 39, 43; spec section "Performance".
 ## Acceptance
 
 - `pnpm lighthouse` passes locally against the fixture build and the numbers are recorded in this ticket's Comments.
+
+## Updates after research (ticket 01)
+
+Use the exact thresholds and assertion syntax from `docs/research/mobile-map-ux.md` decision 6 (score ≥ 0.9, LCP ≤ 2500 ms, TBT ≤ 200 ms on `/` and warn 200 / error 600 ms on the deep link, CLS ≤ 0.1, warn-only FCP/SI/TTI, `resource-summary:script:size` ≤ 100000 B on `/` and ≤ 280000 B on the deep link, total warn 300 kB / 1.5 MB, 3 runs median). Test both `/` and `/?lat=52.3676&lng=4.9041&r=500`.

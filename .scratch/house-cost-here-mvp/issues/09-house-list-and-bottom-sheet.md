@@ -19,3 +19,7 @@ Spec section "House List"; user stories 13, 14, 23 to 30, 44, 45.
 
 - Manual phone-viewport check of list, sheet snap points, and two-way sync.
 - `pnpm quality` green.
+
+## Updates after research (ticket 01)
+
+The bottom sheet itself is built in ticket 08 (`BottomSheet.vue`, custom SSR component, not `UDrawer`). This ticket fills it: `HouseCard.vue` for the selected House (rendered in the sheet's card slot, sheet snaps to at least half when a selection is made from the map, closing clears `h`) and `HouseList.vue` in `#houses`. Do not build a second sheet. The list header row must fit in the peek state (one 48 px summary row: "N houses, M with a price"). Nuxt UI 4 renamed `UButtonGroup` to `UFieldGroup`.

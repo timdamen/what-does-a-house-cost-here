@@ -24,3 +24,13 @@ Spec section "Map"; user stories 10 to 22. Build `app/components/HouseMap.client
 
 - Map renders houses from the fixture provider when given props; clustering, price labels, circle, and controls visible in a manual `pnpm dev` check.
 - `pnpm quality` green.
+
+## Updates after research (ticket 01)
+
+Read `docs/research/mobile-map-ux.md` "Decisions" 1, 3, 4, 5, 7 and apply them; they override the scope above where they differ:
+
+- Load MapLibre with a dynamic `import('maplibre-gl')` (and its CSS) in the `.client.vue` component, not with `useScript`. Wrap in `<ClientOnly>` with a server-rendered `#fallback` placeholder of fixed height (`100dvh` minus peek) containing the text summary; spinner after 1 s; "Map failed to load" with retry on error.
+- Controls 48×48 px with 8 px gap, right edge, stacked above `calc(peek + 16px + env(safe-area-inset-bottom))`; no zoom buttons or compass on phones; `NavigationControl` only at `>= 840px`. Gestures: `touchPitch: false`, `pitchWithRotate: false`, `maxPitch: 0`. Compact attribution bottom-left above the peek.
+- Clustering: `clusterRadius: 56`, `clusterMaxZoom: 16`; tap hit-testing via `queryRenderedFeatures` with a 48 px box. Price pill labels via `Intl` compact currency (domain helper), plain outlined circle without a Price Signal, distinct selected style. Radius options `[250, 500, 1000]`; zoom per radius z16/z15/z14.
+- Reduced motion: `easeTo` with `duration <= 300` and never `essential: true`; `fadeDuration: 0` under reduced motion. Dark mode: `map.setStyle(dark, { transformStyle })` re-adding the app's sources and layers.
+- Expose a test hook `window.__houseMap = { select(id), getState() }` in dev/test for e2e tests.

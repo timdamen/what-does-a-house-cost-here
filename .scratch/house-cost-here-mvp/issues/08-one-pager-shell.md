@@ -21,3 +21,7 @@ Assemble the page: location flow, map, and the data plumbing that the list (09) 
 
 - Manual check with the fixture provider: prompt, map, skeleton sections, retry state (use the failing provider switch from ticket 05).
 - `pnpm quality` green.
+
+## Updates after research (ticket 01)
+
+Overturned default 2 in `docs/research/mobile-map-ux.md` changes the layout: on phones the map fills the viewport and a `BottomSheet.vue` (custom, SSR-rendered, three snap points peek/half/full per decision 2, `dvh` units, drag handle that also cycles snap points on tap, keyboard operable, `0ms` transitions under reduced motion, Back/Escape collapses from full) hosts the two sections `#houses` and `#neighbourhood` and, above them, a slot for the selected House card. At `>= 840px` it renders as a side panel one third wide with the map beside it. Build `BottomSheet.vue` in this ticket with the sections as skeleton content; tickets 09 and 10 fill the sections and 09 adds the card. Keep the header bar (search, locate) at the top under `env(safe-area-inset-top)`. The `#fallback` map placeholder and the sheet must give a stable layout (CLS ≤ 0.1).
