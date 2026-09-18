@@ -1,6 +1,6 @@
 # 01 Mobile map UX research
 
-Status: ready-for-agent
+Status: done
 Type: research
 Blocked by: none
 
@@ -27,3 +27,8 @@ Spec section "Implementation Decisions › Order of work" and user story 51. Use
 
 - File exists, every decision cites a primary source URL.
 - Decisions section gives exact numbers for radius, snap points, budgets and tile host.
+
+## Comments
+
+- 2026-09-17: Findings in `docs/research/mobile-map-ux.md`. Five defaults overturned for ticket 14's ADRs: radius options drop 2000 m (Overpass counts measured at 18–28k buildings in cities, ~10 MB per query against a 1 GB/day policy); the bottom sheet hosts list + facts, not only the card (NN/g scroll-vs-pan finding); MapLibre's 29 px buttons go to 48 px; the budget is LCP ≤ 2.5 s + TBT ≤ 200 ms (TTI is unscored since Lighthouse 10); MapLibre is lazy-loaded with `import()` because 6.10.0 ships ESM only, so Nuxt Scripts is not needed for it.
+- VersaTiles publishes no fair-use page; OpenFreeMap style URLs are recorded as the runtime-config fallback.
