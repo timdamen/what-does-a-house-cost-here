@@ -42,3 +42,59 @@ pnpm test:e2e         # placeholder until the e2e ticket lands
   commitlint (Conventional Commits), pre-push runs typecheck, knip and unit tests.
 
 Exact versions are pinned; see `.scratch/house-cost-here-mvp/versions.md`.
+
+## Deploying
+
+The app runs on Vercel as one Nuxt project whose root is the repository root. `vercel.json` at the
+root sets the framework preset (`nuxtjs`), the install command (`pnpm install --frozen-lockfile`)
+and the build command (`pnpm --filter @house-cost/web build`); leave the Vercel Root Directory
+setting empty. Vercel sets `VERCEL=1` while building, which makes Nitro pick its `vercel` preset,
+and `apps/web/nuxt.config.ts` then writes the Build Output API directory to `.vercel/output` at
+the repository root, where Vercel expects it. A plain `pnpm build` is unaffected and still writes
+the Node server to `apps/web/.output`.
+
+```sh
+vercel deploy          # preview deployment, from the repository root
+vercel deploy --prod   # production deployment
+vercel build --prod    # build locally into .vercel/output without deploying
+```
+
+The first `vercel deploy` links the directory to a Vercel project (accept the repository root as
+the code location). `vercel build` needs that link, or the project settings pulled with
+`vercel pull`, and is what CI can run before `vercel deploy --prebuilt`.
+
+Environment variables, all optional, set in the Vercel project for Production and Preview:
+
+| Variable                                                    | Default                                                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------ |
+| `NUXT_USER_AGENT`                                           | `what-does-a-house-cost-here/<version> (+repository URL)`    |
+| `NUXT_PUBLIC_MAP_STYLE_LIGHT`, `NUXT_PUBLIC_MAP_STYLE_DARK` | The VersaTiles `colorful` and `eclipse` styles               |
+| `NUXT_DATA_PROVIDER`                                        | `open-data` in production builds, `fixture` in dev and tests |
+
+The Data Provider default is decided at build time from `NODE_ENV`, which `nuxt build` sets to
+`production`, so a deployment uses the open-data adapters (Overpass, Nominatim, HM Land Registry)
+without any variable. Nominatim's usage policy wants a User-Agent that identifies the deployment
+and its operator; override `NUXT_USER_AGENT` if the default does not name you.
+
+The server function (`.vercel/output/functions/__fallback.func`) is configured through
+`nitro.vercel.functions` in `nuxt.config.ts`: `maxDuration` 30 s, because cold Overpass-bound
+routes take 2 to 5.5 s, and the `nodejs24.x` runtime to match `.nvmrc`.
+
+Caching: the route handlers cache upstream results with Nitro's `defineCachedFunction`, whose
+production storage is the in-memory driver. On Vercel that cache lives per function instance, so
+a cold instance fetches everything again; there is no shared cache (no Vercel KV or Redis) in the
+MVP. The `Cache-Control` headers on the `/api/*` responses (6 h for houses and facts, 24 h for
+prices and geocode) let the Vercel CDN absorb repeats meanwhile.
+
+The Vercel build container has no `.git` directory, so the root `prepare` script only runs
+`lefthook install` when `git rev-parse` finds a repository.
+
+To run a production build with the fixture provider locally (the generated town, no network):
+
+```sh
+pnpm build
+NUXT_DATA_PROVIDER=fixture node apps/web/.output/server/index.mjs
+```
+
+`pnpm dev` already uses the fixture provider; `NUXT_DATA_PROVIDER=open-data pnpm dev` runs the
+real adapters against the open-data services.
