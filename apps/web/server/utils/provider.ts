@@ -5,6 +5,11 @@ import {
   type DataProvider,
   type Geocoder,
 } from '@house-cost/domain';
+import {
+  createNominatimGeocoder,
+  createOpenDataProvider,
+  type OpenDataOptions,
+} from '@house-cost/open-data';
 import type { H3Event } from 'h3';
 
 /**
@@ -21,6 +26,9 @@ interface ProviderSet {
 
 /** Service name the `failing` provider reports in its `UpstreamError`. */
 export const FAILING_SERVICE = 'failing-provider';
+
+/** Upstream requests in flight at once across Overpass, Nominatim and the price registers. */
+export const OPEN_DATA_CONCURRENCY = 2;
 
 const providerSets = new Map<ProviderName, ProviderSet>();
 
@@ -64,26 +72,42 @@ function createFailingSet(): ProviderSet {
   };
 }
 
-function createProviderSet(name: ProviderName): ProviderSet {
+/**
+ * The real adapters. `userAgent` comes from `runtimeConfig.userAgent` (env `NUXT_USER_AGENT`,
+ * default set in `nuxt.config.ts`); the upstream policies require it to identify this deployment.
+ */
+function createOpenDataSet(event: H3Event): ProviderSet {
+  const { userAgent } = useRuntimeConfig(event);
+  if (typeof userAgent !== 'string' || userAgent.trim() === '') {
+    throw new Error('runtimeConfig.userAgent (NUXT_USER_AGENT) must be a non-empty string');
+  }
+  const options: OpenDataOptions = { userAgent, concurrency: OPEN_DATA_CONCURRENCY };
+  return {
+    provider: createOpenDataProvider(options),
+    geocoder: createNominatimGeocoder(options),
+  };
+}
+
+function createProviderSet(name: ProviderName, event: H3Event): ProviderSet {
   switch (name) {
     case 'fixture':
       return { provider: createFixtureProvider(), geocoder: createFixtureGeocoder() };
     case 'failing':
       return createFailingSet();
     case 'open-data':
-      // Ticket 11 replaces this branch with the @house-cost/open-data adapters.
-      throw new Error(
-        'dataProvider "open-data" is not wired yet; set NUXT_DATA_PROVIDER=fixture until ticket 11 lands',
-      );
+      return createOpenDataSet(event);
   }
 }
 
-/** Providers are singletons per server instance; the fixture town is generated once. */
+/**
+ * Providers are singletons per server instance: the fixture town is generated once and the
+ * open-data adapters share one HTTP client so the concurrency limit holds across requests.
+ */
 function resolveProviderSet(event: H3Event): ProviderSet {
   const name = providerName(event);
   let set = providerSets.get(name);
   if (!set) {
-    set = createProviderSet(name);
+    set = createProviderSet(name, event);
     providerSets.set(name, set);
   }
   return set;
