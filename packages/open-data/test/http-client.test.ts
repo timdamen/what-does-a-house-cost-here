@@ -91,3 +91,49 @@ describe('createHttpClient', () => {
     expect(peak).toBe(2);
   });
 });
+
+describe('retry', () => {
+  it('retries once after a retryable failure when the request opts in', async () => {
+    vi.useFakeTimers();
+    try {
+      const fetch = vi
+        .fn<FetchLike>()
+        .mockResolvedValueOnce(jsonResponse({}, 504))
+        .mockResolvedValueOnce(jsonResponse({ ok: true }));
+      const client = clientWith(fetch);
+
+      const pending = client.json('https://example.test/q', {
+        service: 'svc',
+        retry: { delayMs: 1000 },
+      });
+      await vi.advanceTimersByTimeAsync(1000);
+
+      await expect(pending).resolves.toEqual({ ok: true });
+      expect(fetch).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('gives up after the second failure and never retries without opting in', async () => {
+    const failing = vi.fn<FetchLike>().mockResolvedValue(jsonResponse({}, 504));
+    await expect(
+      clientWith(failing).json('https://example.test/q', { service: 'svc', retry: { delayMs: 0 } }),
+    ).rejects.toBeInstanceOf(UpstreamError);
+    expect(failing).toHaveBeenCalledTimes(2);
+
+    const once = vi.fn<FetchLike>().mockResolvedValue(jsonResponse({}, 504));
+    await expect(
+      clientWith(once).json('https://example.test/q', { service: 'svc' }),
+    ).rejects.toBeInstanceOf(UpstreamError);
+    expect(once).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not retry non-retryable statuses', async () => {
+    const fetch = vi.fn<FetchLike>().mockResolvedValue(jsonResponse({}, 404));
+    await expect(
+      clientWith(fetch).json('https://example.test/q', { service: 'svc', retry: { delayMs: 0 } }),
+    ).rejects.toBeInstanceOf(UpstreamError);
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+});

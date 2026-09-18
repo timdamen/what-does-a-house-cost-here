@@ -88,9 +88,15 @@ export function createLandRegistryAdapter(options: LandRegistryAdapterOptions): 
     houses: readonly HouseRef[],
   ): Promise<Map<string, LandRegistryTransaction[]>> {
     const postcodes = rankedPostcodes(houses).slice(0, MAX_POSTCODES_PER_CALL);
-    const pages = await Promise.all(
+    const settled = await Promise.allSettled(
       postcodes.map(async (postcode) => [postcode, await transactionsFor(postcode)] as const),
     );
+    const pages = settled.flatMap((page) => (page.status === 'fulfilled' ? [page.value] : []));
+    // Some postcodes failing is a partial answer; every postcode failing is an outage.
+    if (pages.length === 0 && settled.length > 0) {
+      const [first] = settled;
+      if (first?.status === 'rejected') throw first.reason;
+    }
     return new Map(pages);
   }
 

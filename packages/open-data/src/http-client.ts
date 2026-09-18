@@ -23,6 +23,12 @@ export interface JsonRequest {
   headers?: Record<string, string>;
   /** Form body for POST requests, sent as `application/x-www-form-urlencoded`. */
   form?: Record<string, string>;
+  /**
+   * Retry once after a retryable failure (network error, 429, 5xx), waiting `delayMs` first.
+   * Off by default: Nominatim must never be retried on 429; Overpass opts in because its
+   * gateway answers 504 under load a few seconds before the query itself would have finished.
+   */
+  retry?: { delayMs: number };
 }
 
 export interface HttpClient {
@@ -44,9 +50,21 @@ export function createHttpClient(options: HttpClientOptions): HttpClient {
 
   return {
     json(url, request) {
-      return limit(() => requestJson(fetchImpl, options.userAgent, url, request));
+      return limit(async () => {
+        try {
+          return await requestJson(fetchImpl, options.userAgent, url, request);
+        } catch (error) {
+          if (!request.retry || !(error instanceof UpstreamError) || !error.retryable) throw error;
+          await sleep(request.retry.delayMs);
+          return requestJson(fetchImpl, options.userAgent, url, request);
+        }
+      });
     },
   };
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function requestJson(

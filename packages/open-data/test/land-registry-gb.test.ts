@@ -166,3 +166,31 @@ describe('helpers', () => {
     ]);
   });
 });
+
+describe('partial upstream failure', () => {
+  function failingFor(postcode: string, status = 500): FetchLike {
+    const fixtures = createFixtureFetch();
+    return (url, init) =>
+      decodeURIComponent(url).replace(/\+/g, ' ').includes(postcode)
+        ? Promise.resolve(jsonResponse({}, status))
+        : fixtures(url, init);
+  }
+
+  it('keeps the signals of the postcodes that answered when one page fails', async () => {
+    const signals = await adapterWith(failingFor('N1 0YW')).getPriceSignals([
+      MOON_8,
+      WATER_TOWER_1,
+    ]);
+
+    expect(signals.length).toBeGreaterThan(0);
+    expect(signals.every((signal) => signal.houseId === MOON_8.id)).toBe(true);
+  });
+
+  it('reports an outage when every postcode page fails', async () => {
+    const fetch: FetchLike = () => Promise.resolve(jsonResponse({}, 503));
+
+    await expect(
+      adapterWith(fetch).getPriceSignals([MOON_8, WATER_TOWER_1]),
+    ).rejects.toBeInstanceOf(UpstreamError);
+  });
+});

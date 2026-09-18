@@ -2,11 +2,21 @@ import { HOUSE_CAP, roundLocation, type HouseRef } from '@house-cost/domain';
 import type { H3Event } from 'h3';
 import { z } from 'zod';
 
+/**
+ * OSM address tags are free text (`addr:housenumber` can be "1-3, 5-7 and 9"), so over-long
+ * fields are trimmed rather than rejected: one odd tag must not cost the whole area its prices.
+ */
+const addressField = (max: number) =>
+  z
+    .string()
+    .transform((value) => value.trim().slice(0, max))
+    .optional();
+
 const addressSchema = z.object({
-  street: z.string().max(200).optional(),
-  housenumber: z.string().max(20).optional(),
-  postcode: z.string().max(20).optional(),
-  city: z.string().max(200).optional(),
+  street: addressField(200),
+  housenumber: addressField(100),
+  postcode: addressField(32),
+  city: addressField(200),
 });
 
 const bodySchema = z.object({

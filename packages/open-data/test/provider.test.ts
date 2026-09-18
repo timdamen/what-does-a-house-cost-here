@@ -62,6 +62,7 @@ describe('createOpenDataProvider', () => {
     });
 
     it('does not remember a failed Overpass query, so a retry asks again', async () => {
+      // The HTTP client retries Overpass once, so two 504s make the first search fail.
       let failures = 0;
       const fixtures = createFixtureFetch();
       const provider = createOpenDataProvider(
@@ -69,7 +70,7 @@ describe('createOpenDataProvider', () => {
           userAgent: TEST_USER_AGENT,
           now: () => FIXED_NOW,
           fetch: async (url, init) => {
-            if (url.includes('/api/interpreter') && failures === 0) {
+            if (url.includes('/api/interpreter') && failures < 2) {
               failures += 1;
               return jsonResponse('Gateway Timeout', 504);
             }

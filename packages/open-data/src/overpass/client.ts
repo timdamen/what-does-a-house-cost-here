@@ -14,6 +14,8 @@ export const OVERPASS_SERVICE = 'overpass';
 
 /** Server-side query timeout. The public instance defaults to 180 s; we ask for much less. */
 const OVERPASS_TIMEOUT_SECONDS = 25;
+/** One retry after a retryable failure; the public gateway 504s under load before `timeout`. */
+const OVERPASS_RETRY_DELAY_MS = 1000;
 
 export interface OverpassElement {
   type: 'node' | 'way' | 'relation';
@@ -64,6 +66,7 @@ export async function runOverpassQuery(
     service: OVERPASS_SERVICE,
     method: 'POST',
     form: { data: query },
+    retry: { delayMs: OVERPASS_RETRY_DELAY_MS },
   });
   return parseOverpassResponse(body);
 }
