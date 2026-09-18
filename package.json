@@ -13,7 +13,7 @@
     "typecheck": "pnpm -r --workspace-concurrency=1 typecheck",
     "knip": "knip",
     "test": "pnpm -r --workspace-concurrency=1 test",
-    "test:e2e": "echo \"e2e tests are added by a later ticket\""
+    "test:e2e": "pnpm --filter @house-cost/web test:e2e"
   },
   "devDependencies": {
     "@commitlint/cli": "21.2.2",

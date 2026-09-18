@@ -58,3 +58,9 @@ Pinned in ticket 02, verified with `npm view` on 2026-09-17:
 | vue-router | 5.3.1 | Direct dependency of `apps/web` so the generated `.nuxt/tsconfig` can resolve `vue-router/volar/sfc-route-blocks` under pnpm's strict `node_modules`. |
 | tailwindcss | 4.3.3 | Direct dependency of `apps/web` so `@import 'tailwindcss'` in `main.css` resolves under pnpm (it is only a transitive dependency of `@nuxt/ui`). |
 | @vue/test-utils | 2.5.1 | Peer of `@nuxt/test-utils` needed by `mountSuspended`. |
+
+Pinned in ticket 05:
+
+| Package | Version | Reason |
+| --- | --- | --- |
+| zod | 4.6.5 | Direct dependency of `apps/web` for query and body validation in the server routes (already in the table above; added here when it became a real dependency). |

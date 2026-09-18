@@ -7,7 +7,7 @@
     },
     "apps/web": {
       "entry": ["vitest.config.ts"],
-      "ignoreDependencies": ["@iconify-json/lucide", "vue-tsc"],
+      "ignoreDependencies": ["@iconify-json/lucide", "vue-tsc", "h3"],
       "vitest": {
         "config": []
       }
