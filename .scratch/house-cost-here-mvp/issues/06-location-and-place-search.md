@@ -1,6 +1,6 @@
 # 06 Location, URL state and place search
 
-Status: ready-for-agent
+Status: done
 Type: task
 Blocked by: 03
 
@@ -22,3 +22,11 @@ Spec section "Location"; user stories 1 to 9. Build the location flow in the Nux
 
 - Opening `/` shows the prompt and requests geolocation immediately; `/?lat=52.3676&lng=4.9041` skips it.
 - `pnpm quality` green.
+
+## Comments
+
+- Done. `pnpm quality` green; 16 web unit tests (`use-location`, `use-geolocation`, `location-prompt`, `place-search`, plus the app shell). No new dependencies. SSR of `/` and `/?lat=52.3676&lng=4.9041` checked against a dev server.
+- `useLocation()` (`app/composables/useLocation.ts`): `location: ComputedRef<Location | null>` (rounded to 4 decimals on read), `radius: ComputedRef<250 | 500 | 1000>` (default 500, unknown values fall back), `radiusOptions`, `selectedHouseId: ComputedRef<string | null>`, `setLocation(loc)` (rounds, writes `lat`/`lng` with `toFixed(4)`, drops `h`), `setRadius(r)`, `select(id | null)`. All writers use `router.replace` and return its promise. Exports `RADIUS_OPTIONS`, `DEFAULT_RADIUS`, `parseLocation(query)`, `parseRadius(query)` for server or middleware reuse.
+- `useGeolocation()` (`app/composables/useGeolocation.ts`): `status: Ref<'unsupported' | 'idle' | 'requesting' | 'granted' | 'denied' | 'error'>`, `position: Ref<Location | null>` (already rounded), `locate(): Promise<Location | null>`. State lives in `useState` so the prompt, `LocateMeButton` and the map share one status; concurrent `locate()` calls join the in-flight request. 10 s timeout, `maximumAge` 60 s. Starts `idle` on both server and client; `unsupported` is only discovered when `locate()` runs, which avoids a hydration mismatch. Tests call `clearNuxtState()` in `beforeEach`.
+- Components: `LocationPrompt` (no props; calls `locate()` in `onMounted`, then `setLocation`; shows `PlaceSearch` on denied/unsupported/error and hides the button when unsupported). `PlaceSearch` (props `debounceMs` 400, `minLength` 2, `autofocus`; emits `select(GeocodeResult)`; hand-rolled combobox on `UInput` with `role="combobox"`, `aria-activedescendant`, 48 px options; debounced `$fetch('/api/geocode', { query: { q } })`, Enter searches at once, stale responses are dropped). `LocateMeButton` (props `label?`, `block?`; icon-only 48 px square without a label; emits `located(Location)` and `failed(status)`).
+- Note for ticket 05: the search box calls `/api/geocode` per debounced keystroke (minimum 2 characters, 400 ms). Nominatim's usage policy forbids autocomplete, so the server route should cache by query and rate-limit, or the debounce should be raised and `minLength` increased; both are props.
