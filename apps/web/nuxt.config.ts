@@ -1,3 +1,8 @@
+import { version } from './package.json';
+
+/** Identifies this deployment to the open-data services (Nominatim requires it). */
+const defaultUserAgent = `what-does-a-house-cost-here/${version} (+https://github.com/timdamen/what-does-a-house-cost-here)`;
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2026-09-17',
@@ -16,10 +21,11 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
-    // Which Data Provider the server routes use. Overridden by NUXT_DATA_PROVIDER.
+    // Which Data Provider the server routes use: `open-data` in production, `fixture` in dev and
+    // test. Overridden by NUXT_DATA_PROVIDER (see `.env.example`).
     dataProvider: process.env.NODE_ENV === 'production' ? 'open-data' : 'fixture',
     // User-Agent sent on every upstream open-data request. Overridden by NUXT_USER_AGENT.
-    userAgent: 'house-cost-here (https://github.com/timdamen/what-does-a-house-cost-here)',
+    userAgent: defaultUserAgent,
     public: {
       // MapLibre style URLs. Overridden by NUXT_PUBLIC_MAP_STYLE_LIGHT / _DARK.
       mapStyleLight: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
