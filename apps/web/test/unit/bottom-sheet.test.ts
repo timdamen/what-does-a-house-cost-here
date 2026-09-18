@@ -78,6 +78,21 @@ describe('BottomSheet', () => {
     await handle.trigger('click');
     expect(sheet.attributes('data-snap')).toBe('full');
   });
+
+  it('still cycles on the tap after a touch drag, which ends without a click', async () => {
+    const { sheet, handle } = await mountSheet();
+    const heights = snapHeightsPx(window.innerHeight);
+
+    await handle.trigger('pointerdown', { pointerId: 1, clientY: 800, pointerType: 'touch' });
+    await handle.trigger('pointermove', { pointerId: 1, clientY: 800 - heights.half });
+    await handle.trigger('pointerup', { pointerId: 1, clientY: 800 - heights.half });
+    expect(sheet.attributes('data-snap')).toBe('half');
+
+    await handle.trigger('pointerdown', { pointerId: 2, clientY: 400, pointerType: 'touch' });
+    await handle.trigger('pointerup', { pointerId: 2, clientY: 400 });
+    await handle.trigger('click');
+    expect(sheet.attributes('data-snap')).toBe('full');
+  });
 });
 
 describe('sheet helpers', () => {

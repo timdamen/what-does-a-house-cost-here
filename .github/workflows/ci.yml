@@ -17,3 +17,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm quality
+      - name: Install Playwright Chromium
+        run: pnpm --filter @house-cost/web exec playwright install --with-deps chromium
+      - name: End-to-end tests
+        run: pnpm test:e2e

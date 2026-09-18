@@ -139,12 +139,18 @@ async function init(): Promise<void> {
   timers.push(window.setTimeout(() => (showSteps.value = true), STEPS_AFTER_MS));
 
   try {
-    const [maplibre] = await Promise.all([
+    const [maplibre, worker] = await Promise.all([
       import('maplibre-gl'),
+      import('maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'),
       import('maplibre-gl/dist/maplibre-gl.css'),
     ]);
     if (!canvasHost.value) return;
     loadStep.value = 2;
+    // MapLibre spawns its worker from `new URL('maplibre-gl-worker.mjs', import.meta.url)`, a
+    // file (plus the shared chunk it imports) that the production build never emits, so the map
+    // would sit on "loading" forever. `?worker&url` makes Vite bundle the worker as its own
+    // entry and hands back the URL it is served from, in dev and in the build.
+    maplibre.setWorkerUrl(worker.default);
     createMap(maplibre, canvasHost.value);
   } catch (error) {
     fail(error);
