@@ -144,12 +144,29 @@ function rowFor(houseId: string): HTMLElement | null {
   return root.value?.querySelector<HTMLElement>(`[data-house-id="${CSS.escape(houseId)}"]`) ?? null;
 }
 
-/** A selection from the map brings its row into view (user story 27). */
-async function revealSelected(houseId: string | null) {
-  if (!houseId) return;
-  const index = listed.value.findIndex((item) => item.house.id === houseId);
-  if (index === -1) return;
-  await nextTick();
+/** How long a reveal keeps the row in view while the scroll viewport is still moving. */
+const REVEAL_SETTLE_MS = 2000;
+
+let revealFrame: number | undefined;
+let stopRevealListeners: (() => void) | undefined;
+
+function stopRevealing() {
+  if (revealFrame !== undefined) cancelAnimationFrame(revealFrame);
+  revealFrame = undefined;
+  stopRevealListeners?.();
+  stopRevealListeners = undefined;
+}
+
+/** The user taking hold of the list ends the reveal so it never fights their scroll. */
+function stopRevealOnUserScroll(scroller: HTMLElement) {
+  const events = ['pointerdown', 'wheel'] as const;
+  for (const event of events) scroller.addEventListener(event, stopRevealing, { passive: true });
+  return () => {
+    for (const event of events) scroller.removeEventListener(event, stopRevealing);
+  };
+}
+
+function scrollRowIntoView(index: number, houseId: string) {
   if (virtualised.value) {
     measureScrollMargin();
     virtualizer.value.scrollToIndex(index, { align: 'auto' });
@@ -157,6 +174,51 @@ async function revealSelected(houseId: string | null) {
   }
   rowFor(houseId)?.scrollIntoView?.({ block: 'nearest' });
 }
+
+/** Whether the row sits entirely inside the scroll element (or the viewport without one). */
+function rowInView(houseId: string): boolean {
+  const row = rowFor(houseId);
+  if (!row) return false;
+  const box = row.getBoundingClientRect();
+  const frame = scrollParent.value?.getBoundingClientRect() ?? {
+    top: 0,
+    bottom: window.innerHeight,
+  };
+  return box.top >= frame.top && box.bottom <= frame.bottom;
+}
+
+/**
+ * A selection from the map brings its row into view (user story 27). The scroll viewport keeps
+ * moving for a moment after a selection: the Bottom Sheet grows from peek to half over 250 ms,
+ * the House card is inserted above this list, and the virtualiser re-measures rows as they
+ * render. A single scroll lands the row below the fold, so for a short while after the first
+ * scroll every frame that finds the row outside the viewport scrolls it back in.
+ */
+async function revealSelected(houseId: string | null) {
+  stopRevealing();
+  if (!houseId) return;
+  const index = listed.value.findIndex((item) => item.house.id === houseId);
+  if (index === -1) return;
+  await nextTick();
+  scrollRowIntoView(index, houseId);
+
+  const scroller = scrollParent.value;
+  if (!scroller) return;
+  stopRevealListeners = stopRevealOnUserScroll(scroller);
+  const deadline = performance.now() + REVEAL_SETTLE_MS;
+  const step = () => {
+    revealFrame = undefined;
+    if (performance.now() >= deadline) {
+      stopRevealing();
+      return;
+    }
+    if (!rowInView(houseId)) scrollRowIntoView(index, houseId);
+    revealFrame = requestAnimationFrame(step);
+  };
+  revealFrame = requestAnimationFrame(step);
+}
+
+onBeforeUnmount(stopRevealing);
 
 watch(() => props.selectedHouseId, revealSelected);
 watch(sort, () => revealSelected(props.selectedHouseId));

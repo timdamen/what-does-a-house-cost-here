@@ -41,6 +41,9 @@ function onPointerDown(event: PointerEvent) {
   if (event.pointerType === 'mouse' && event.button !== 0) return;
   const element = root.value;
   if (!element) return;
+  // A mouse drag ends with a click the handler below swallows; a touch drag ends without one,
+  // so a stale flag would swallow the next real tap instead.
+  suppressNextClick = false;
   activePointer = event.pointerId;
   startY = event.clientY;
   startHeight = element.getBoundingClientRect().height;
