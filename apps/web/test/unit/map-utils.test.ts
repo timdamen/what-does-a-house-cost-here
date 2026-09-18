@@ -15,9 +15,9 @@ import {
   IMAGE_IDS,
   LAYER_IDS,
   LIGHT_PALETTE,
+  paletteFor,
   pickTextFonts,
   pillStyleForImage,
-  selectedFilter,
   SOURCE_IDS,
 } from '../../app/utils/map/layers';
 import { createPillImage, PILL_IMAGE_OPTIONS, PILL_SIZE } from '../../app/utils/map/pill';
@@ -139,13 +139,13 @@ describe('house GeoJSON', () => {
 
 describe('layer definitions', () => {
   it('splits Houses by price and keeps the selected one out of the ordinary layers', () => {
-    expect(houseFilter(true, 'way/9')).toEqual([
+    expect(houseFilter(true, 'others', 'way/9')).toEqual([
       'all',
       ['!', ['has', 'point_count']],
       ['==', ['get', 'hasPrice'], true],
       ['!=', ['get', 'id'], 'way/9'],
     ]);
-    expect(selectedFilter(false, null)).toEqual([
+    expect(houseFilter(false, 'selected', null)).toEqual([
       'all',
       ['!', ['has', 'point_count']],
       ['!=', ['get', 'hasPrice'], true],
@@ -168,6 +168,22 @@ describe('layer definitions', () => {
       'text-font': ['noto_sans_bold'],
       'icon-image': IMAGE_IDS.pillLight,
       'icon-text-fit': 'both',
+    });
+  });
+
+  it('draws the selected pill in the theme of the palette it is given', () => {
+    const fonts = { regular: ['r'], bold: ['b'] };
+    const selectedIn = (theme: 'light' | 'dark') =>
+      appLayers(paletteFor(theme), fonts, 'way/1').find(
+        (layer) => layer.id === LAYER_IDS.selectedPriced,
+      );
+
+    expect(selectedIn('light')?.layout).toMatchObject({
+      'icon-image': IMAGE_IDS.pillSelectedLight,
+    });
+    expect(selectedIn('dark')?.layout).toMatchObject({ 'icon-image': IMAGE_IDS.pillSelectedDark });
+    expect(selectedIn('dark')?.paint).toMatchObject({
+      'text-color': paletteFor('dark').onSelected,
     });
   });
 
@@ -238,8 +254,10 @@ describe('pill image', () => {
     expect(PILL_IMAGE_OPTIONS.content[2]).toBeGreaterThan(PILL_IMAGE_OPTIONS.content[0]);
   });
 
-  it('knows the style of each pill image id', () => {
+  it('knows the style of each pill image id, selected pills included', () => {
     expect(pillStyleForImage(IMAGE_IDS.pillLight)).toEqual(LIGHT_PALETTE.pill);
+    expect(pillStyleForImage(IMAGE_IDS.pillSelectedLight)).toEqual(LIGHT_PALETTE.pillSelected);
+    expect(pillStyleForImage(IMAGE_IDS.pillSelectedDark)).toEqual(paletteFor('dark').pillSelected);
     expect(pillStyleForImage('unknown')).toBeUndefined();
   });
 

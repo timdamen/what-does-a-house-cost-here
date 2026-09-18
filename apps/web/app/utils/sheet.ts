@@ -1,22 +1,34 @@
 /**
  * Bottom Sheet snap points (research note `docs/research/mobile-map-ux.md`, decision 2; ADR-0006).
- * Pure helpers so the drag and keyboard logic in `BottomSheet.vue` stays testable.
+ * The one place the heights live: `SHEET_SNAP_CSS` is what the sheet and the page put in their
+ * CSS custom properties, `snapHeightsPx` the pixel mirror the drag logic snaps with. The side
+ * panel breakpoint is the Tailwind theme token `--breakpoint-panel` in `assets/css/main.css`.
  */
 export const SHEET_SNAPS = ['peek', 'half', 'full'] as const;
 export type SheetSnap = (typeof SHEET_SNAPS)[number];
 
 /** Peek is `15dvh` but never less than a 48 px handle plus one 48 px summary row. */
 export const SHEET_PEEK_MIN_PX = 96;
-const PEEK_RATIO = 0.15;
-const HALF_RATIO = 0.5;
-const FULL_RATIO = 0.9;
+const PEEK_DVH = 15;
+const HALF_DVH = 50;
+const FULL_DVH = 90;
 
-/** Pixel heights mirroring the CSS in `BottomSheet.vue` (`max(96px, 15dvh)`, `50dvh`, `90dvh`). */
+/** Key in `history.state` of the entry `BottomSheet.vue` pushes when it opens fully (ADR-0006). */
+export const SHEET_HISTORY_MARKER = 'houseCostSheet';
+
+/** CSS height of each snap point. */
+export const SHEET_SNAP_CSS: Readonly<Record<SheetSnap, string>> = {
+  peek: `max(${SHEET_PEEK_MIN_PX}px, ${PEEK_DVH}dvh)`,
+  half: `${HALF_DVH}dvh`,
+  full: `${FULL_DVH}dvh`,
+};
+
+/** Pixel heights of the snap points for a viewport height, matching `SHEET_SNAP_CSS`. */
 export function snapHeightsPx(viewportHeightPx: number): Record<SheetSnap, number> {
   return {
-    peek: Math.max(SHEET_PEEK_MIN_PX, viewportHeightPx * PEEK_RATIO),
-    half: viewportHeightPx * HALF_RATIO,
-    full: viewportHeightPx * FULL_RATIO,
+    peek: Math.max(SHEET_PEEK_MIN_PX, (viewportHeightPx * PEEK_DVH) / 100),
+    half: (viewportHeightPx * HALF_DVH) / 100,
+    full: (viewportHeightPx * FULL_DVH) / 100,
   };
 }
 

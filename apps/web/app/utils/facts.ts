@@ -7,6 +7,8 @@ import type {
 } from '@house-cost/domain';
 import { AMENITY_CLASSES, BUILDING_TYPES } from '@house-cost/domain';
 
+import { BUILDING_TYPE_LABELS } from './houses';
+
 /**
  * Pure helpers behind `NeighbourhoodFacts.vue`: labels, the place hierarchy trail, the Housing
  * Mix entries, and the provenance wording ("About this data"). Kept out of the component so
@@ -32,17 +34,6 @@ export const AMENITY_CLASS_ICONS: Record<AmenityClass, string> = {
 
 /** The five classes in the fixed display order. */
 export const AMENITY_CLASS_ORDER: readonly AmenityClass[] = AMENITY_CLASSES;
-
-/** Labels for the Housing Mix, in the fixed order the bar and its list use. */
-export const BUILDING_TYPE_LABELS: Record<BuildingType, string> = {
-  detached: 'Detached',
-  'semi-detached': 'Semi-detached',
-  terraced: 'Terraced',
-  apartments: 'Apartments',
-  house: 'Houses',
-  residential: 'Other residential',
-  other: 'Other',
-};
 
 /**
  * The place hierarchy as a trail from the smallest unit outwards, with blanks and consecutive
@@ -118,19 +109,24 @@ const OSM_ATTRIBUTION: Attribution = {
   href: 'https://www.openstreetmap.org/copyright',
 };
 
-/** Wording the Open Government Licence requires for Price Paid Data. */
-const LAND_REGISTRY_ATTRIBUTION: Attribution = {
-  id: 'land-registry',
-  text: 'Contains HM Land Registry data © Crown copyright and database right 2026. This data is licensed under the Open Government Licence v3.0.',
-  href: 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/',
-};
+/** Wording the Open Government Licence requires for Price Paid Data, with the current year. */
+function landRegistryAttribution(year: number): Attribution {
+  return {
+    id: 'land-registry',
+    text: `Contains HM Land Registry data © Crown copyright and database right ${year}. This data is licensed under the Open Government Licence v3.0.`,
+    href: 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/',
+  };
+}
 
 /** The attribution lines the sources on screen oblige the app to show (`packages/open-data/README.md`). */
-export function attributionsFor(sources: readonly string[]): Attribution[] {
+export function attributionsFor(
+  sources: readonly string[],
+  year = new Date().getUTCFullYear(),
+): Attribution[] {
   const joined = sources.join('+');
   const lines: Attribution[] = [];
   if (/openstreetmap|overpass|nominatim/.test(joined)) lines.push(OSM_ATTRIBUTION);
-  if (/land-registry/.test(joined)) lines.push(LAND_REGISTRY_ATTRIBUTION);
+  if (/land-registry/.test(joined)) lines.push(landRegistryAttribution(year));
   return lines;
 }
 

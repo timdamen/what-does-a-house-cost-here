@@ -1,11 +1,12 @@
 import { UpstreamError } from '@house-cost/domain';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createHttpClient, type FetchLike } from '../src/http-client';
 import {
   createNominatimClient,
   mapReverse,
   mapSearch,
+  NOMINATIM_MIN_INTERVAL_MS,
   NOMINATIM_URL,
   UNKNOWN_COUNTRY_CODE,
 } from '../src/nominatim';
@@ -31,7 +32,6 @@ describe('reverse', () => {
         country: 'United Kingdom',
         countryCode: 'GB',
       },
-      postcode: 'N1 2TU',
     });
     const url = new URL(fetch.calls[0]?.url ?? '');
     expect(url.pathname).toBe('/reverse');
@@ -75,6 +75,60 @@ describe('reverse', () => {
     const error = await failing.reverse(ISLINGTON).catch((e) => e);
     expect(error).toBeInstanceOf(UpstreamError);
     expect(error).toMatchObject({ service: 'nominatim', retryable: true });
+  });
+});
+
+describe('pacing', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('starts consecutive requests at least NOMINATIM_MIN_INTERVAL_MS apart', async () => {
+    vi.useFakeTimers();
+    const fixtures = createFixtureFetch();
+    const startedAt: number[] = [];
+    const nominatim = nominatimWith(async (url, init) => {
+      startedAt.push(Date.now());
+      return fixtures(url, init);
+    });
+
+    const first = nominatim.reverse(ISLINGTON);
+    const second = nominatim.reverse(AMSTERDAM);
+    const third = nominatim.search('Amsterdam');
+
+    await vi.advanceTimersByTimeAsync(0);
+    expect(startedAt).toHaveLength(1);
+    await vi.advanceTimersByTimeAsync(NOMINATIM_MIN_INTERVAL_MS - 1);
+    expect(startedAt).toHaveLength(1);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(startedAt).toHaveLength(2);
+    await vi.advanceTimersByTimeAsync(NOMINATIM_MIN_INTERVAL_MS);
+    expect(startedAt).toHaveLength(3);
+
+    await Promise.all([first, second, third]);
+    expect((startedAt[1] ?? 0) - (startedAt[0] ?? 0)).toBeGreaterThanOrEqual(
+      NOMINATIM_MIN_INTERVAL_MS,
+    );
+    expect((startedAt[2] ?? 0) - (startedAt[1] ?? 0)).toBeGreaterThanOrEqual(
+      NOMINATIM_MIN_INTERVAL_MS,
+    );
+  });
+
+  it('does not delay a request that comes more than a second after the previous one', async () => {
+    vi.useFakeTimers();
+    const fixtures = createFixtureFetch();
+    const startedAt: number[] = [];
+    const nominatim = nominatimWith(async (url, init) => {
+      startedAt.push(Date.now());
+      return fixtures(url, init);
+    });
+
+    await nominatim.reverse(ISLINGTON);
+    await vi.advanceTimersByTimeAsync(NOMINATIM_MIN_INTERVAL_MS * 2);
+    const before = Date.now();
+    await nominatim.reverse(AMSTERDAM);
+
+    expect(startedAt[1]).toBe(before);
   });
 });
 

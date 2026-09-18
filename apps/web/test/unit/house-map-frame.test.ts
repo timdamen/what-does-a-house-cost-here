@@ -32,6 +32,8 @@ describe('HouseMapFrame', () => {
 
     const frame = wrapper.get('[data-testid="house-map-frame"]');
     expect(frame.attributes('style')).toContain('--house-map-peek: 120px');
+    // Without a sheet height the camera keeps its targets above the peek.
+    expect(frame.attributes('style')).toContain('--house-map-sheet: 120px');
     expect(wrapper.get('[aria-live="polite"]').text()).toBe(
       '2 houses within 500 m of 52.3676, 4.9041',
     );
@@ -47,9 +49,7 @@ describe('HouseMapFrame', () => {
     const loading = await mountSuspended(MapPlaceholder, { props: { summary } });
 
     expect(loading.text()).toContain(summary);
-    expect(loading.find('[role="status"]').classes()).toContain(
-      'map-placeholder__spinner--delayed',
-    );
+    expect(loading.find('[role="status"]').classes()).toContain('map-placeholder__spinner');
 
     const failed = await mountSuspended(MapPlaceholder, {
       props: { summary, status: 'error', detail: 'style.json 503' },

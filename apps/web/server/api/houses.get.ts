@@ -19,7 +19,7 @@ const searchHousesCached = defineCachedFunction(
 
 /**
  * `GET /api/houses?lat&lng&radius` -> `{ data: House[], cap, truncated, provenance }`.
- * Coordinates are rounded to 4 decimals before the search and the cache key.
+ * The Location is rounded to 4 decimals before the search and the cache key.
  */
 export default defineApiHandler(async (event) => {
   const { lat, lng, radius } = parseOrReject(querySchema, getQuery(event));

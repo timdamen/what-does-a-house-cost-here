@@ -1,4 +1,4 @@
-import { HOUSE_CAP, roundLocation, type House } from '@house-cost/domain';
+import { HOUSE_CAP, roundLocation, type HouseRef } from '@house-cost/domain';
 import type { H3Event } from 'h3';
 import { z } from 'zod';
 
@@ -22,7 +22,7 @@ const bodySchema = z.object({
 });
 
 const priceSignalsCached = defineCachedFunction(
-  (event: H3Event, houses: House[]) => useDataProvider(event).getPriceSignals(houses),
+  (event: H3Event, houses: HouseRef[]) => useDataProvider(event).getPriceSignals(houses),
   {
     name: 'prices',
     maxAge: ONE_DAY,
@@ -41,19 +41,18 @@ const priceSignalsCached = defineCachedFunction(
 
 /**
  * `POST /api/prices` with body `{ houses: Array<{ id, location, address? }> }`
- * -> `{ data: PriceSignal[], provenance }`. Signals carry `houseId` so the client can join them
- * back; Houses without open price data simply have no signal. Cached per set of house ids.
+ * -> `{ data: PriceSignal[], provenance }`. The body is exactly the `HouseRef` the port takes.
+ * Signals carry `houseId` so the client can join them back; Houses without open price data
+ * simply have no signal. Cached per set of house ids.
  */
 export default defineApiHandler(async (event) => {
   const { houses } = parseOrReject(bodySchema, await readBody(event));
 
-  const lookups: House[] = houses.map((house) => ({
-    id: house.id,
-    location: roundLocation(house.location),
-    address: house.address ?? {},
-    buildingType: 'other',
-    osmTags: {},
-  }));
+  const lookups: HouseRef[] = houses.map((house) => {
+    const lookup: HouseRef = { id: house.id, location: roundLocation(house.location) };
+    if (house.address) lookup.address = house.address;
+    return lookup;
+  });
 
   const result = await priceSignalsCached(event, lookups);
   setPublicCache(event, ONE_DAY);

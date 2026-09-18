@@ -4,18 +4,13 @@
  * `GB`). Server-side only: every request carries an identifying `User-Agent`, goes through one
  * concurrency-limited HTTP client and maps failures to `UpstreamError`.
  */
-import { DOMAIN_PACKAGE_NAME } from '@house-cost/domain';
-
-export const OPEN_DATA_PACKAGE_NAME = '@house-cost/open-data';
-
-/** The domain package this adapter set implements the port of. */
-export const IMPLEMENTS_PORT_FROM = DOMAIN_PACKAGE_NAME;
-
 export {
   createOpenDataProvider,
+  createOpenDataRuntime,
   DEFAULT_CONCURRENCY,
-  DEFAULT_FACTS_RADIUS_METRES,
+  HOUSES_MEMO_TTL_MS,
   type OpenDataOptions,
+  type OpenDataRuntime,
 } from './provider';
 export { createNominatimGeocoder } from './geocoder';
 
@@ -23,6 +18,7 @@ export { createHttpClient, type FetchLike, type HttpClient, type JsonRequest } f
 
 export { OVERPASS_SERVICE, OVERPASS_SOURCE, OVERPASS_URL } from './overpass/client';
 export {
+  NOMINATIM_MIN_INTERVAL_MS,
   NOMINATIM_SERVICE,
   NOMINATIM_SOURCE,
   NOMINATIM_URL,

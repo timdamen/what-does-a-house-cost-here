@@ -7,6 +7,7 @@ import {
 } from '@house-cost/domain';
 
 import type { HttpClient } from './http-client';
+import { isRecord } from './json';
 
 /** Public Nominatim instance. Configurable so a self-hosted instance can replace it. */
 export const NOMINATIM_URL = 'https://nominatim.openstreetmap.org';
@@ -23,6 +24,9 @@ const NOMINATIM_REVERSE_ZOOM = 16;
 /** Results per forward search, enough for a place-search box. */
 const NOMINATIM_SEARCH_LIMIT = 5;
 
+/** Nominatim's usage policy: at most one request per second. Requests start this far apart. */
+export const NOMINATIM_MIN_INTERVAL_MS = 1000;
+
 /**
  * ISO 3166-1 user-assigned code reported when Nominatim cannot place a Location in a country
  * (open water, for instance). No price register is keyed on it, so it yields "no data".
@@ -33,8 +37,6 @@ export interface ReverseGeocodeResult {
   /** The most local named area Nominatim knows for the Location. */
   name: string;
   hierarchy: NeighbourhoodHierarchy;
-  /** Postcode of the nearest addressable feature, when Nominatim reports one. */
-  postcode?: string;
 }
 
 export interface NominatimClient {
@@ -57,13 +59,26 @@ const AREA_NAME_KEYS = [
 ] as const;
 
 /**
- * Reverse geocoding for Neighbourhood names and forward search for the Geocoder. Requests are
- * serialised through their own single-slot limit (inside the shared client limit) so at most one
- * Nominatim request is in flight, in line with its "maximum 1 request per second" policy.
+ * Reverse geocoding for Neighbourhood names and forward search for the Geocoder. Requests go
+ * through one single-slot limit (inside the shared client limit) and start at least
+ * `NOMINATIM_MIN_INTERVAL_MS` apart, so one client never exceeds Nominatim's "maximum 1 request
+ * per second" policy. Build one client per process and share it between the provider and the
+ * geocoder, otherwise each copy paces itself alone.
  */
 export function createNominatimClient(client: HttpClient, baseUrl: string): NominatimClient {
   const oneAtATime = pLimit(1);
   const base = baseUrl.replace(/\/$/, '');
+  let nextAllowedAt = 0;
+
+  /** Runs `request` alone and no sooner than a second after the previous one started. */
+  function paced(request: () => Promise<unknown>): Promise<unknown> {
+    return oneAtATime(async () => {
+      const wait = nextAllowedAt - Date.now();
+      if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait));
+      nextAllowedAt = Date.now() + NOMINATIM_MIN_INTERVAL_MS;
+      return request();
+    });
+  }
 
   return {
     async reverse(location) {
@@ -74,7 +89,7 @@ export function createNominatimClient(client: HttpClient, baseUrl: string): Nomi
         zoom: String(NOMINATIM_REVERSE_ZOOM),
         addressdetails: '1',
       });
-      const body = await oneAtATime(() =>
+      const body = await paced(() =>
         client.json(`${base}/reverse?${params}`, { service: NOMINATIM_SERVICE }),
       );
       return mapReverse(body);
@@ -89,7 +104,7 @@ export function createNominatimClient(client: HttpClient, baseUrl: string): Nomi
         limit: String(NOMINATIM_SEARCH_LIMIT),
         addressdetails: '1',
       });
-      const body = await oneAtATime(() =>
+      const body = await paced(() =>
         client.json(`${base}/search?${params}`, { service: NOMINATIM_SERVICE }),
       );
       return mapSearch(body);
@@ -111,9 +126,8 @@ export function mapReverse(body: unknown): ReverseGeocodeResult {
     firstDisplaySegment(body.display_name) ??
     hierarchy.country ??
     'Unknown place';
-  const postcode = stringOrUndefined(address.postcode);
 
-  return postcode === undefined ? { name, hierarchy } : { name, hierarchy, postcode };
+  return { name, hierarchy };
 }
 
 /** Maps a `/search` body (an array of places) to Geocoder results, skipping malformed entries. */
@@ -170,8 +184,4 @@ function firstDisplaySegment(value: unknown): string | undefined {
 
 function stringOrUndefined(value: unknown): string | undefined {
   return typeof value === 'string' && value.length > 0 ? value : undefined;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }

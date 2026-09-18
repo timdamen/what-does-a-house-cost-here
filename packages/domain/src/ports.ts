@@ -1,7 +1,7 @@
 import type {
   GeocodeResult,
   House,
-  Location,
+  HouseRef,
   NeighbourhoodFacts,
   PriceSignal,
   Provenance,
@@ -38,8 +38,9 @@ export type GeocodeSearchResult = ProviderResult<GeocodeResult[]>;
  */
 export interface DataProvider {
   searchHouses(area: SearchArea): Promise<HouseSearchResult>;
-  getNeighbourhoodFacts(location: Location): Promise<NeighbourhoodFactsResult>;
-  getPriceSignals(houses: House[]): Promise<PriceSignalsResult>;
+  /** Facts for the Search Area: amenities and the Housing Mix follow its Search Radius. */
+  getNeighbourhoodFacts(area: SearchArea): Promise<NeighbourhoodFactsResult>;
+  getPriceSignals(houses: readonly HouseRef[]): Promise<PriceSignalsResult>;
 }
 
 /** Forward geocoding for the place-search box. */

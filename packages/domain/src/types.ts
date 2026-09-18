@@ -48,6 +48,13 @@ export interface House {
   osmTags: Record<string, string>;
 }
 
+/**
+ * What a Price Signal lookup needs of a House: its id, its Location and whatever address OSM
+ * holds. A `House` satisfies it; the server route builds it from the request body without
+ * inventing the fields a lookup never reads.
+ */
+export type HouseRef = Pick<House, 'id' | 'location'> & { address?: HouseAddress };
+
 export const PRICE_SIGNAL_KINDS = ['sale', 'valuation'] as const;
 export type PriceSignalKind = (typeof PRICE_SIGNAL_KINDS)[number];
 
@@ -107,6 +114,8 @@ export interface PriceSummary {
   /** ISO date the summary is current as of. */
   asOf: string;
   sampleSize: number;
+  /** How many months of sales before `asOf` the summary covers. */
+  windowMonths: number;
 }
 
 /** Counts of Houses per building type inside the Search Area. */

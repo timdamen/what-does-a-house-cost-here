@@ -18,7 +18,8 @@ export interface ListedHouse {
   distanceMetres: number;
 }
 
-const BUILDING_TYPE_LABELS: Record<BuildingType, string> = {
+/** The one label per building type, shared by the list, the card and the Housing Mix. */
+export const BUILDING_TYPE_LABELS: Record<BuildingType, string> = {
   detached: 'Detached house',
   'semi-detached': 'Semi-detached house',
   terraced: 'Terraced house',

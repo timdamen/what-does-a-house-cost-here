@@ -50,9 +50,11 @@ const asOf = computed(() =>
 );
 
 const sampleSentence = computed(() => {
-  const size = props.facts?.priceSummary?.sampleSize ?? 0;
+  const summary = props.facts?.priceSummary;
+  const size = summary?.sampleSize ?? 0;
   const count = new Intl.NumberFormat(locale.value).format(size);
-  return `Based on ${count} ${size === 1 ? 'sale' : 'sales'} in the last 24 months.`;
+  const months = summary?.windowMonths ?? 0;
+  return `Based on ${count} ${size === 1 ? 'sale' : 'sales'} in the last ${months} months.`;
 });
 
 const countryName = computed(() => props.facts?.hierarchy.country?.trim() || 'this country');
@@ -120,7 +122,7 @@ function formatCount(value: number): string {
       </section>
 
       <section :aria-labelledby="`${id}-cost`" class="flex flex-col gap-2">
-        <h3 :id="`${id}-cost`" class="text-highlighted text-sm font-semibold">What homes cost</h3>
+        <h3 :id="`${id}-cost`" class="text-highlighted text-sm font-semibold">What houses cost</h3>
 
         <UCard
           v-if="facts.priceSummary"

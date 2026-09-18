@@ -10,12 +10,15 @@ Alternatives: let the Nuxt server routes call each service directly (fast to wri
 
 ## Decision
 
-- `DataProvider` lives in `@house-cost/domain` with three operations: `searchHouses(area: SearchArea)`, `getNeighbourhoodFacts(location: Location)` and `getPriceSignals(houses: House[])`. Each resolves to `{ data, provenance }` where Provenance is `{ source, fetchedAt }`; `searchHouses` adds `cap` and `truncated`.
+- `DataProvider` lives in `@house-cost/domain` with three operations: `searchHouses(area: SearchArea)`, `getNeighbourhoodFacts(area: SearchArea)` and `getPriceSignals(houses: HouseRef[])`. Each resolves to `{ data, provenance }` where Provenance is `{ source, fetchedAt }`; `searchHouses` adds `cap` and `truncated`.
+- The facts take the whole Search Area, not a bare Location, so the Amenities and the Housing Mix describe the same circle as the map and the list at every Search Radius. `HouseRef` (`{ id, location, address? }`) is the part of a House a register lookup keys on; the `/api/prices` body is exactly that, so the server route never invents building types or OSM tags to satisfy the port.
 - A separate, smaller `Geocoder` port has `search(query)` for the place-search box.
 - Failures surface as the typed `UpstreamError` (`{ kind: 'upstream', service, retryable }`). The server maps it to HTTP 502; the One-Pager to a retry message. "No price data" is never an error (ADR-0005).
 - Two implementations: the fixture provider in `@house-cost/domain` (deterministic, offline, two fixture areas, one without price data) and the open-data provider in `@house-cost/open-data` (composes the Overpass, Nominatim and price adapters). Nuxt runtime config `dataProvider` selects one; tests always use the fixture.
 - A contract test exported from the domain package runs against both providers, so a real adapter cannot drift from what the UI expects.
-- The browser never calls an open-data service. The three server routes mirror the three port operations, add caching keyed on rounded Location and Search Radius, and send an identifying User-Agent with a small concurrency limit.
+- The browser never calls an open-data service. The three server routes mirror the three port operations, add caching keyed on rounded Location and Search Radius (facts included), and send an identifying User-Agent with a small concurrency limit.
+- The open-data package builds one runtime (`createOpenDataRuntime`) per process that the provider and the Geocoder share: one HTTP client, so the concurrency limit spans both, and one Nominatim client that lets one request through at a time and starts them at least a second apart (Nominatim's published limit). The server keeps that runtime as a singleton.
+- The open-data provider memoises the Houses of a Search Area for ten minutes, in-flight requests included. The One-Pager asks for Houses and facts at the same moment and the facts need the Houses too (the Housing Mix, and the postcodes the price register is queried by), so without the memo every Location cost two identical Overpass queries. The memo lives inside the provider rather than in the server routes because the port, not the route, knows which operations share upstream work; the contract test still asserts the facts of an area against the same area.
 
 ## Consequences
 

@@ -1,12 +1,12 @@
 import {
   UpstreamError,
-  type House,
+  type HouseRef,
   type PriceSignal,
   type PriceSummary,
-  type SearchArea,
 } from '@house-cost/domain';
 
 import type { HttpClient } from '../http-client';
+import { isRecord } from '../json';
 import { normalisePostcode } from '../overpass/houses';
 import type { PriceAdapter } from './registry';
 
@@ -49,9 +49,6 @@ export interface LandRegistryTransaction {
   postcode: string;
   /** Primary addressable object name: the house number or name. */
   paon?: string;
-  /** Secondary addressable object name: the flat or unit. */
-  saon?: string;
-  street?: string;
   /** `true` for category A (standard price paid) transactions. */
   standard: boolean;
 }
@@ -88,7 +85,7 @@ export function createLandRegistryAdapter(options: LandRegistryAdapterOptions): 
   }
 
   async function transactionsByPostcode(
-    houses: readonly House[],
+    houses: readonly HouseRef[],
   ): Promise<Map<string, LandRegistryTransaction[]>> {
     const postcodes = rankedPostcodes(houses).slice(0, MAX_POSTCODES_PER_CALL);
     const pages = await Promise.all(
@@ -114,7 +111,7 @@ export function createLandRegistryAdapter(options: LandRegistryAdapterOptions): 
       return signals;
     },
 
-    async getPriceSummary(_area: SearchArea, houses) {
+    async getPriceSummary(houses) {
       if (houses.length === 0) return null;
       const byPostcode = await transactionsByPostcode(houses);
       const since = monthsBefore(now(), SUMMARY_WINDOW_MONTHS);
@@ -127,7 +124,7 @@ export function createLandRegistryAdapter(options: LandRegistryAdapterOptions): 
 }
 
 /** Distinct normalised postcodes of the Houses, the ones with the most Houses first. */
-export function rankedPostcodes(houses: readonly House[]): string[] {
+export function rankedPostcodes(houses: readonly HouseRef[]): string[] {
   const counts = new Map<string, number>();
   for (const house of houses) {
     const postcode = housePostcode(house);
@@ -138,16 +135,16 @@ export function rankedPostcodes(houses: readonly House[]): string[] {
     .map(([postcode]) => postcode);
 }
 
-function housePostcode(house: House): string | undefined {
-  const postcode = house.address.postcode;
+function housePostcode(house: HouseRef): string | undefined {
+  const postcode = house.address?.postcode;
   return postcode ? normalisePostcode(postcode) : undefined;
 }
 
 function signalsForHouse(
-  house: House,
+  house: HouseRef,
   transactions: readonly LandRegistryTransaction[],
 ): PriceSignal[] {
-  const number = house.address.housenumber?.trim().toUpperCase();
+  const number = house.address?.housenumber?.trim().toUpperCase();
   const exact =
     number === undefined
       ? []
@@ -163,7 +160,7 @@ function signalsForHouse(
 }
 
 function toSignal(
-  house: House,
+  house: HouseRef,
   transaction: LandRegistryTransaction,
   scope: PriceSignal['scope'],
 ): PriceSignal {
@@ -190,6 +187,7 @@ export function summarise(sales: readonly LandRegistryTransaction[]): PriceSumma
     currency: 'GBP',
     asOf,
     sampleSize: sales.length,
+    windowMonths: SUMMARY_WINDOW_MONTHS,
   };
 }
 
@@ -250,8 +248,6 @@ function parseTransaction(item: unknown): LandRegistryTransaction | undefined {
     standard: typeof category !== 'string' || category.endsWith('standardPricePaidTransaction'),
   };
   if (typeof address.paon === 'string') transaction.paon = address.paon;
-  if (typeof address.saon === 'string') transaction.saon = address.saon;
-  if (typeof address.street === 'string') transaction.street = address.street;
   return transaction;
 }
 
@@ -284,8 +280,4 @@ export function parsePpdDate(value: unknown): string | undefined {
 
 function toIsoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
 }

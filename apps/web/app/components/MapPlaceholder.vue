@@ -1,19 +1,18 @@
 <script setup lang="ts">
 /**
- * Fixed-height panel shown where the map will be: server-rendered as the `<ClientOnly>` fallback
- * and again by `HouseMap.client.vue` until MapLibre has loaded. Research decision 7: no indicator
- * for the first second, a spinner after that, a step indicator from 10 s, retry on failure.
+ * Fixed-height panel shown where the map will be, server-rendered by `HouseMapFrame.vue` and
+ * kept until MapLibre has loaded. Research decision 7: no indicator for the first second, then a
+ * spinner (faded in with CSS so it works without JavaScript), a step indicator from 10 s, retry
+ * on failure.
  */
 withDefaults(
   defineProps<{
     summary: string;
     status?: 'loading' | 'error';
-    /** `delayed` fades the spinner in after 1 s with CSS so it works without JavaScript. */
-    spinner?: 'hidden' | 'delayed' | 'visible';
     /** Extra line under the spinner, e.g. "Loading map (2/3)". */
     detail?: string;
   }>(),
-  { status: 'loading', spinner: 'delayed', detail: undefined },
+  { status: 'loading', detail: undefined },
 );
 
 const emit = defineEmits<{ retry: [] }>();
@@ -38,17 +37,11 @@ const emit = defineEmits<{ retry: [] }>();
       />
     </template>
 
-    <template v-else-if="spinner !== 'hidden'">
-      <span
-        class="map-placeholder__spinner flex flex-col items-center gap-2"
-        :class="{ 'map-placeholder__spinner--delayed': spinner === 'delayed' }"
-        role="status"
-      >
-        <UIcon name="i-lucide-loader-circle" class="size-8 motion-safe:animate-spin" />
-        <span class="sr-only">Loading map</span>
-        <span v-if="detail" class="text-xs">{{ detail }}</span>
-      </span>
-    </template>
+    <span v-else class="map-placeholder__spinner flex flex-col items-center gap-2" role="status">
+      <UIcon name="i-lucide-loader-circle" class="size-8 motion-safe:animate-spin" />
+      <span class="sr-only">Loading map</span>
+      <span v-if="detail" class="text-xs">{{ detail }}</span>
+    </span>
   </div>
 </template>
 
@@ -77,7 +70,7 @@ const emit = defineEmits<{ retry: [] }>();
   }
 }
 
-.map-placeholder__spinner--delayed {
+.map-placeholder__spinner {
   animation: map-placeholder-appear 0s linear 1s both;
 }
 </style>

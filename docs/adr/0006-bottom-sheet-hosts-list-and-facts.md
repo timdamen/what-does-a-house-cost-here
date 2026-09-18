@@ -16,7 +16,8 @@ Alternatives: a shorter map (60dvh) with the page scrolling beneath it (the spec
 - The sheet hosts, top to bottom: the House Card when a House is selected, the house list in `<section id="houses">`, and the Neighbourhood Facts in `<section id="neighbourhood">`. Peek shows the one-row count summary ("42 houses, 18 with prices"), half shows the list, full shows list then facts. The DOM order is map, summary, list, facts for SSR and screen readers.
 - Selecting a House from the map snaps the sheet to at least half and pushes the House Card in; closing the card clears `h` in the URL. Back or Escape collapses the sheet from full. The drag handle also cycles snap points on tap and is keyboard operable. Focusing an Amenity collapses the sheet to half so the map is visible.
 - At `>= 840px` (Android "expanded" width class) the same component renders as a side panel one third of the window wide, with the map beside it.
-- It is a custom component, not `UDrawer`, because its content must be server-rendered and always present. Nuxt UI is used for everything inside it.
+- It is a custom component, not `UDrawer`, because its structure must be server-rendered and always present. Nuxt UI is used for everything inside it.
+- The sheet's structure, headings and skeletons are server-rendered; the house list, the Neighbourhood Facts and the prices are fetched in the browser (`server: false`) and hydrate into it. The spec asked for the list and facts to be server-rendered, but a cold Overpass query takes 2 to 5 seconds, so waiting for it on the server would blow the 2.5 s largest-contentful-paint budget on every uncached Location. The shell paints first; the data arrives into cached, keyed slots.
 - Snap transitions are `0ms` under `prefers-reduced-motion: reduce`.
 
 ## Consequences

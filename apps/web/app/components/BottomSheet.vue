@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import { cycleSnap, nearestSnap, type SheetSnap, snapHeightsPx, stepSnap } from '~/utils/sheet';
+import {
+  cycleSnap,
+  nearestSnap,
+  SHEET_HISTORY_MARKER,
+  SHEET_SNAP_CSS,
+  type SheetSnap,
+  snapHeightsPx,
+  stepSnap,
+} from '~/utils/sheet';
 
 /**
- * The Bottom Sheet (ADR-0006): a server-rendered, always-present panel over the map with three
+ * The Bottom Sheet (ADR-0006): a server-rendered, always-present sheet over the map with three
  * snap points, peek / half / full, in `dvh` units. The drag handle is a real button: dragging it
  * resizes the sheet, tapping it cycles the snap points, ArrowUp/ArrowDown step them and Escape
- * collapses full to half. At `>= 840px` the same markup becomes a side panel one third wide,
- * full height, without snapping (CSS only, no JavaScript). The `card` slot sits above the
- * scrollable body; the default slot is the body.
+ * collapses full to half. Opening the sheet fully pushes one history entry, so Back collapses it
+ * to half instead of leaving the page; leaving full any other way pops that entry again. At the
+ * side-panel breakpoint the same markup becomes a side panel one third wide, full height,
+ * without snapping (CSS only, no JavaScript). The `card` slot sits above the scrollable body;
+ * the default slot is the body.
  */
 const props = withDefaults(defineProps<{ label?: string }>(), {
   label: 'Houses and neighbourhood',
@@ -26,11 +36,19 @@ let activePointer: number | null = null;
 let startY = 0;
 let startHeight = 0;
 let suppressNextClick = false;
+/** Whether the history entry for the full state is currently on the stack. */
+let pushedHistoryEntry = false;
 
-const handleLabel = computed(() => `Resize panel (now ${snap.value})`);
+const handleLabel = computed(() => `Resize sheet (now ${snap.value})`);
+
+const snapVars = {
+  '--sheet-peek': SHEET_SNAP_CSS.peek,
+  '--sheet-half': SHEET_SNAP_CSS.half,
+  '--sheet-full': SHEET_SNAP_CSS.full,
+};
 
 const style = computed(() =>
-  dragHeight.value === null ? undefined : { height: `${dragHeight.value}px` },
+  dragHeight.value === null ? snapVars : { ...snapVars, height: `${dragHeight.value}px` },
 );
 
 function heights() {
@@ -117,6 +135,52 @@ function onRootKeydown(event: KeyboardEvent) {
     snap.value = 'half';
   }
 }
+
+/**
+ * Back collapses the sheet from full (ADR-0006). The entry is pushed with `history.pushState`
+ * on top of the router's own state, so `router.replace` (which never adds entries) is not
+ * disturbed; only this component's marker, or its own bookkeeping, makes it react to `popstate`.
+ */
+function onPopState(event: PopStateEvent) {
+  const state: unknown = event.state;
+  const marked =
+    typeof state === 'object' &&
+    state !== null &&
+    (state as Record<string, unknown>)[SHEET_HISTORY_MARKER] === 'full';
+  if (marked) {
+    // Forward, back onto the entry the full state pushed.
+    pushedHistoryEntry = true;
+    snap.value = 'full';
+    return;
+  }
+  if (!pushedHistoryEntry) return;
+  pushedHistoryEntry = false;
+  if (snap.value === 'full') snap.value = 'half';
+}
+
+watch(snap, (next, previous) => {
+  if (typeof window === 'undefined') return;
+  if (next === 'full' && !pushedHistoryEntry) {
+    pushedHistoryEntry = true;
+    window.history.pushState({ ...window.history.state, [SHEET_HISTORY_MARKER]: 'full' }, '');
+  } else if (previous === 'full' && next !== 'full' && pushedHistoryEntry) {
+    // Collapsed by a drag, tap or Escape: drop the entry so Back leaves the page as usual.
+    pushedHistoryEntry = false;
+    window.history.back();
+  }
+});
+
+onMounted(() => {
+  window.addEventListener('popstate', onPopState);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('popstate', onPopState);
+  if (pushedHistoryEntry) {
+    pushedHistoryEntry = false;
+    window.history.back();
+  }
+});
 </script>
 
 <template>
@@ -156,11 +220,10 @@ function onRootKeydown(event: KeyboardEvent) {
 </template>
 
 <style scoped>
-/* Snap heights in `dvh`; `snapHeightsPx()` in `~/utils/sheet` mirrors these for the drag logic. */
+@reference '../assets/css/main.css';
+
+/* Snap heights come from `SHEET_SNAP_CSS` (`~/utils/sheet`) through the inline custom properties. */
 .bottom-sheet {
-  --sheet-peek: max(96px, 15dvh);
-  --sheet-half: 50dvh;
-  --sheet-full: 90dvh;
   height: var(--sheet-peek);
   padding-bottom: env(safe-area-inset-bottom);
   border-radius: 16px 16px 0 0;
@@ -186,7 +249,7 @@ function onRootKeydown(event: KeyboardEvent) {
 }
 
 /* Research decision 2: at the Android "expanded" width the sheet becomes a side panel. */
-@media (min-width: 840px) {
+@media (width >= --theme(--breakpoint-panel)) {
   .bottom-sheet,
   .bottom-sheet[data-snap] {
     inset: 0 0 0 auto;

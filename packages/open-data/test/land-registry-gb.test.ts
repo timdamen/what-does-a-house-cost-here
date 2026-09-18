@@ -1,4 +1,4 @@
-import { UpstreamError, type House } from '@house-cost/domain';
+import { UpstreamError, type HouseRef } from '@house-cost/domain';
 import { describe, expect, it } from 'vitest';
 
 import { createHttpClient, type FetchLike } from '../src/http-client';
@@ -13,16 +13,10 @@ import {
   type LandRegistryTransaction,
 } from '../src/prices/land-registry-gb';
 import { createFixtureFetch, jsonResponse } from './helpers/fixture-fetch';
-import { FIXED_NOW, ISLINGTON_AREA, TEST_USER_AGENT } from './helpers/subject';
+import { FIXED_NOW, TEST_USER_AGENT } from './helpers/subject';
 
-function house(id: string, address: House['address']): House {
-  return {
-    id,
-    location: { lat: 51.5385, lng: -0.1025 },
-    address,
-    buildingType: 'house',
-    osmTags: {},
-  };
+function house(id: string, address: HouseRef['address']): HouseRef {
+  return { id, location: { lat: 51.5385, lng: -0.1025 }, address };
 }
 
 const MOON_8 = house('way/31024606', {
@@ -96,29 +90,29 @@ describe('getPriceSignals', () => {
 
 describe('getPriceSummary', () => {
   it('summarises standard sales in the last 24 months across the area postcodes', async () => {
-    const summary = await adapterWith(createFixtureFetch()).getPriceSummary(ISLINGTON_AREA, [
+    const summary = await adapterWith(createFixtureFetch()).getPriceSummary([
       MOON_8,
       MOON_99,
       WATER_TOWER_1,
     ]);
 
     if (summary === null) throw new Error('expected a summary');
-    expect(summary).toMatchObject({ currency: 'GBP', asOf: '2023-06-30', sampleSize: 2 });
+    expect(summary).toMatchObject({
+      currency: 'GBP',
+      asOf: '2023-06-30',
+      sampleSize: 2,
+      windowMonths: 24,
+    });
     expect(summary.low).toBeLessThanOrEqual(summary.typical);
     expect(summary.typical).toBeLessThanOrEqual(summary.high);
   });
 
   it('is null when the window holds no sales, or there are no Houses', async () => {
     const recordedOn = new Date('2026-09-17T00:00:00Z');
-    const stale = await adapterWith(createFixtureFetch(), recordedOn).getPriceSummary(
-      ISLINGTON_AREA,
-      [MOON_8],
-    );
+    const stale = await adapterWith(createFixtureFetch(), recordedOn).getPriceSummary([MOON_8]);
     expect(stale).toBeNull();
 
-    await expect(
-      adapterWith(createFixtureFetch()).getPriceSummary(ISLINGTON_AREA, []),
-    ).resolves.toBeNull();
+    await expect(adapterWith(createFixtureFetch()).getPriceSummary([])).resolves.toBeNull();
   });
 });
 
@@ -141,6 +135,7 @@ describe('summarise', () => {
       currency: 'GBP',
       asOf: '2024-09-01',
       sampleSize: 10,
+      windowMonths: 24,
     });
     expect(summarise([sale(300_000, '2024-01-01')])).toMatchObject({
       typical: 300_000,

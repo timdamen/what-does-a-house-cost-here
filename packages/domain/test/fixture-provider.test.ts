@@ -16,6 +16,9 @@ const provider = () => createFixtureProvider({ now: () => FIXED_NOW });
 const metroDistance = (facts: NeighbourhoodFacts): number | undefined =>
   facts.amenities.transport.find((a) => a.name === 'Metro Vijzelgracht')?.distanceMetres;
 
+const mixTotal = (facts: NeighbourhoodFacts): number =>
+  Object.values(facts.housingMix).reduce((sum, count) => sum + count, 0);
+
 describe('fixture provider', () => {
   it('is deterministic across instances', async () => {
     const area = { centre: AMSTERDAM_CENTRE, radiusMetres: 2000 };
@@ -85,12 +88,16 @@ describe('fixture provider', () => {
   });
 
   it('returns Neighbourhood Facts for Amsterdam with every amenity class and a price summary', async () => {
-    const { data: facts } = await provider().getNeighbourhoodFacts(AMSTERDAM_CENTRE);
+    const { data: facts } = await provider().getNeighbourhoodFacts({
+      centre: AMSTERDAM_CENTRE,
+      radiusMetres: 500,
+    });
 
     expect(facts.name).toBe('Grachtengordel-Zuid');
     expect(facts.hierarchy).toMatchObject({ city: 'Amsterdam', countryCode: 'NL' });
     expect(facts.priceSummary?.currency).toBe('EUR');
     expect(facts.priceSummary?.sampleSize).toBeGreaterThan(30);
+    expect(facts.priceSummary?.windowMonths).toBe(48);
     for (const list of Object.values(facts.amenities)) {
       expect(list.length).toBeGreaterThan(0);
     }
@@ -98,17 +105,33 @@ describe('fixture provider', () => {
     expect(total).toBeGreaterThanOrEqual(110);
   });
 
+  it('counts the Housing Mix over the Houses inside the Search Area only', async () => {
+    const p = provider();
+    const wide = await p.getNeighbourhoodFacts({ centre: AMSTERDAM_CENTRE, radiusMetres: 500 });
+    const narrow = await p.getNeighbourhoodFacts({ centre: AMSTERDAM_CENTRE, radiusMetres: 250 });
+    const { data: houses } = await p.searchHouses({ centre: AMSTERDAM_CENTRE, radiusMetres: 250 });
+
+    expect(mixTotal(narrow.data)).toBe(houses.length);
+    expect(mixTotal(narrow.data)).toBeLessThan(mixTotal(wide.data));
+  });
+
   it('measures amenity distances from the queried Location', async () => {
     const p = provider();
-    const here = await p.getNeighbourhoodFacts(AMSTERDAM_CENTRE);
-    const nearby = await p.getNeighbourhoodFacts({ lat: 52.369, lng: 4.906 });
+    const here = await p.getNeighbourhoodFacts({ centre: AMSTERDAM_CENTRE, radiusMetres: 500 });
+    const nearby = await p.getNeighbourhoodFacts({
+      centre: { lat: 52.369, lng: 4.906 },
+      radiusMetres: 500,
+    });
 
     expect(metroDistance(here.data)).not.toBe(metroDistance(nearby.data));
   });
 
   it('returns no price data for Sydney as a normal value', async () => {
     const p = provider();
-    const { data: facts } = await p.getNeighbourhoodFacts(SYDNEY_CENTRE);
+    const { data: facts } = await p.getNeighbourhoodFacts({
+      centre: SYDNEY_CENTRE,
+      radiusMetres: 500,
+    });
     const { data: houses } = await p.searchHouses({ centre: SYDNEY_CENTRE, radiusMetres: 1000 });
     const { data: signals } = await p.getPriceSignals(houses);
 
@@ -121,13 +144,7 @@ describe('fixture provider', () => {
 
   it('ignores unknown house ids when looking up Price Signals', async () => {
     const { data } = await provider().getPriceSignals([
-      {
-        id: 'way/1',
-        location: AMSTERDAM_CENTRE,
-        address: {},
-        buildingType: 'other',
-        osmTags: {},
-      },
+      { id: 'way/1', location: AMSTERDAM_CENTRE },
     ]);
     expect(data).toEqual([]);
   });

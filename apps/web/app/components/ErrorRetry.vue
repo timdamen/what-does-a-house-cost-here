@@ -1,11 +1,12 @@
 <script setup lang="ts">
 /**
- * Shown when an upstream open-data service answered with an Upstream Error (HTTP 502). Never a
- * blank page (user story 41): one sentence that puts the blame where it belongs and a retry.
+ * Shown whenever loading the area failed, whatever the cause: an Upstream Error from an open-data
+ * service (HTTP 502, with the service named), a server error or a lost connection. Never a blank
+ * page (user story 41): one sentence and a retry.
  */
-withDefaults(
+const props = withDefaults(
   defineProps<{
-    /** Name of the failing service, for the small print. */
+    /** Name of the failing upstream service, when the failure was a typed Upstream Error. */
     service?: string;
     retrying?: boolean;
   }>(),
@@ -13,6 +14,12 @@ withDefaults(
 );
 
 const emit = defineEmits<{ retry: [] }>();
+
+const description = computed(() =>
+  props.service
+    ? "The open-data service is unavailable right now. It's them, not you."
+    : 'Loading this area failed. Check your connection and try again.',
+);
 </script>
 
 <template>
@@ -22,7 +29,7 @@ const emit = defineEmits<{ retry: [] }>();
       variant="soft"
       icon="i-lucide-cloud-off"
       title="Could not load this area"
-      description="The open-data service is unavailable right now. It's them, not you."
+      :description="description"
     >
       <template #actions>
         <div class="flex flex-wrap items-center gap-3">

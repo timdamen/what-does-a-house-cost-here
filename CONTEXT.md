@@ -17,14 +17,14 @@ This file is the glossary and nothing else. Each term names the package that own
 
 - **House** (`domain`): a residential building known to OpenStreetMap inside the Search Area, with whatever address and building type OSM holds for it.
 - **Price Signal** (`domain`): a sale price or official valuation for a House, or for the street or area it sits in, from an open price register. Price Signals are regional and are often absent.
-- **Price Summary** (`domain`): the typical, low and high price for a Neighbourhood with the date it holds for; `null` means "no open price data for this region yet", which is a normal state, not an error.
-- **Neighbourhood Facts** (`domain`): what the app shows for a Neighbourhood: its name and hierarchy, the Price Summary, its Amenities with walking distances, and its Housing Mix.
+- **Price Summary** (`domain`): the typical, low and high price for a Neighbourhood with the date it holds for and the number of months of sales it covers; `null` means "no open price data for this region yet", which is a normal state, not an error.
+- **Neighbourhood Facts** (`domain`): what the app shows for a Search Area: the Neighbourhood's name and hierarchy, the Price Summary, its Amenities with walking distances, and its Housing Mix.
 - **Amenity** (`domain`): a school, supermarket, healthcare place, park or public transport stop near the Location, with its walking distance.
 - **Housing Mix** (`domain`): counts of Houses in the Search Area by building type.
 
 ### Data sources
 
-- **Data Provider** (`domain` port; implementations in `domain` and `open-data`): the single port through which the app reaches any external source of Houses, Price Signals or Neighbourhood Facts (ADR-0004). The fixture provider is the deterministic offline implementation; the open-data provider is the real one.
+- **Data Provider** (`domain` port; implementations in `domain` and `open-data`): the single port through which the app reaches any external source of Houses, Price Signals or Neighbourhood Facts (ADR-0004). The fixture provider is the deterministic offline implementation; the open-data provider is the real one. A Price Signal lookup takes a House reference (`HouseRef`: id, Location and address), the part of a House a register keys on.
 - **Geocoder** (`domain` port; implementations in `domain` and `open-data`): the port behind the place-search box, turning a typed query into candidate Locations with a label and country code.
 - **Provenance** (`domain`): the source name and fetched-at time attached to every Data Provider result and shown to the visitor under "About this data".
 - **Upstream Error** (`domain`): the typed error a Data Provider raises when an open-data service fails; the server turns it into an HTTP 502 and the One-Pager into a retry message.

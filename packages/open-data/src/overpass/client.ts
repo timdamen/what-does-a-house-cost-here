@@ -1,6 +1,7 @@
 import { UpstreamError, type Location } from '@house-cost/domain';
 
 import type { HttpClient } from '../http-client';
+import { isRecord } from '../json';
 
 /** Public Overpass instance. Configurable so a mirror or self-hosted instance can replace it. */
 export const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
@@ -41,7 +42,7 @@ export function elementId(element: OverpassElementLike): string {
 
 type OverpassElementLike = Pick<OverpassElement, 'type' | 'id'>;
 
-/** Coordinates of a node, or the centre of a way/relation. `undefined` when neither is present. */
+/** The Location of a node, or the centre of a way/relation. `undefined` when neither is present. */
 export function elementLocation(element: OverpassElement): Location | undefined {
   if (element.type === 'node' && isFiniteNumber(element.lat) && isFiniteNumber(element.lon)) {
     return { lat: element.lat, lng: element.lon };
@@ -87,10 +88,6 @@ function isOverpassElement(value: unknown): value is OverpassElement {
   if (!isRecord(value)) return false;
   const type = value.type;
   return (type === 'node' || type === 'way' || type === 'relation') && isFiniteNumber(value.id);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
 }
 
 function isFiniteNumber(value: unknown): value is number {

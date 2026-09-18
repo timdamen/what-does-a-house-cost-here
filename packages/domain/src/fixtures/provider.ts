@@ -1,4 +1,5 @@
-import { haversineMetres, offsetLocation, walkingMinutes } from '../geo';
+import { haversineMetres, isWithinArea, offsetLocation, walkingMinutes } from '../geo';
+import { countHousingMix } from '../housing-mix';
 import { HOUSE_CAP, type DataProvider } from '../ports';
 import type {
   Amenity,
@@ -11,10 +12,16 @@ import type {
   Provenance,
 } from '../types';
 import { FIXTURE_AREAS, type FixtureArea } from './areas';
-import { countHousingMix, generateFixtureTown, type FixtureTown } from './houses';
+import { generateFixtureTown, type FixtureTown } from './houses';
 
 /** `provenance.source` reported by the fixture provider and geocoder. */
 export const FIXTURE_SOURCE = 'fixture';
+
+/** The fixture Price Summary holds for this date and looks back `FIXTURE_SUMMARY_WINDOW_MONTHS`. */
+const FIXTURE_SUMMARY_AS_OF = '2026-06-30';
+const FIXTURE_SUMMARY_WINDOW_MONTHS = 48;
+/** `FIXTURE_SUMMARY_AS_OF` minus the window; sales before it are left out of the summary. */
+const FIXTURE_SUMMARY_SINCE = '2022-06-30';
 
 export interface FixtureProviderOptions {
   /** Clock used for `provenance.fetchedAt`. Inject a fixed one in tests. */
@@ -28,7 +35,9 @@ export interface FixtureProviderOptions {
 /**
  * Deterministic, offline Data Provider. Two areas: Amsterdam (`AMSTERDAM_CENTRE`) with Price
  * Signals in EUR and a price summary, and Sydney (`SYDNEY_CENTRE`) whose region has no open price
- * data (`priceSummary: null`, no Price Signals). Any Location is served by its nearest area.
+ * data (`priceSummary: null`, no Price Signals). Any Location is served by its nearest area. The
+ * Housing Mix counts the Houses inside the Search Area; the amenities are the whole town's,
+ * nearest first, so every class has something to show at any Search Radius.
  */
 export function createFixtureProvider(options: FixtureProviderOptions = {}): DataProvider {
   const now = options.now ?? (() => new Date());
@@ -59,17 +68,19 @@ export function createFixtureProvider(options: FixtureProviderOptions = {}): Dat
       };
     },
 
-    async getNeighbourhoodFacts(location) {
-      const area = nearestArea(location);
+    async getNeighbourhoodFacts(searchArea) {
+      const area = nearestArea(searchArea.centre);
       const town = towns.get(area);
-      const houses = town?.houses ?? [];
+      const houses = (town?.houses ?? []).filter((house) =>
+        isWithinArea(house.location, searchArea),
+      );
       const signals = town ? [...town.signalsByHouseId.values()].flat() : [];
 
       const facts: NeighbourhoodFacts = {
         name: area.name,
         hierarchy: { ...area.hierarchy },
         priceSummary: summarisePrices(area, signals),
-        amenities: groupAmenities(area, location),
+        amenities: groupAmenities(area, searchArea.centre),
         housingMix: countHousingMix(houses),
       };
       return { data: facts, provenance: provenance() };
@@ -129,7 +140,7 @@ function groupAmenities(area: FixtureArea, from: Location): Record<AmenityClass,
 function summarisePrices(area: FixtureArea, signals: PriceSignal[]): PriceSummary | null {
   if (!area.currency) return null;
   const sales = signals
-    .filter((signal) => signal.kind === 'sale')
+    .filter((signal) => signal.kind === 'sale' && signal.date >= FIXTURE_SUMMARY_SINCE)
     .map((signal) => signal.amount)
     .toSorted((a, b) => a - b);
   if (sales.length === 0) return null;
@@ -139,8 +150,9 @@ function summarisePrices(area: FixtureArea, signals: PriceSignal[]): PriceSummar
     low: percentile(sales, 0.1),
     high: percentile(sales, 0.9),
     currency: area.currency,
-    asOf: '2026-06-30',
+    asOf: FIXTURE_SUMMARY_AS_OF,
     sampleSize: sales.length,
+    windowMonths: FIXTURE_SUMMARY_WINDOW_MONTHS,
   };
 }
 

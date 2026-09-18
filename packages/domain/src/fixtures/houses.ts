@@ -1,6 +1,5 @@
 import { offsetLocation, roundLocation } from '../geo';
-import type { BuildingType, House, HousingMix, PriceSignal } from '../types';
-import { BUILDING_TYPES } from '../types';
+import type { House, PriceSignal } from '../types';
 import type { FixtureArea, FixtureStreet } from './areas';
 import { createSeededRandom, type SeededRandom } from './random';
 
@@ -136,18 +135,4 @@ function roundToThousand(value: number): number {
 
 function pad(value: number): string {
   return String(value).padStart(2, '0');
-}
-
-/** Counts Houses per building type, with every type present (zero when absent). */
-export function countHousingMix(houses: readonly House[]): HousingMix {
-  const mix = Object.fromEntries(BUILDING_TYPES.map((type) => [type, 0])) as HousingMix;
-  for (const house of houses) {
-    mix[house.buildingType] += 1;
-  }
-  return mix;
-}
-
-/** Whether a string is one of the fixed building types. */
-export function isBuildingType(value: string): value is BuildingType {
-  return (BUILDING_TYPES as readonly string[]).includes(value);
 }

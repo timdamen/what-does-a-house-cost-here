@@ -17,7 +17,6 @@
     "@house-cost/domain": "workspace:*",
     "@house-cost/open-data": "workspace:*",
     "@iconify-json/lucide": "^1.2.133",
-    "@nuxt/fonts": "^0.14.0",
     "@nuxt/icon": "^2.5.1",
     "@nuxt/image": "^2.1.0",
     "@nuxt/ui": "^4.11.1",

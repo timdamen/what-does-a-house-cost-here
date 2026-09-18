@@ -87,3 +87,13 @@ Ticket 09 (2026-09-17):
 ## Removals
 
 - `@nuxt/scripts` 1.3.9 (ticket 07). Research decision 5 overturned loading MapLibre through `useScript`; nothing in the app called `useScript` or read `$scripts`, so the module is gone from `apps/web/nuxt.config.ts` and `apps/web/package.json`. Re-add it only if a third-party tag is ever needed.
+
+- `@nuxt/fonts` 0.14.0 removed (fix pass after the code review, 2026-09-17). The module was
+  installed but declared no font, so it did nothing. Declaring Inter as `--font-sans` (self-hosted,
+  `font-display: swap`, upright latin faces only) added about 225 ms to the simulated
+  first-contentful-paint in the Lighthouse CI run (`/` 2255 ms -> 2480 ms, deep link LCP
+  2413 ms -> 2628 ms) and broke the 2.5 s LCP budget on both URLs: Lighthouse's throttling folds
+  every request started before first paint into its estimate, so any web font costs it, whatever
+  its `font-display`. Nuxt Fonts cannot set `font-display: optional` for provider fonts either.
+  The UI keeps Tailwind's system font stack, which the spec's "self-hosted or open hosts" allows.
+  Re-add the module together with a raised budget if a brand font is ever wanted.

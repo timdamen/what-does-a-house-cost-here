@@ -8,27 +8,36 @@ services.
 ## Usage
 
 ```ts
-import { createNominatimGeocoder, createOpenDataProvider } from '@house-cost/open-data';
+import {
+  createNominatimGeocoder,
+  createOpenDataProvider,
+  createOpenDataRuntime,
+} from '@house-cost/open-data';
 
-const options = {
+// One runtime per process: it holds the HTTP client (concurrency limit) and the Nominatim
+// client (one request at a time, a second apart) that the provider and the geocoder share.
+const runtime = createOpenDataRuntime({
   userAgent: 'what-does-a-house-cost-here/0.1 (+https://example.org/contact)',
   concurrency: 2, // default
-  // fetch, now, overpassUrl, nominatimUrl, landRegistryUrl, factsRadiusMetres, priceAdapters
-};
-const provider = createOpenDataProvider(options);
-const geocoder = createNominatimGeocoder(options);
+  // fetch, now, overpassUrl, nominatimUrl, landRegistryUrl, priceAdapters
+});
+const provider = createOpenDataProvider(runtime);
+const geocoder = createNominatimGeocoder(runtime);
 ```
 
 - `searchHouses(area)`: residential buildings from Overpass, nearest first, at most `HOUSE_CAP`
   (300). The query asks for `cap + 1` elements, so `truncated` is exact and the download bounded.
   `provenance.source` is `openstreetmap-overpass`.
-- `getNeighbourhoodFacts(location)`: name and hierarchy from Nominatim reverse geocoding
-  (`zoom=16`), amenities (nearest 5 per class) and housing mix from Overpass within
-  `factsRadiusMetres` (default 500), and a price summary from the register for the country
-  Nominatim reports. `provenance.source` joins the contributors with `+`, e.g.
-  `nominatim+openstreetmap-overpass+hm-land-registry-ppd`.
-- `getPriceSignals(houses)`: one Nominatim reverse lookup on the Houses' centroid picks the
-  register; no register means `data: []` (`provenance.source` `nominatim`).
+- `getNeighbourhoodFacts(area)`: name and hierarchy from Nominatim reverse geocoding (`zoom=16`),
+  amenities (nearest 5 per class) and housing mix from Overpass within the area's Search Radius,
+  and a price summary from the register for the country Nominatim reports. `provenance.source`
+  joins the contributors with `+`, e.g. `nominatim+openstreetmap-overpass+hm-land-registry-ppd`.
+  The Houses of an area are memoised for `HOUSES_MEMO_TTL_MS` (10 minutes, in flight included),
+  so the app asking for Houses and facts at the same moment costs one Overpass houses query, not
+  two; the register also needs them for its postcodes.
+- `getPriceSignals(houses)`: takes `HouseRef` (`{ id, location, address? }`). One Nominatim
+  reverse lookup on the Houses' centroid picks the register; no register means `data: []`
+  (`provenance.source` `nominatim`).
 - `search(query)` (Geocoder): Nominatim `/search`, `limit=5`. Call it on an explicit submit only.
 - Every operation rejects with `UpstreamError` (`service`: `overpass`, `nominatim` or
   `land-registry`; `retryable` for 429/5xx/network) when a service fails. "No open price data
@@ -37,9 +46,9 @@ const geocoder = createNominatimGeocoder(options);
 
 ## Price registry
 
-`PriceAdapter` is `{ countryCodes, source, getPriceSignals(houses), getPriceSummary(area, houses) }`.
-Registers rarely carry coordinates, so adapters receive the Houses (with `addr:*` fields) as the
-geographic key. `createPriceRegistry(adapters)` keys them by ISO country code; unknown codes
+`PriceAdapter` is `{ countryCodes, source, getPriceSignals(houses), getPriceSummary(houses) }`.
+Registers rarely index by Location, so adapters receive the Houses (`HouseRef`: id, Location and
+`addr:*` fields) as the geographic key. `createPriceRegistry(adapters)` keys them by ISO country code; unknown codes
 return `undefined`, which the provider reports as "no data". Add a region by writing an adapter
 and passing `priceAdapters` (or extending the default list in `provider.ts`).
 
@@ -53,18 +62,18 @@ most-populated postcodes first, at most `MAX_POSTCODES_PER_CALL` (30) per operat
 - Signals: transactions whose PAON equals the House's `housenumber` are `scope: 'house'` (newest
   5); otherwise the newest sale in the postcode is one `scope: 'street'` signal. `kind` is
   always `sale`, currency `GBP`.
-- Summary: category A (standard) sales in the last `SUMMARY_WINDOW_MONTHS` (24). `typical` is
-  the median, `low`/`high` the 10th and 90th percentiles by nearest rank (min/max for small
-  samples), `asOf` the newest sale date, `sampleSize` the count. No sales in the window gives
-  `null`.
+- Summary: category A (standard) sales in the last `SUMMARY_WINDOW_MONTHS` (24, reported as
+  `windowMonths`). `typical` is the median, `low`/`high` the 10th and 90th percentiles by nearest
+  rank (min/max for small samples), `asOf` the newest sale date, `sampleSize` the count. No sales
+  in the window gives `null`.
 
 ## Upstream services and their policies
 
-| Service                                                       | Policy                                                                                                                                                                                     | How this package complies                                                                                                                                                                                                                                         |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Overpass API (`overpass-api.de`)                              | https://dev.overpass-api.de/overpass-doc/en/preface/commons.html (about 10 000 requests and 1 GB per day per user; 429/504 when overloaded)                                                | `[timeout:25]`, `out center tags` (no node lists), result limit `cap + 1`, one amenities query per Location, identifying `User-Agent`, concurrency 2, endpoint configurable for a mirror or self-hosted instance. The app caches per rounded Location and radius. |
-| Nominatim (`nominatim.openstreetmap.org`)                     | https://operations.osmfoundation.org/policies/nominatim/ (max 1 request/second, identifying `User-Agent` or Referer, no autocomplete, results must be cached)                              | `User-Agent` required by the options, at most one Nominatim request in flight (a single-slot limit inside the shared one), `/search` only on explicit submit with `limit=5`, reverse lookups on rounded coordinates so the app can cache them.                    |
-| HM Land Registry Price Paid Data (`landregistry.data.gov.uk`) | Open Government Licence v3.0, https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads and https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/ | Bounded requests per operation, `_pageSize=100`, identifying `User-Agent`. Address data is used only to display residential property price information, the permitted use.                                                                                        |
+| Service                                                       | Policy                                                                                                                                                                                     | How this package complies                                                                                                                                                                                                                                                                          |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Overpass API (`overpass-api.de`)                              | https://dev.overpass-api.de/overpass-doc/en/preface/commons.html (about 10 000 requests and 1 GB per day per user; 429/504 when overloaded)                                                | `[timeout:25]`, `out center tags` (no node lists), result limit `cap + 1`, one amenities query per Location, identifying `User-Agent`, concurrency 2, endpoint configurable for a mirror or self-hosted instance. The app caches per rounded Location and radius.                                  |
+| Nominatim (`nominatim.openstreetmap.org`)                     | https://operations.osmfoundation.org/policies/nominatim/ (max 1 request/second, identifying `User-Agent` or Referer, no autocomplete, results must be cached)                              | `User-Agent` required by the options, one Nominatim client per runtime that lets one request through at a time and starts them at least `NOMINATIM_MIN_INTERVAL_MS` (1 s) apart, `/search` only on explicit submit with `limit=5`, reverse lookups on rounded Locations so the app can cache them. |
+| HM Land Registry Price Paid Data (`landregistry.data.gov.uk`) | Open Government Licence v3.0, https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads and https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/ | Bounded requests per operation, `_pageSize=100`, identifying `User-Agent`. Address data is used only to display residential property price information, the permitted use.                                                                                                                         |
 
 Attribution the app must display:
 
@@ -77,7 +86,8 @@ Attribution the app must display:
 
 `createHttpClient({ userAgent, concurrency, fetch })` is the only path to the network: it sets
 `User-Agent` and `Accept`, limits concurrency with `p-limit`, and turns non-2xx responses, network
-failures and non-JSON bodies into `UpstreamError`. Adapters never call `fetch` directly.
+failures and non-JSON bodies into `UpstreamError`. Adapters never call `fetch` directly. The
+runtime builds one client and the provider and geocoder share it, so the limit is per process.
 
 ## Tests and fixtures
 

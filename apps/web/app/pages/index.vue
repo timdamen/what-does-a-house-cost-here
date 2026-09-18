@@ -2,15 +2,15 @@
 import type { Location } from '@house-cost/domain';
 
 import { RADIUS_OPTIONS } from '~/utils/map/radius';
-import type { MapHouse } from '~/utils/map/types';
-import type { SheetSnap } from '~/utils/sheet';
+import type { CentreRequest, MapHouse } from '~/utils/map/types';
+import { SHEET_SNAP_CSS, type SheetSnap } from '~/utils/sheet';
 
 /**
  * The One-Pager. Without a Location in the URL it shows the prompt. With one: a header bar
  * (app name, place search, locate me), the map filling the viewport, and the Bottom Sheet with
- * the house list and Neighbourhood Facts sections (skeletons here; tickets 09 and 10 fill them).
- * The shell is server-rendered and interactive before the map script loads; houses, facts and
- * prices are fetched in the browser and cached per area.
+ * the house list and Neighbourhood Facts sections. The shell is server-rendered and interactive
+ * before the map script loads; houses, facts and prices are fetched in the browser and cached
+ * per Search Area (ADR-0006 says why they are not server-rendered).
  */
 const APP_NAME = 'What does a house cost here?';
 
@@ -28,7 +28,6 @@ const {
   result: housesResult,
   houses,
   truncated,
-  cap,
   status: housesStatus,
   upstreamError: housesError,
   refresh: refreshHouses,
@@ -40,7 +39,7 @@ const {
   status: factsStatus,
   upstreamError: factsError,
   refresh: refreshFacts,
-} = useFacts(location);
+} = useFacts(location, radius);
 const {
   byHouseId: priceByHouseId,
   status: pricesStatus,
@@ -57,6 +56,14 @@ const mapHouses = computed<MapHouse[]>(() =>
   })),
 );
 
+/** Any fetch that failed, whatever the cause, shows the retry card (user story 41). */
+const failed = computed(
+  () =>
+    housesStatus.value === 'error' ||
+    factsStatus.value === 'error' ||
+    pricesStatus.value === 'error',
+);
+/** The typed envelope of a 502, when the failure was one; names the service on the card. */
 const upstreamError = computed(
   () => housesError.value ?? factsError.value ?? pricesError.value ?? null,
 );
@@ -69,9 +76,9 @@ const retrying = computed(
 
 async function retry() {
   const refreshes: Promise<void>[] = [];
-  if (housesError.value) refreshes.push(refreshHouses());
-  if (factsError.value) refreshes.push(refreshFacts());
-  if (pricesError.value) refreshes.push(refreshPrices());
+  if (housesStatus.value === 'error') refreshes.push(refreshHouses());
+  if (factsStatus.value === 'error') refreshes.push(refreshFacts());
+  if (pricesStatus.value === 'error') refreshes.push(refreshPrices());
   await Promise.all(refreshes);
 }
 
@@ -90,14 +97,28 @@ const sheetSnap = ref<SheetSnap>('peek');
 const searchOpen = ref(false);
 
 /** A retry message hidden below the peek would be as good as a blank page (user story 41). */
-watch(upstreamError, (failure) => {
-  if (failure && sheetSnap.value === 'peek') sheetSnap.value = 'half';
+watch(failed, (hasFailed) => {
+  if (hasFailed && sheetSnap.value === 'peek') sheetSnap.value = 'half';
 });
 
-function onSelect(houseId: string | null) {
+/** ADR-0006: choosing a House brings the sheet up to at least half, so its card is in view. */
+function showCard() {
+  if (sheetSnap.value === 'peek') sheetSnap.value = 'half';
+}
+
+/** The map only pans when the tapped House is hidden (user story 26, map side). */
+function onMapSelect(houseId: string | null) {
   void select(houseId);
-  // ADR-0006: choosing a House on the map brings the sheet up to at least half.
-  if (houseId && sheetSnap.value === 'peek') sheetSnap.value = 'half';
+  if (houseId) showCard();
+}
+
+/** A list row always centres the map on its House (user story 26); a fresh request each tap. */
+const centreOn = ref<CentreRequest | null>(null);
+
+function onListSelect(houseId: string) {
+  void select(houseId);
+  centreOn.value = { houseId };
+  showCard();
 }
 
 function onSearchHere(centre: Location) {
@@ -135,7 +156,18 @@ function onFocusAmenity(target: Location) {
 
 watch(location, () => {
   amenityFocus.value = null;
+  centreOn.value = null;
 });
+
+/**
+ * The sheet's phone heights, from the one module that owns them. The stylesheet maps them onto
+ * `--sheet-peek` and `--sheet-height`, which drop to zero at the side-panel breakpoint where the
+ * map sits beside the panel instead of under it.
+ */
+const sheetVars = computed(() => ({
+  '--sheet-peek-phone': SHEET_SNAP_CSS.peek,
+  '--sheet-height-phone': SHEET_SNAP_CSS[sheetSnap.value],
+}));
 </script>
 
 <template>
@@ -147,7 +179,7 @@ watch(location, () => {
     <LocationPrompt />
   </main>
 
-  <div v-else class="one-pager relative overflow-hidden" data-testid="one-pager">
+  <div v-else class="one-pager relative overflow-hidden" :style="sheetVars" data-testid="one-pager">
     <header
       class="one-pager__header bg-default/90 border-default fixed inset-x-0 top-0 z-30 border-b backdrop-blur"
       data-testid="header"
@@ -185,18 +217,17 @@ watch(location, () => {
         :radius-metres="radius"
         :houses="mapHouses"
         :selected-house-id="selectedHouseId"
+        :centre-on="centreOn"
         :user-position="userPosition"
         :country-code="countryCode"
         :amenity-focus="amenityFocus"
         peek-height="var(--sheet-peek)"
+        sheet-height="var(--sheet-height)"
         :test-hook="config.public.testHooks"
-        @select="onSelect"
+        @select="onMapSelect"
         @search-here="onSearchHere"
         @radius-change="onRadiusChange"
-      >
-        <!-- The header's LocateMeButton replaces the map's built-in locate control. -->
-        <template #locate><span hidden aria-hidden="true" /></template>
-      </HouseMapFrame>
+      />
     </div>
 
     <BottomSheet v-model:snap="sheetSnap">
@@ -211,9 +242,9 @@ watch(location, () => {
       </template>
 
       <ErrorRetry
-        v-if="upstreamError"
+        v-if="failed"
         class="mb-4"
-        :service="upstreamError.service"
+        :service="upstreamError?.service"
         :retrying="retrying"
         @retry="retry"
       />
@@ -225,10 +256,9 @@ watch(location, () => {
           :centre="location"
           :selected-house-id="selectedHouseId"
           :truncated="truncated"
-          :cap="cap"
           :country-code="countryCode"
           :prices-status="pricesStatus"
-          @select="onSelect"
+          @select="onListSelect"
         />
         <template v-else>
           <div class="flex min-h-12 items-center justify-between gap-3">
@@ -267,9 +297,12 @@ watch(location, () => {
 </template>
 
 <style scoped>
+@reference '../assets/css/main.css';
+
 .one-pager {
-  /* Mirrors the Bottom Sheet's peek; the map stacks its controls above it. */
-  --sheet-peek: max(96px, 15dvh);
+  /* The sheet's heights (inline, from `~/utils/sheet`); the map stacks its controls above the peek. */
+  --sheet-peek: var(--sheet-peek-phone);
+  --sheet-height: var(--sheet-height-phone);
   --one-pager-header-height: 3.5rem;
   height: 100dvh;
 }
@@ -288,9 +321,10 @@ watch(location, () => {
 }
 
 /* Research decision 2: side panel at the Android "expanded" width, map beside it. */
-@media (min-width: 840px) {
+@media (width >= --theme(--breakpoint-panel)) {
   .one-pager {
     --sheet-peek: 0px;
+    --sheet-height: 0px;
   }
 
   .one-pager__header,

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { Location } from '@house-cost/domain';
-
 /**
  * "Use my location" control. Requests the browser position and writes the rounded Location to
- * the URL. Icon-only when no `label` is given (48 px square, for the map); with a label it is a
+ * the URL; the shared geolocation status drives its loading state and the prompt's wording.
+ * Icon-only when no `label` is given (48 px square, for the header); with a label it is a
  * full-width primary button (for the prompt).
  */
 const props = defineProps<{
@@ -11,22 +10,12 @@ const props = defineProps<{
   block?: boolean;
 }>();
 
-const emit = defineEmits<{
-  located: [location: Location];
-  failed: [status: 'denied' | 'error' | 'unsupported'];
-}>();
-
 const { status, locate } = useGeolocation();
 const { setLocation } = useLocation();
 
 async function onClick() {
   const found = await locate();
-  if (found) {
-    await setLocation(found);
-    emit('located', found);
-  } else if (status.value !== 'requesting' && status.value !== 'idle') {
-    emit('failed', status.value === 'granted' ? 'error' : status.value);
-  }
+  if (found) await setLocation(found);
 }
 </script>
 

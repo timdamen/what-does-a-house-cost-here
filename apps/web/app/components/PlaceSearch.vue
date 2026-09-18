@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { GeocodeResult, GeocodeSearchResult } from '@house-cost/domain';
+import type { AsyncDataRequestStatus } from '#app';
 
 /**
  * Place search box backed by `GET /api/geocode?q`. Searches only on submit (Enter or the search
@@ -25,7 +26,7 @@ const listId = useId();
 
 const query = ref('');
 const results = ref<GeocodeResult[]>([]);
-const status = ref<'idle' | 'pending' | 'success' | 'error'>('idle');
+const status = ref<AsyncDataRequestStatus>('idle');
 const open = ref(false);
 const highlighted = ref(-1);
 
