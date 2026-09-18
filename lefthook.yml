@@ -1,0 +1,33 @@
+# Git hooks. Installed by `pnpm install` through the root `prepare` script.
+# Every job only sees the files it is given, so hooks stay fast.
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: oxfmt
+      glob: '*.{js,mjs,cjs,ts,mts,cts,vue,json,jsonc,yaml,yml,md,css}'
+      exclude:
+        - '.scratch/**'
+        - 'docs/**'
+        - 'pnpm-lock.yaml'
+      run: pnpm exec oxfmt --check {staged_files}
+    - name: oxlint
+      glob: '*.{js,mjs,cjs,ts,mts,cts,vue}'
+      exclude:
+        - '.scratch/**'
+        - 'docs/**'
+      run: pnpm exec oxlint {staged_files}
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: pnpm exec commitlint --edit {1}
+
+pre-push:
+  jobs:
+    - name: typecheck
+      run: pnpm typecheck
+    - name: knip
+      run: pnpm knip
+    - name: test
+      run: pnpm test

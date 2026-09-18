@@ -14,7 +14,7 @@ Verified against the npm registry on 2026-09-17 with `npm view <pkg> version`. P
 | @nuxt/kit | 4.5.2 |
 | vue | 3.5.43 |
 | vue-tsc | 3.3.11 |
-| typescript | 7.0.2 (fallback 6.0.3 if vue-tsc or oxlint cannot use 7) |
+| typescript | 6.0.3 (see deviations; 7.0.2 does not work with vue-tsc) |
 | oxlint | 1.83.0 |
 | oxfmt | 0.68.0 |
 | knip | 6.36.0 |
@@ -47,4 +47,14 @@ Notes:
 
 ## Deviations
 
-(none yet)
+- `typescript` 7.0.2 -> 6.0.3 (ticket 02). TypeScript 7 is the Go compiler and no longer ships the JavaScript compiler API (`typescript/lib/tsc`), which `vue-tsc` 3.3.11 (and therefore `nuxt typecheck`) requires. 6.0.3 is the newest release that still does.
+
+## Additions
+
+Pinned in ticket 02, verified with `npm view` on 2026-09-17:
+
+| Package | Version | Reason |
+| --- | --- | --- |
+| vue-router | 5.3.1 | Direct dependency of `apps/web` so the generated `.nuxt/tsconfig` can resolve `vue-router/volar/sfc-route-blocks` under pnpm's strict `node_modules`. |
+| tailwindcss | 4.3.3 | Direct dependency of `apps/web` so `@import 'tailwindcss'` in `main.css` resolves under pnpm (it is only a transitive dependency of `@nuxt/ui`). |
+| @vue/test-utils | 2.5.1 | Peer of `@nuxt/test-utils` needed by `mountSuspended`. |

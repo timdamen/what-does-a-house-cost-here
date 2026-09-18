@@ -1,0 +1,31 @@
+{
+  "name": "house-cost-here",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "lefthook install",
+    "dev": "pnpm --filter @house-cost/web dev",
+    "build": "pnpm --filter @house-cost/web build",
+    "quality": "pnpm fmt:check && pnpm lint && pnpm typecheck && pnpm knip && pnpm test",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "typecheck": "pnpm -r --workspace-concurrency=1 typecheck",
+    "knip": "knip",
+    "test": "pnpm -r --workspace-concurrency=1 test",
+    "test:e2e": "echo \"e2e tests are added by a later ticket\""
+  },
+  "devDependencies": {
+    "@commitlint/cli": "21.2.2",
+    "@commitlint/config-conventional": "21.2.2",
+    "knip": "6.36.0",
+    "lefthook": "2.1.14",
+    "oxfmt": "0.68.0",
+    "oxlint": "1.83.0",
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

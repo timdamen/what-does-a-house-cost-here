@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": [],
+      "project": []
+    },
+    "apps/web": {
+      "entry": ["vitest.config.ts"],
+      "ignoreDependencies": ["@iconify-json/lucide", "vue-tsc"],
+      "vitest": {
+        "config": []
+      }
+    },
+    "packages/*": {}
+  }
+}
