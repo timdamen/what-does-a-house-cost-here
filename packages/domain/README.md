@@ -8,8 +8,8 @@ provider. Browser-safe TypeScript source, no build step.
 ```ts
 interface DataProvider {
   searchHouses(area: SearchArea): Promise<{ data: House[]; cap; truncated; provenance }>;
-  getNeighbourhoodFacts(location: Location): Promise<{ data: NeighbourhoodFacts; provenance }>;
-  getPriceSignals(houses: House[]): Promise<{ data: PriceSignal[]; provenance }>;
+  getNeighbourhoodFacts(area: SearchArea): Promise<{ data: NeighbourhoodFacts; provenance }>;
+  getPriceSignals(houses: HouseRef[]): Promise<{ data: PriceSignal[]; provenance }>;
 }
 
 interface Geocoder {
@@ -24,12 +24,20 @@ interface Geocoder {
   `getPriceSignals` list. Upstream failures reject with `UpstreamError`
   (`{ kind: 'upstream', service, retryable }`).
 - `PriceSignal.houseId` links each signal to the House it was resolved for, whatever its `scope`.
+- `getNeighbourhoodFacts` takes the whole Search Area: amenities and the Housing Mix follow its
+  Search Radius, so the facts describe what the map shows.
+- `getPriceSignals` takes `HouseRef` (`{ id, location, address? }`), the part of a House a
+  register lookup keys on, so the server route never has to invent building types or tags.
+- `PriceSummary.windowMonths` says how many months of sales before `asOf` the summary covers.
+- `DEFAULT_RADIUS_METRES` (500) is the Search Radius when none is given; `countHousingMix` counts
+  Houses per building type.
 
 ## Fixtures
 
 `createFixtureProvider()` serves two areas: Amsterdam (`AMSTERDAM_CENTRE`, about 120 Houses,
 roughly half with EUR Price Signals, full Neighbourhood Facts) and Sydney (`SYDNEY_CENTRE`,
-country `AU`, no price data). `createFixtureGeocoder()` resolves place names such as
+country `AU`, no price data). The Housing Mix counts the Houses inside the Search Area; the
+amenities are the whole fixture town's, nearest first, whatever the Search Radius. `createFixtureGeocoder()` resolves place names such as
 "Amsterdam" and "Sydney", and postcode-looking strings. Both accept `{ now }` for a fixed clock.
 
 ## Contract test

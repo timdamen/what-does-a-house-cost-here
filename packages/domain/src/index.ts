@@ -5,8 +5,6 @@
  * The reusable provider contract test lives behind `@house-cost/domain/testing` so Vitest never
  * enters the app bundle.
  */
-export const DOMAIN_PACKAGE_NAME = '@house-cost/domain';
-
 export type {
   Amenity,
   AmenityClass,
@@ -14,6 +12,7 @@ export type {
   GeocodeResult,
   House,
   HouseAddress,
+  HouseRef,
   HousingMix,
   Location,
   NeighbourhoodFacts,
@@ -43,6 +42,7 @@ export { isUpstreamError, UpstreamError, type UpstreamErrorShape } from './error
 export type { BoundingBox } from './geo';
 export {
   boundingBox,
+  DEFAULT_RADIUS_METRES,
   EARTH_RADIUS_METRES,
   haversineMetres,
   isWithinArea,
@@ -62,7 +62,7 @@ export {
 } from './format';
 
 export { AMSTERDAM_CENTRE, SYDNEY_CENTRE } from './fixtures/areas';
-export { countHousingMix, isBuildingType } from './fixtures/houses';
+export { countHousingMix, isBuildingType } from './housing-mix';
 export {
   createFixtureProvider,
   FIXTURE_SOURCE,

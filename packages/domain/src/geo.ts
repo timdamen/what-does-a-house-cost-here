@@ -12,6 +12,12 @@ export const WALKING_DETOUR_FACTOR = 1.3;
 /** Decimals kept when rounding a Location for URLs, cache keys and server requests. */
 export const LOCATION_DECIMALS = 4;
 
+/**
+ * Search Radius used when none is given (research note `docs/research/mobile-map-ux.md`,
+ * decision 1). The URL, the server routes and the map all fall back to it.
+ */
+export const DEFAULT_RADIUS_METRES = 500;
+
 const DEGREES_TO_RADIANS = Math.PI / 180;
 
 /** Straight-line (great-circle) distance in metres between two Locations. */
@@ -62,7 +68,7 @@ export function isWithinArea(location: Location, area: SearchArea): boolean {
   return haversineMetres(area.centre, location) <= area.radiusMetres;
 }
 
-/** Rounds both coordinates to `LOCATION_DECIMALS` (about 11 m), the precision the app works at. */
+/** Rounds a Location's latitude and longitude to `LOCATION_DECIMALS` (about 11 m), the precision the app works at. */
 export function roundLocation(location: Location, decimals = LOCATION_DECIMALS): Location {
   const factor = 10 ** decimals;
   return {

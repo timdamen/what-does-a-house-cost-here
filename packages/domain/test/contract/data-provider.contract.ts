@@ -75,7 +75,7 @@ export function runDataProviderContract(name: string, factory: DataProviderContr
     describe('getNeighbourhoodFacts', () => {
       it('returns the Neighbourhood name, hierarchy, amenities, housing mix and a price summary', async () => {
         const { provider, pricedArea } = await subject();
-        const { data: facts, provenance } = await provider.getNeighbourhoodFacts(pricedArea.centre);
+        const { data: facts, provenance } = await provider.getNeighbourhoodFacts(pricedArea);
 
         expectProvenance(provenance);
         expect(facts.name.length).toBeGreaterThan(0);
@@ -104,6 +104,8 @@ export function runDataProviderContract(name: string, factory: DataProviderContr
         expect(summary.currency).toMatch(CURRENCY_CODE);
         expect(summary.asOf).toMatch(ISO_DATE);
         expect(summary.sampleSize).toBeGreaterThan(0);
+        expect(Number.isInteger(summary.windowMonths)).toBe(true);
+        expect(summary.windowMonths).toBeGreaterThan(0);
         expect(summary.low).toBeGreaterThan(0);
         expect(summary.low).toBeLessThanOrEqual(summary.typical);
         expect(summary.typical).toBeLessThanOrEqual(summary.high);
@@ -111,9 +113,7 @@ export function runDataProviderContract(name: string, factory: DataProviderContr
 
       it('reports "no open price data" as priceSummary: null, not an error', async () => {
         const { provider, unpricedArea } = await subject();
-        const { data: facts, provenance } = await provider.getNeighbourhoodFacts(
-          unpricedArea.centre,
-        );
+        const { data: facts, provenance } = await provider.getNeighbourhoodFacts(unpricedArea);
 
         expectProvenance(provenance);
         expect(facts.priceSummary).toBeNull();
@@ -133,7 +133,10 @@ export function runDataProviderContract(name: string, factory: DataProviderContr
       it('returns well-formed Price Signals for Houses in a priced region', async () => {
         const { provider, pricedArea } = await subject();
         const houses = (await provider.searchHouses(pricedArea)).data;
-        const result = await provider.getPriceSignals(houses);
+        // Only what the server route can send: id, Location and address.
+        const result = await provider.getPriceSignals(
+          houses.map(({ id, location, address }) => ({ id, location, address })),
+        );
 
         expectProvenance(result.provenance);
         expect(result.data.length).toBeGreaterThan(0);
