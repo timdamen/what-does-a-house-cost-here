@@ -1,6 +1,6 @@
 # 02 Monorepo scaffold and quality tooling
 
-Status: ready-for-agent
+Status: done
 Type: task
 Blocked by: none
 
@@ -23,3 +23,13 @@ User stories 47, 48, 49 and spec sections "Monorepo", "Nuxt and official modules
 - `pnpm install`, `pnpm quality`, `pnpm --filter @house-cost/web build` all succeed from a clean checkout.
 - `git commit` with a non-conventional message is rejected by lefthook; a conventional one passes.
 - `../versions.md` updated with any deviations.
+
+## Comments
+
+- Done. `pnpm install`, `pnpm quality` (oxfmt check, oxlint, `nuxt typecheck` + `tsc --noEmit`, knip, vitest in all three workspaces) and `pnpm --filter @house-cost/web build` are green from a clean checkout; lefthook rejects a non-conventional commit message and accepts a conventional one.
+- Config files: `.oxfmtrc.json`, `.oxlintrc.json`, `knip.json`, `lefthook.yml`, `commitlint.config.js`, `tsconfig.base.json`, `.editorconfig`, `.npmrc`, `.nvmrc`, `.github/workflows/ci.yml`. App Vitest configs: `apps/web/vitest.config.ts` (Nuxt runtime environment, `test/unit/`) and `apps/web/vitest.e2e.config.ts` (plain Vitest, `test/e2e/`). Packages: `packages/*/vitest.config.ts`.
+- Deviation: TypeScript 7.0.2 -> 6.0.3 everywhere. TS 7 no longer ships the JS compiler API that vue-tsc needs. Recorded in `../versions.md`.
+- Additions (recorded in `../versions.md`): `vue-router` 5.3.1, `tailwindcss` 4.3.3 and `@vue/test-utils` 2.5.1 as direct dependencies of `apps/web`, all forced by pnpm's strict `node_modules` (no hoisting).
+- Packages ship TypeScript source (`exports` -> `src/index.ts`, no `dist/`). Vite, Nitro and vue-tsc consume it directly; the production build inlines both packages into the server bundle (proved by `server/api/health.get.ts`, which imports both).
+- knip: the web workspace sets `vitest.config: []` because knip cannot evaluate `defineVitestConfig` from `@nuxt/test-utils/config` (it boots Nuxt and fails to resolve `@nuxt/kit` through jiti). `vitest.config.ts` is listed as an entry instead. The e2e config uses plain `defineConfig` from `vitest/config` so knip can load it.
+- `.scratch/` and `docs/` are excluded from oxfmt and oxlint via `ignorePatterns`; knip only sees workspace files so it needs no exclusion.
