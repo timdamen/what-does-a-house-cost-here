@@ -71,7 +71,7 @@ describe('index page', () => {
       expect(wrapper.find('[data-testid="neighbourhood-skeleton"]').exists()).toBe(false);
     });
     await vi.waitFor(() => {
-      expect(sheet.text()).toMatch(/\d+ houses, \d+ with prices/);
+      expect(sheet.text()).toMatch(/\d+ houses, \d+ with a price/);
     });
     expect(sheet.text()).toContain('Grachtengordel-Zuid');
     expect(wrapper.find('[data-testid="error-retry"]').exists()).toBe(false);

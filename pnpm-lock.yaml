@@ -53,6 +53,9 @@ importers:
       '@nuxt/ui':
         specifier: ^4.11.1
         version: 4.11.1(f49c86df3cb1b6d36f79b5b61302d45d)
+      '@tanstack/vue-virtual':
+        specifier: ^3.13.39
+        version: 3.13.39(vue@3.5.43(typescript@6.0.3))
       maplibre-gl:
         specifier: ^6.10.0
         version: 6.10.0

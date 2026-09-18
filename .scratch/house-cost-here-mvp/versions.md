@@ -78,6 +78,12 @@ Ticket 07 (2026-09-17):
 | --- | --- | --- |
 | maplibre-gl | ^6.10.0 | Direct dependency of `apps/web`, imported dynamically inside `HouseMap.client.vue`. Declared with a caret per the dependency policy change during ticket 07; resolves to 6.10.0. |
 
+Ticket 09 (2026-09-17):
+
+| Package | Version | Reason |
+| --- | --- | --- |
+| @tanstack/vue-virtual | ^3.13.39 | Direct dependency of `apps/web`; `useVirtualizer` virtualises `HouseList.vue` above 50 rows with the sheet body as the scroll element (user story 30). Verified with `npm view` on 2026-09-17; resolves to 3.13.39. |
+
 ## Removals
 
 - `@nuxt/scripts` 1.3.9 (ticket 07). Research decision 5 overturned loading MapLibre through `useScript`; nothing in the app called `useScript` or read `$scripts`, so the module is gone from `apps/web/nuxt.config.ts` and `apps/web/package.json`. Re-add it only if a third-party tag is ever needed.
