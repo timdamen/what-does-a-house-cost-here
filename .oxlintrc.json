@@ -9,7 +9,8 @@
   "rules": {
     "no-console": "warn",
     "import/no-cycle": "error",
-    "unicorn/prefer-node-protocol": "error"
+    "unicorn/prefer-node-protocol": "error",
+    "no-underscore-dangle": ["warn", { "allow": ["__houseMap"] }]
   },
   "env": {
     "builtin": true,

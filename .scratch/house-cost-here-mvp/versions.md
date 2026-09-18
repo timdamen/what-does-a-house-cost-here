@@ -71,3 +71,13 @@ Pinned in ticket 04, verified with `npm view` on 2026-09-17:
 | --- | --- | --- |
 | p-limit | 7.3.2 | Concurrency limit in the `@house-cost/open-data` HTTP client (already listed above; now a dependency of `packages/open-data`). |
 | @types/node | 26.6.1 | devDependency of `packages/open-data` so `fetch`, `Response` and `node:fs` (recording script) typecheck under pnpm's strict `node_modules`; same version as `apps/web`. |
+
+Ticket 07 (2026-09-17):
+
+| Package | Version | Reason |
+| --- | --- | --- |
+| maplibre-gl | ^6.10.0 | Direct dependency of `apps/web`, imported dynamically inside `HouseMap.client.vue`. Declared with a caret per the dependency policy change during ticket 07; resolves to 6.10.0. |
+
+## Removals
+
+- `@nuxt/scripts` 1.3.9 (ticket 07). Research decision 5 overturned loading MapLibre through `useScript`; nothing in the app called `useScript` or read `$scripts`, so the module is gone from `apps/web/nuxt.config.ts` and `apps/web/package.json`. Re-add it only if a third-party tag is ever needed.
