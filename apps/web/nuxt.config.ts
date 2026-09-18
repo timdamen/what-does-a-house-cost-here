@@ -45,6 +45,23 @@ export default defineNuxtConfig({
     },
   },
 
+  nitro: {
+    // Pre-compress `.output/public` (brotli and gzip) so the node server sends `_nuxt` assets
+    // compressed; the Lighthouse budgets in `budget.json` are transfer sizes.
+    compressPublicAssets: true,
+  },
+
+  hooks: {
+    'build:manifest'(manifest) {
+      // Research decision 7: MapLibre is fetched on demand once a Location is known. Without
+      // this the renderer prefetches its 1 MB chunk on every page, including the place-search
+      // state that never shows a map.
+      for (const [key, entry] of Object.entries(manifest)) {
+        if (key.includes('maplibre-gl')) entry.prefetch = false;
+      }
+    },
+  },
+
   typescript: {
     strict: true,
     typeCheck: false,

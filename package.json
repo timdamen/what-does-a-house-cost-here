@@ -13,11 +13,13 @@
     "typecheck": "pnpm -r --workspace-concurrency=1 typecheck",
     "knip": "knip",
     "test": "pnpm -r --workspace-concurrency=1 test",
-    "test:e2e": "pnpm --filter @house-cost/web test:e2e"
+    "test:e2e": "pnpm --filter @house-cost/web test:e2e",
+    "lighthouse": "pnpm --filter @house-cost/web build && lhci autorun"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
+    "@lhci/cli": "^0.15.1",
     "knip": "^6.36.0",
     "lefthook": "^2.1.14",
     "oxfmt": "^0.68.0",

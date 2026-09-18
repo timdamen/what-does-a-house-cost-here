@@ -48,12 +48,22 @@ import {
   zoomForRadius,
 } from '../utils/map/radius';
 import { searchAreaSummary } from '../utils/map/summary';
-import type { HouseMapProps, HouseMapState, HouseMapStatus, MapHouse } from '../utils/map/types';
+import type {
+  HouseMapProps,
+  HouseMapState,
+  HouseMapStatus,
+  MapHouse,
+  MapPlaceholderState,
+} from '../utils/map/types';
 
 /**
  * The MapLibre map. Client-only: `maplibre-gl` and its CSS are imported in `onMounted` so they
  * never enter the entry bundle. Mount it through `HouseMapFrame.vue`, which renders the
  * server-side placeholder and the CSS variables this component positions its controls with.
+ * The placeholder itself belongs to the frame: it is server-rendered once and must survive
+ * hydration untouched, otherwise Chrome drops it as a largest-contentful-paint candidate and
+ * Lighthouse attributes the LCP to the re-created copy after the map chunk (ticket 13). This
+ * component only reports `placeholder` state upward and exposes `retry()`.
  */
 defineOptions({ name: 'HouseMap' });
 
@@ -70,11 +80,12 @@ const emit = defineEmits<{
   select: [houseId: string | null];
   'search-here': [centre: Location];
   'radius-change': [metres: number];
+  /** Loading or error state for the frame's placeholder; `null` once the map is ready. */
+  placeholder: [state: MapPlaceholderState | null];
 }>();
 
 type MapLibreModule = typeof import('maplibre-gl');
 
-const SPINNER_AFTER_MS = 1000;
 const STEPS_AFTER_MS = 10_000;
 const CAMERA_DURATION_MS = 300;
 const CAMERA_MARGIN_PX = 16;
@@ -90,7 +101,6 @@ const canvasHost = useTemplateRef<HTMLDivElement>('canvasHost');
 const insets = useTemplateRef<HTMLDivElement>('insets');
 
 const status = ref<HouseMapStatus>('loading');
-const showSpinner = ref(false);
 const showSteps = ref(false);
 const loadStep = ref(0);
 const busy = ref(false);
@@ -117,6 +127,15 @@ const detail = computed(() => {
   return showSteps.value ? `Loading map (${loadStep.value}/${LOAD_STEPS})` : undefined;
 });
 
+watchEffect(() => {
+  emit(
+    'placeholder',
+    status.value === 'ready' ? null : { status: placeholderStatus.value, detail: detail.value },
+  );
+});
+
+defineExpose({ retry: init });
+
 onMounted(() => {
   reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   installTestHook();
@@ -132,10 +151,8 @@ async function init(): Promise<void> {
   teardown();
   status.value = 'loading';
   failure.value = undefined;
-  showSpinner.value = false;
   showSteps.value = false;
   loadStep.value = 1;
-  timers.push(window.setTimeout(() => (showSpinner.value = true), SPINNER_AFTER_MS));
   timers.push(window.setTimeout(() => (showSteps.value = true), STEPS_AFTER_MS));
 
   try {
@@ -540,15 +557,6 @@ watch(theme, switchTheme);
       aria-label="Map of houses around the search location"
     />
 
-    <MapPlaceholder
-      v-if="status !== 'ready'"
-      :summary="summary"
-      :status="placeholderStatus"
-      :spinner="showSpinner ? 'visible' : 'hidden'"
-      :detail="detail"
-      @retry="init"
-    />
-
     <div ref="insets" class="house-map__insets pointer-events-none absolute inset-x-0">
       <div class="absolute top-0 left-1/2 -translate-x-1/2">
         <UButton
@@ -609,6 +617,8 @@ watch(theme, switchTheme);
 .house-map__insets {
   top: var(--house-map-top-inset, 16px);
   bottom: var(--house-map-bottom-inset, 16px);
+  /* Above the frame's placeholder, so the controls stay usable while the map loads. */
+  z-index: 1;
 }
 
 /* Research decision 3: MapLibre's 29 px buttons become 48 px thumb targets. */
