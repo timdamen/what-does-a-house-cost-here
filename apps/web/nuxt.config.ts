@@ -13,6 +13,16 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  app: {
+    head: {
+      // `viewport-fit=cover` lets the header and the bottom sheet pad for the notch and home bar
+      // with `env(safe-area-inset-*)`.
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
+      ],
+    },
+  },
+
   runtimeConfig: {
     // Which Data Provider the server routes use: `open-data` in production, `fixture` in dev and
     // test. Overridden by NUXT_DATA_PROVIDER (see `.env.example`).
@@ -23,6 +33,9 @@ export default defineNuxtConfig({
       // MapLibre style URLs. Overridden by NUXT_PUBLIC_MAP_STYLE_LIGHT / _DARK.
       mapStyleLight: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
       mapStyleDark: 'https://tiles.versatiles.org/assets/styles/eclipse/style.json',
+      // Installs `window.__houseMap` outside dev builds so browser tests can drive the map.
+      // Overridden by NUXT_PUBLIC_TEST_HOOKS=true.
+      testHooks: false,
     },
   },
 

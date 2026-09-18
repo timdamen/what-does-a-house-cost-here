@@ -2,8 +2,10 @@ import type { Location } from '@house-cost/domain';
 import { LOCATION_DECIMALS, roundLocation } from '@house-cost/domain';
 import type { LocationQuery, LocationQueryValue } from 'vue-router';
 
-/** Fixed Search Radius choices in metres (research note `docs/research/mobile-map-ux.md`, decision 1). */
-export const RADIUS_OPTIONS = [250, 500, 1000] as const;
+import { RADIUS_OPTIONS } from '~/utils/map/radius';
+
+/** Re-exported so callers of the composable need not know where the map helpers live. */
+export { RADIUS_OPTIONS };
 export type RadiusOption = (typeof RADIUS_OPTIONS)[number];
 export const DEFAULT_RADIUS: RadiusOption = 500;
 

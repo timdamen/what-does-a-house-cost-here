@@ -28,24 +28,28 @@ registerEndpoint('/api/geocode', (event) => {
 });
 
 async function mountSearch() {
-  const wrapper = await mountSuspended(PlaceSearch, {
-    route: '/',
-    props: { debounceMs: 0 },
-  });
+  const wrapper = await mountSuspended(PlaceSearch, { route: '/' });
   const input = wrapper.find('input[role="combobox"]');
   return { wrapper, input };
 }
 
 describe('PlaceSearch', () => {
-  it('renders results from the geocode endpoint after typing', async () => {
+  it('searches only on submit, never per keystroke', async () => {
     const { wrapper, input } = await mountSearch();
+    seen.length = 0;
 
+    await input.setValue('Ams');
     await input.setValue('Amst');
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(seen).toEqual([]);
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(0);
+
+    await wrapper.get('[data-testid="place-search-submit"]').trigger('submit');
 
     await vi.waitFor(() => {
       expect(wrapper.findAll('[role="option"]')).toHaveLength(2);
     });
-    expect(seen).toContain('Amst');
+    expect(seen).toEqual(['Amst']);
     expect(wrapper.text()).toContain('Amsterdam, Netherlands');
     expect(input.attributes('aria-expanded')).toBe('true');
     expect(wrapper.find('[role="option"][aria-selected="true"]').text()).toContain('Amsterdam');
@@ -56,6 +60,7 @@ describe('PlaceSearch', () => {
     const router = useRouter();
 
     await input.setValue('Amst');
+    await input.trigger('keydown', { key: 'Enter' });
     await vi.waitFor(() => {
       expect(wrapper.findAll('[role="option"]')).toHaveLength(2);
     });
@@ -75,6 +80,7 @@ describe('PlaceSearch', () => {
     const router = useRouter();
 
     await input.setValue('Amst');
+    await input.trigger('keydown', { key: 'Enter' });
     await vi.waitFor(() => {
       expect(wrapper.findAll('[role="option"]')).toHaveLength(2);
     });
@@ -96,10 +102,25 @@ describe('PlaceSearch', () => {
     const { wrapper, input } = await mountSearch();
 
     await input.setValue('nowhere');
+    await input.trigger('keydown', { key: 'Enter' });
 
     await vi.waitFor(() => {
       expect(wrapper.text()).toContain('No places found');
     });
     expect(wrapper.findAll('[role="option"]')).toHaveLength(0);
+  });
+
+  it('drops the results as soon as the query changes', async () => {
+    const { wrapper, input } = await mountSearch();
+
+    await input.setValue('Amst');
+    await input.trigger('keydown', { key: 'Enter' });
+    await vi.waitFor(() => {
+      expect(wrapper.findAll('[role="option"]')).toHaveLength(2);
+    });
+
+    await input.setValue('Amste');
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(0);
+    expect(input.attributes('aria-expanded')).toBe('false');
   });
 });
