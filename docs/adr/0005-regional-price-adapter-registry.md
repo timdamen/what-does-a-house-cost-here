@@ -10,9 +10,9 @@ Alternatives: one adapter with per-country branches inside it (grows into a tang
 
 ## Decision
 
-- `PriceAdapter` in `@house-cost/open-data`: `{ countryCodes: string[]; getPriceSignals(houses); getPriceSummary(location, radius) }`.
+- `PriceAdapter` in `@house-cost/open-data`: `{ countryCodes: string[]; source: string; getPriceSignals(houses: HouseRef[]); getPriceSummary(houses: HouseRef[]) }`. Both operations take the Houses of the Search Area (`HouseRef`: id, Location and `addr:*` fields) rather than a Location and radius, because open registers are indexed by address, not by place: HM Land Registry is queried per postcode, and the postcodes come from the Houses. The provider passes the Houses it already fetched for the area.
 - The Price Adapter Registry maps an ISO country code, taken from Nominatim reverse geocoding of the Location, to an adapter. An unknown code returns `priceSummary: null` and no Price Signals as a normal result with its own Provenance, never an `UpstreamError`.
-- The MVP registers `GB` backed by HM Land Registry Price Paid Data through its linked-data API at `https://landregistry.data.gov.uk/`, matched by postcode where a House has one, with the summary built from the last 24 months for the area's postcodes.
+- The MVP registers `GB` backed by HM Land Registry Price Paid Data through its linked-data API at `https://landregistry.data.gov.uk/`, matched by postcode where a House has one, with the summary built from the last 24 months for the area's postcodes. The Price Summary reports that window as `windowMonths`, so the UI never hard-codes a register's choice.
 - The fixture provider covers both paths: a fixture area with prices and a second area far away that returns `null`.
 - Every further region is its own ticket: one adapter, its recorded fixtures, one registration line.
 

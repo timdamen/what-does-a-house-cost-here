@@ -25,7 +25,8 @@ pnpm dev              # nuxt dev for apps/web
 pnpm build            # nuxt build for apps/web
 pnpm quality          # fmt:check + lint + typecheck + knip + test (CI runs the same)
 pnpm fmt              # oxfmt --write
-pnpm test:e2e         # placeholder until the e2e ticket lands
+pnpm test:e2e         # server-route and phone-browser tests against a built app
+pnpm lighthouse       # build, then the Lighthouse CI performance budget
 ```
 
 ## Quality tooling
@@ -41,7 +42,12 @@ pnpm test:e2e         # placeholder until the e2e ticket lands
 - Git hooks (`lefthook.yml`): pre-commit formats and lints staged files, commit-msg runs
   commitlint (Conventional Commits), pre-push runs typecheck, knip and unit tests.
 
-Exact versions are pinned; see `.scratch/house-cost-here-mvp/versions.md`.
+Dependencies use caret ranges (`^x.y.z`) on the versions verified in
+`.scratch/house-cost-here-mvp/versions.md`; `packageManager` stays exact.
+
+Fonts: the UI uses the system font stack on purpose. `@nuxt/fonts` was tried and removed because
+a web font costs about 225 ms of simulated first paint and breaks the Lighthouse LCP budget; see
+`.scratch/house-cost-here-mvp/versions.md`, Deviations.
 
 ## Deploying
 
