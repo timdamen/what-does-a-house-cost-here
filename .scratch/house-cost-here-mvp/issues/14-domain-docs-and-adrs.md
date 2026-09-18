@@ -1,6 +1,6 @@
 # 14 Domain docs: CONTEXT.md and ADRs
 
-Status: ready-for-agent
+Status: done
 Type: task
 Blocked by: 01
 
@@ -16,3 +16,8 @@ Spec section "Domain docs"; user story 51. Use the `domain-modeling` skill conve
 ## Acceptance
 
 - Files exist, reference the research note where relevant, and `pnpm quality` stays green (oxfmt may format Markdown; check).
+
+## Comments
+
+- Done. `CONTEXT.md` at the repo root (glossary with owning package per term and a "Naming rules" section) and `docs/adr/0001` to `0006`. ADR 0006 was added beyond the ticket list to record overturned default 2 from `docs/research/mobile-map-ux.md` (the bottom sheet hosts the list and facts), since it changes the spec's page structure; ADR 0002 folds in overturned defaults 1, 3 and 5 (radius options, control size, dynamic import instead of Nuxt Scripts). Each ADR uses Status, Context, Decision, Consequences, References and stays under 60 lines.
+- `docs/**` is excluded from oxfmt and oxlint by `ignorePatterns` (ticket 02), so `CONTEXT.md` is the only new file the formatter sees; `pnpm quality` stays green.
