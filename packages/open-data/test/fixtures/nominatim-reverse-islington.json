@@ -1,0 +1,37 @@
+{
+  "recordedAt": "2026-09-18T03:18:03.928Z",
+  "request": {
+    "method": "GET",
+    "url": "https://nominatim.openstreetmap.org/reverse?lat=51.5385&lon=-0.1025&format=jsonv2&zoom=16&addressdetails=1"
+  },
+  "response": {
+    "place_id": 280111953,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 534087835,
+    "lat": "51.5384596",
+    "lon": "-0.1023221",
+    "category": "highway",
+    "type": "trunk",
+    "place_rank": 26,
+    "importance": 0.2702882353650111,
+    "addresstype": "road",
+    "name": "Upper Street",
+    "display_name": "Upper Street, Canonbury, Angel, Islington, London Borough of Islington, Greater London, England, N1 2TU, United Kingdom",
+    "address": {
+      "road": "Upper Street",
+      "neighbourhood": "Canonbury",
+      "quarter": "Angel",
+      "suburb": "Islington",
+      "city_district": "London Borough of Islington",
+      "ISO3166-2-lvl8": "GB-ISL",
+      "city": "Greater London",
+      "state": "England",
+      "ISO3166-2-lvl4": "GB-ENG",
+      "postcode": "N1 2TU",
+      "country": "United Kingdom",
+      "country_code": "gb"
+    },
+    "boundingbox": ["51.5377432", "51.5395127", "-0.1027160", "-0.1022915"]
+  }
+}

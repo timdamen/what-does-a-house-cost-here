@@ -1,0 +1,370 @@
+{
+  "recordedAt": "2026-09-18T03:18:01.680Z",
+  "request": {
+    "method": "POST",
+    "url": "https://overpass-api.de/api/interpreter",
+    "form": {
+      "data": "[out:json][timeout:25];\n(\n  nwr[\"amenity\"=\"school\"](around:250,52.3676,4.9041);\n  nwr[\"shop\"=\"supermarket\"](around:250,52.3676,4.9041);\n  nwr[\"amenity\"~\"^(doctors|hospital|pharmacy|clinic)$\"](around:250,52.3676,4.9041);\n  nwr[\"leisure\"=\"park\"](around:250,52.3676,4.9041);\n  node[\"highway\"=\"bus_stop\"](around:250,52.3676,4.9041);\n  nwr[\"railway\"~\"^(station|halt|tram_stop)$\"](around:250,52.3676,4.9041);\n  node[\"public_transport\"~\"^(stop_position|platform)$\"](around:250,52.3676,4.9041);\n);\nout center tags;"
+    }
+  },
+  "response": {
+    "version": 0.6,
+    "generator": "Overpass API 0.7.62.11 87bfad18",
+    "osm3s": {
+      "timestamp_osm_base": "2026-09-18T03:16:49Z",
+      "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+    },
+    "elements": [
+      {
+        "type": "node",
+        "id": 46369643,
+        "lat": 52.3679611,
+        "lon": 4.9053602,
+        "tags": {
+          "name": "Meester Visserplein",
+          "public_transport": "stop_position",
+          "railway": "tram_stop",
+          "source": "AND",
+          "tram": "yes",
+          "wheelchair": "yes",
+          "wikidata": "Q111397558"
+        }
+      },
+      {
+        "type": "node",
+        "id": 241772055,
+        "lat": 52.3669934,
+        "lon": 4.9019846,
+        "tags": {
+          "name": "Waterlooplein",
+          "public_transport": "stop_position",
+          "railway": "tram_stop",
+          "tram": "yes",
+          "wikidata": "Q111397560"
+        }
+      },
+      {
+        "type": "node",
+        "id": 1310911731,
+        "lat": 52.3685515,
+        "lon": 4.9023015,
+        "tags": {
+          "brand": "Ekoplaza",
+          "brand:wikidata": "Q47017915",
+          "brand:wikipedia": "nl:Ekoplaza",
+          "check_date": "2024-08-18",
+          "name": "Ekoplaza",
+          "opening_hours": "Mo-Sa 08:30-20:00; Su 10:00-20:00",
+          "organic": "only",
+          "shop": "supermarket",
+          "wheelchair": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 1611202691,
+        "lat": 52.3688459,
+        "lon": 4.9036621,
+        "tags": {
+          "addr:city": "Amsterdam",
+          "addr:housenumber": "21",
+          "addr:postcode": "1011NH",
+          "addr:street": "Jodenbreestraat",
+          "brand": "Albert Heijn",
+          "brand:wikidata": "Q1653985",
+          "brand:wikipedia": "nl:Albert Heijn (supermarkt)",
+          "check_date": "2025-02-12",
+          "check_date:opening_hours": "2021-08-17",
+          "description": "AH [Amsterdam] Jodenbreestraat 21",
+          "name": "Albert Heijn",
+          "opening_hours": "Mo-Su 08:00-22:00",
+          "payment:debit_cards": "yes",
+          "payment:maestro": "yes",
+          "phone": "+31 20 624 1249",
+          "ref": "1567",
+          "shop": "supermarket",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "website": "https://www.ah.nl/winkel/1567",
+          "wheelchair": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 2672987288,
+        "lat": 52.3671715,
+        "lon": 4.9022284,
+        "tags": {
+          "name": "Waterlooplein",
+          "public_transport": "stop_position",
+          "railway": "tram_stop",
+          "tram": "yes",
+          "wikidata": "Q111397560"
+        }
+      },
+      {
+        "type": "node",
+        "id": 2673071064,
+        "lat": 52.3677535,
+        "lon": 4.9058474,
+        "tags": {
+          "name": "Meester Visserplein",
+          "public_transport": "stop_position",
+          "railway": "tram_stop",
+          "tram": "yes",
+          "wheelchair": "yes",
+          "wikidata": "Q111397558"
+        }
+      },
+      {
+        "type": "node",
+        "id": 3332544994,
+        "lat": 52.3687652,
+        "lon": 4.9045019,
+        "tags": {
+          "bench": "no",
+          "bus": "yes",
+          "highway": "bus_stop",
+          "name": "Waterlooplein",
+          "public_transport": "platform",
+          "ref:IFOPT": "NL:Q:30005051",
+          "shelter": "no",
+          "tactile_paving": "no",
+          "zone": "5700"
+        }
+      },
+      {
+        "type": "node",
+        "id": 4446826076,
+        "lat": 52.3661817,
+        "lon": 4.9058942,
+        "tags": {
+          "addr:city": "Amsterdam",
+          "addr:housenumber": "1-2-3",
+          "addr:postcode": "1018TZ",
+          "addr:street": "Hortusplantsoen",
+          "amenity": "school",
+          "check_date": "2024-10-26",
+          "name": "Reinwardt Academie",
+          "operator": "AHK",
+          "website": "https://ahk.nl/reinwardt",
+          "wikidata": "Q2072098",
+          "wikipedia": "nl:Reinwardt Academie"
+        }
+      },
+      {
+        "type": "node",
+        "id": 4623266154,
+        "lat": 52.3687054,
+        "lon": 4.9045597,
+        "tags": {
+          "bus": "yes",
+          "name": "Amsterdam, Waterlooplein",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "node",
+        "id": 5189113176,
+        "lat": 52.3691906,
+        "lon": 4.9027308,
+        "tags": {
+          "addr:city": "Amsterdam",
+          "addr:housenumber": "11",
+          "addr:postcode": "1011NG",
+          "addr:street": "Jodenbreestraat",
+          "branch": "Amsterdam Jodenbreestraat",
+          "brand": "Jumbo",
+          "brand:website": "https://www.jumbo.com",
+          "brand:wikidata": "Q2262314",
+          "brand:wikipedia": "nl:Jumbo Supermarkten",
+          "check_date": "2025-02-12",
+          "check_date:opening_hours": "2021-08-17",
+          "name": "Jumbo",
+          "opening_hours": "Mo-Su 08:00-22:00",
+          "payment:american_express": "yes",
+          "payment:cash": "yes",
+          "payment:cash:machine": "cashier",
+          "payment:credit_cards": "yes",
+          "payment:debit_cards": "yes",
+          "phone": "+31 20 723 0990",
+          "shop": "supermarket",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "website": "https://www.jumbo.com/winkel/amsterdam/jumbo-amsterdam-jodenbreestraat",
+          "wheelchair": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 7060609968,
+        "lat": 52.3686934,
+        "lon": 4.9048316,
+        "tags": {
+          "bus": "yes",
+          "highway": "bus_stop",
+          "name": "Waterlooplein",
+          "public_transport": "platform",
+          "ref:IFOPT": "NL:Q:30005054",
+          "zone": "5700"
+        }
+      },
+      {
+        "type": "node",
+        "id": 7060609969,
+        "lat": 52.3687141,
+        "lon": 4.9048175,
+        "tags": {
+          "bus": "yes",
+          "name": "Amsterdam, Waterlooplein",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "node",
+        "id": 7106870068,
+        "lat": 52.3666262,
+        "lon": 4.9036061,
+        "tags": {
+          "name": "Waterlooplein",
+          "network": "Amsterdam Metro",
+          "public_transport": "stop_position",
+          "railway": "stop",
+          "station": "subway",
+          "subway": "yes",
+          "wheelchair": "yes",
+          "zone": "5700"
+        }
+      },
+      {
+        "type": "node",
+        "id": 7106870071,
+        "lat": 52.3666905,
+        "lon": 4.9037527,
+        "tags": {
+          "name": "Waterlooplein",
+          "network": "Amsterdam Metro",
+          "public_transport": "stop_position",
+          "railway": "stop",
+          "station": "subway",
+          "subway": "yes",
+          "wheelchair": "yes",
+          "zone": "5700"
+        }
+      },
+      {
+        "type": "node",
+        "id": 7223335082,
+        "lat": 52.3671599,
+        "lon": 4.9022613,
+        "tags": {
+          "bench": "yes",
+          "bin": "yes",
+          "bus": "yes",
+          "highway": "bus_stop",
+          "name": "Waterlooplein",
+          "public_transport": "platform",
+          "ref:IFOPT": "NL:Q:30005052",
+          "shelter": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 7223335083,
+        "lat": 52.3670031,
+        "lon": 4.901957,
+        "tags": {
+          "bench": "yes",
+          "bin": "yes",
+          "bus": "yes",
+          "highway": "bus_stop",
+          "name": "Waterlooplein",
+          "public_transport": "platform",
+          "ref:IFOPT": "NL:Q:30005053",
+          "shelter": "yes"
+        }
+      },
+      {
+        "type": "node",
+        "id": 7223335084,
+        "lat": 52.3669892,
+        "lon": 4.9020043,
+        "tags": {
+          "bus": "yes",
+          "name": "Amsterdam, Waterlooplein",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "node",
+        "id": 7223408585,
+        "lat": 52.367179,
+        "lon": 4.9022118,
+        "tags": {
+          "bus": "yes",
+          "name": "Amsterdam, Waterlooplein",
+          "public_transport": "stop_position"
+        }
+      },
+      {
+        "type": "way",
+        "id": 4376560,
+        "center": {
+          "lat": 52.367865,
+          "lon": 4.9086539
+        },
+        "tags": {
+          "leisure": "park",
+          "name": "Wertheimpark",
+          "wikidata": "Q3149634",
+          "wikimedia_commons": "Category:Wertheimpark",
+          "wikipedia": "nl:Wertheimpark"
+        }
+      },
+      {
+        "type": "way",
+        "id": 268782305,
+        "center": {
+          "lat": 52.3673901,
+          "lon": 4.9024643
+        },
+        "tags": {
+          "addr:city": "Amsterdam",
+          "addr:postcode": "1011RL",
+          "layer": "-1",
+          "level": "-1",
+          "name": "Waterlooplein",
+          "network": "Amsterdamse metro",
+          "operator": "Gemeentelijk Vervoerbedrijf",
+          "public_transport": "station",
+          "railway": "station",
+          "ref:bag": "0363100012164935",
+          "source": "BAG",
+          "source:date": "2014-03-24",
+          "start_date": "1980-10-11",
+          "station": "subway",
+          "subway": "yes",
+          "website": "https://gvb.nl/reisinformatie/halte/NL:S:30009508",
+          "wikidata": "Q2486332",
+          "wikimedia_commons": "Category:Metrostation Waterlooplein",
+          "wikipedia": "nl:Waterlooplein (metrostation)"
+        }
+      },
+      {
+        "type": "way",
+        "id": 545032852,
+        "center": {
+          "lat": 52.3662647,
+          "lon": 4.9066943
+        },
+        "tags": {
+          "leisure": "park",
+          "name": "Hortusplantsoen",
+          "wikidata": "Q7476523",
+          "wikimedia_commons": "Category:Hortusplantsoen, Amsterdam",
+          "wikipedia": "nl:Hortusplantsoen"
+        }
+      }
+    ]
+  }
+}

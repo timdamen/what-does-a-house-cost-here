@@ -1,0 +1,1703 @@
+{
+  "recordedAt": "2026-09-18T03:17:26.290Z",
+  "request": {
+    "method": "POST",
+    "url": "https://overpass-api.de/api/interpreter",
+    "form": {
+      "data": "[out:json][timeout:25];\nnwr[\"building\"~\"^(house|detached|semidetached_house|terrace|apartments|residential|bungalow)$\"](around:250,51.5385,-0.1025);\nout center tags 301;"
+    }
+  },
+  "response": {
+    "version": 0.6,
+    "generator": "Overpass API 0.7.62.11 87bfad18",
+    "osm3s": {
+      "timestamp_osm_base": "2026-09-18T03:15:51Z",
+      "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+    },
+    "elements": [
+      {
+        "type": "way",
+        "id": 27821165,
+        "center": {
+          "lat": 51.5390397,
+          "lon": -0.1034321
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "6",
+          "name": "11 Esther Anne Place"
+        }
+      },
+      {
+        "type": "way",
+        "id": 27821166,
+        "center": {
+          "lat": 51.5384752,
+          "lon": -0.1032168
+        },
+        "tags": {
+          "building": "apartments",
+          "building:levels": "5",
+          "fixme": "Exact location needed",
+          "name": "17 Esther Anne Place",
+          "note": "Est. completion Dec 2011: Mixed housing+business",
+          "source": "Info poster in window of closing post office elsewhere on upper street"
+        }
+      },
+      {
+        "type": "way",
+        "id": 30724406,
+        "center": {
+          "lat": 51.5404305,
+          "lon": -0.1005971
+        },
+        "tags": {
+          "building": "apartments",
+          "name": "Canonbury Court (17-31)"
+        }
+      },
+      {
+        "type": "way",
+        "id": 30724408,
+        "center": {
+          "lat": 51.5401923,
+          "lon": -0.100788
+        },
+        "tags": {
+          "building": "apartments",
+          "name": "Canonbury Court (1-16)"
+        }
+      },
+      {
+        "type": "way",
+        "id": 30724419,
+        "center": {
+          "lat": 51.5400868,
+          "lon": -0.1013609
+        },
+        "tags": {
+          "building": "apartments",
+          "name": "Canonbury Court (133-141)"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023701,
+        "center": {
+          "lat": 51.5405114,
+          "lon": -0.1042712
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "13",
+          "addr:street": "Waterloo Terrace",
+          "building": "house",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023702,
+        "center": {
+          "lat": 51.5405154,
+          "lon": -0.1042049
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "12",
+          "addr:street": "Waterloo Terrace",
+          "building": "house",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023703,
+        "center": {
+          "lat": 51.5405194,
+          "lon": -0.1041386
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "11",
+          "addr:street": "Waterloo Terrace",
+          "building": "house",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023704,
+        "center": {
+          "lat": 51.5405234,
+          "lon": -0.1040724
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "10",
+          "addr:street": "Waterloo Terrace",
+          "building": "house",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023705,
+        "center": {
+          "lat": 51.5405274,
+          "lon": -0.104006
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "9",
+          "addr:street": "Waterloo Terrace",
+          "building": "house",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023706,
+        "center": {
+          "lat": 51.5405314,
+          "lon": -0.1039399
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "8",
+          "addr:street": "Waterloo Terrace",
+          "building": "house",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023707,
+        "center": {
+          "lat": 51.5405354,
+          "lon": -0.1038736
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "7",
+          "addr:street": "Waterloo Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023708,
+        "center": {
+          "lat": 51.5405394,
+          "lon": -0.1038072
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "6",
+          "addr:street": "Waterloo Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023713,
+        "center": {
+          "lat": 51.5399442,
+          "lon": -0.1041567
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "1-4",
+          "addr:street": "Napier Terrace",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023714,
+        "center": {
+          "lat": 51.5400585,
+          "lon": -0.1041635
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "5-8",
+          "addr:street": "Napier Terrace",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023715,
+        "center": {
+          "lat": 51.5401727,
+          "lon": -0.1041703
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "9-12",
+          "addr:street": "Napier Terrace",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023716,
+        "center": {
+          "lat": 51.540287,
+          "lon": -0.1041772
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "13-16",
+          "addr:street": "Napier Terrace",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023718,
+        "center": {
+          "lat": 51.5403222,
+          "lon": -0.1045048
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "20",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023719,
+        "center": {
+          "lat": 51.5402697,
+          "lon": -0.1045017
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "21",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023720,
+        "center": {
+          "lat": 51.5402172,
+          "lon": -0.1044986
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "22",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023721,
+        "center": {
+          "lat": 51.5401648,
+          "lon": -0.1044956
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "23",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023722,
+        "center": {
+          "lat": 51.5401123,
+          "lon": -0.1044926
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "24",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023723,
+        "center": {
+          "lat": 51.5400598,
+          "lon": -0.1044896
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "25",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023725,
+        "center": {
+          "lat": 51.5399549,
+          "lon": -0.1044836
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "27",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023726,
+        "center": {
+          "lat": 51.5399024,
+          "lon": -0.1044805
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "28",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023727,
+        "center": {
+          "lat": 51.5398499,
+          "lon": -0.1044774
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "29",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31023728,
+        "center": {
+          "lat": 51.5397974,
+          "lon": -0.1044744
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "30",
+          "addr:street": "Napier Terrace",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024250,
+        "center": {
+          "lat": 51.5394397,
+          "lon": -0.104253
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "12",
+          "addr:street": "Almeida Street",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024251,
+        "center": {
+          "lat": 51.5394362,
+          "lon": -0.1043238
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "13",
+          "addr:street": "Almeida Street",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024252,
+        "center": {
+          "lat": 51.5394327,
+          "lon": -0.1043946
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "14",
+          "addr:street": "Almeida Street",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024253,
+        "center": {
+          "lat": 51.5394292,
+          "lon": -0.1044652
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "15",
+          "addr:street": "Almeida Street",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024273,
+        "center": {
+          "lat": 51.540269,
+          "lon": -0.1047861
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "6",
+          "addr:street": "Milner Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024274,
+        "center": {
+          "lat": 51.5402147,
+          "lon": -0.1047881
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "7",
+          "addr:street": "Milner Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024275,
+        "center": {
+          "lat": 51.5401603,
+          "lon": -0.1047902
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "8",
+          "addr:street": "Milner Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024276,
+        "center": {
+          "lat": 51.540106,
+          "lon": -0.1047923
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "9",
+          "addr:street": "Milner Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024277,
+        "center": {
+          "lat": 51.5400516,
+          "lon": -0.1047944
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "10",
+          "addr:street": "Milner Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024278,
+        "center": {
+          "lat": 51.5399973,
+          "lon": -0.1047965
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "11",
+          "addr:street": "Milner Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024279,
+        "center": {
+          "lat": 51.5399429,
+          "lon": -0.1047985
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "12",
+          "addr:street": "Milner Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024280,
+        "center": {
+          "lat": 51.5398885,
+          "lon": -0.1048006
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "13",
+          "addr:street": "Milner Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024522,
+        "center": {
+          "lat": 51.5386645,
+          "lon": -0.1050848
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "49",
+          "addr:street": "Gibson Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024523,
+        "center": {
+          "lat": 51.5387135,
+          "lon": -0.1050829
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "48",
+          "addr:street": "Gibson Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024529,
+        "center": {
+          "lat": 51.539007,
+          "lon": -0.1050717
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "2",
+          "addr:street": "Milner Place",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024566,
+        "center": {
+          "lat": 51.5382915,
+          "lon": -0.1061238
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "28",
+          "addr:street": "Gibson Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024567,
+        "center": {
+          "lat": 51.5382448,
+          "lon": -0.1061255
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "27",
+          "addr:street": "Gibson Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024568,
+        "center": {
+          "lat": 51.5381981,
+          "lon": -0.1061271
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "26",
+          "addr:street": "Gibson Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024569,
+        "center": {
+          "lat": 51.5381514,
+          "lon": -0.1061286
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "25",
+          "addr:street": "Gibson Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024570,
+        "center": {
+          "lat": 51.5381047,
+          "lon": -0.1061304
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "24",
+          "addr:street": "Gibson Square",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024581,
+        "center": {
+          "lat": 51.5376656,
+          "lon": -0.1047477
+        },
+        "tags": {
+          "addr:postcode": "N1 0QX",
+          "building": "house",
+          "house": "terraced",
+          "ref:GB:uprn": "5300090075",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024586,
+        "center": {
+          "lat": 51.5376684,
+          "lon": -0.1043724
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:postcode": "N1 0QX",
+          "building": "terrace",
+          "ref:GB:uprn": "5300090065",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024593,
+        "center": {
+          "lat": 51.5376719,
+          "lon": -0.103922
+        },
+        "tags": {
+          "building": "terrace"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024597,
+        "center": {
+          "lat": 51.5380823,
+          "lon": -0.1048871
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "17",
+          "addr:street": "Moon Street",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024598,
+        "center": {
+          "lat": 51.5380832,
+          "lon": -0.1048228
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "16",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064183",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024599,
+        "center": {
+          "lat": 51.5380842,
+          "lon": -0.1047587
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "15",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064182",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024600,
+        "center": {
+          "lat": 51.5380852,
+          "lon": -0.1046943
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "14",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064181",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024601,
+        "center": {
+          "lat": 51.5380861,
+          "lon": -0.1046301
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "13",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064180",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024602,
+        "center": {
+          "lat": 51.5380871,
+          "lon": -0.1045658
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "12",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064179",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024603,
+        "center": {
+          "lat": 51.5380881,
+          "lon": -0.1045015
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "11",
+          "addr:street": "Moon Street",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024605,
+        "center": {
+          "lat": 51.53809,
+          "lon": -0.1043731
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "9",
+          "addr:street": "Moon Street",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024606,
+        "center": {
+          "lat": 51.5380909,
+          "lon": -0.1043089
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "8",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064173",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024607,
+        "center": {
+          "lat": 51.5380919,
+          "lon": -0.1042446
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "7",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064172",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024608,
+        "center": {
+          "lat": 51.5380928,
+          "lon": -0.1041804
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "6",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064171",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024609,
+        "center": {
+          "lat": 51.5380939,
+          "lon": -0.1041161
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "5",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064170",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024610,
+        "center": {
+          "lat": 51.5380949,
+          "lon": -0.1040519
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "4",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064169",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024611,
+        "center": {
+          "lat": 51.5380958,
+          "lon": -0.1039876
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "3",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064168",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024612,
+        "center": {
+          "lat": 51.5380967,
+          "lon": -0.1039235
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "2",
+          "addr:postcode": "N1 0QU",
+          "addr:street": "Moon Street",
+          "building": "house",
+          "ref:GB:uprn": "5300064167",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31024613,
+        "center": {
+          "lat": 51.5380978,
+          "lon": -0.1038592
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "1",
+          "addr:street": "Moon Street",
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31067057,
+        "center": {
+          "lat": 51.5405823,
+          "lon": -0.1018548
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "49A",
+          "addr:street": "Florence Street",
+          "building": "apartments",
+          "name": "Florence Court"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31307474,
+        "center": {
+          "lat": 51.5376279,
+          "lon": -0.1029705
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "100",
+          "addr:street": "Upper Street",
+          "building": "apartments",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31307477,
+        "center": {
+          "lat": 51.5378503,
+          "lon": -0.1028513
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "106A",
+          "addr:street": "Upper Street",
+          "building": "apartments",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31307478,
+        "center": {
+          "lat": 51.5378175,
+          "lon": -0.1028822
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "106",
+          "addr:street": "Upper Street",
+          "building": "apartments",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31307479,
+        "center": {
+          "lat": 51.5377835,
+          "lon": -0.1029006
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "105",
+          "addr:street": "Upper Street",
+          "building": "apartments",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31307483,
+        "center": {
+          "lat": 51.5385988,
+          "lon": -0.1024996
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "121",
+          "addr:street": "Upper Street",
+          "building": "apartments",
+          "building:levels": "4"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31320332,
+        "center": {
+          "lat": 51.5364377,
+          "lon": -0.1037685
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "76",
+          "addr:street": "Upper Street",
+          "building": "apartments",
+          "building:levels": "3",
+          "roof:levels": "1",
+          "roof:shape": "gambrel"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31320333,
+        "center": {
+          "lat": 51.5364901,
+          "lon": -0.1037497
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "77",
+          "addr:street": "Upper Street",
+          "building": "apartments",
+          "building:levels": "3",
+          "roof:levels": "1",
+          "roof:shape": "gambrel"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31320334,
+        "center": {
+          "lat": 51.5365419,
+          "lon": -0.1037312
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "78",
+          "addr:street": "Upper Street",
+          "building": "apartments",
+          "building:levels": "3",
+          "roof:levels": "1",
+          "roof:shape": "gambrel"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31324416,
+        "center": {
+          "lat": 51.5367588,
+          "lon": -0.1030539
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "330",
+          "addr:street": "Upper Street",
+          "amenity": "restaurant",
+          "building": "apartments",
+          "check_date": "2023-06-04",
+          "diet:vegan": "yes",
+          "indoor_seating": "yes",
+          "name": "KOD",
+          "outdoor_seating": "no",
+          "payment:credit_cards": "yes",
+          "payment:debit_cards": "yes",
+          "phone": "+44 20 8037 7393",
+          "takeaway": "yes",
+          "website": "https://kod-uk.com/"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31342860,
+        "center": {
+          "lat": 51.5380514,
+          "lon": -0.1022547
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "303",
+          "addr:street": "Upper Street",
+          "addr:suburb": "Islington",
+          "building": "residential"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31342862,
+        "center": {
+          "lat": 51.5379498,
+          "lon": -0.102312
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:street": "Upper Street",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31342863,
+        "center": {
+          "lat": 51.5379054,
+          "lon": -0.1023383
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:street": "Upper Street",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31539115,
+        "center": {
+          "lat": 51.5376816,
+          "lon": -0.1019359
+        },
+        "tags": {
+          "building": "apartments",
+          "name": "Victor Cazalet House"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31539116,
+        "center": {
+          "lat": 51.5379283,
+          "lon": -0.1019
+        },
+        "tags": {
+          "building": "apartments",
+          "name": "Salisbury House"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31539121,
+        "center": {
+          "lat": 51.5376295,
+          "lon": -0.1012825
+        },
+        "tags": {
+          "building": "apartments",
+          "name": "Robinson Court"
+        }
+      },
+      {
+        "type": "way",
+        "id": 31539123,
+        "center": {
+          "lat": 51.5379368,
+          "lon": -0.1009323
+        },
+        "tags": {
+          "building": "apartments",
+          "name": "St Mary's House"
+        }
+      },
+      {
+        "type": "way",
+        "id": 34064936,
+        "center": {
+          "lat": 51.5376224,
+          "lon": -0.0996801
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housename": "Gough House",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 40996731,
+        "center": {
+          "lat": 51.5366149,
+          "lon": -0.1044129
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:street": "St. Alban's Place",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 46108146,
+        "center": {
+          "lat": 51.5391487,
+          "lon": -0.0994402
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housename": "Arundel House",
+          "addr:street": "Halton Road",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 67524688,
+        "center": {
+          "lat": 51.5369359,
+          "lon": -0.1007319
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:flats": "1-9",
+          "addr:housenumber": "40",
+          "addr:street": "Essex Road",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 68390146,
+        "center": {
+          "lat": 51.5386957,
+          "lon": -0.0996357
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "7,9",
+          "addr:street": "Cross Street",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 68422890,
+        "center": {
+          "lat": 51.5391195,
+          "lon": -0.0991506
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housename": "Fircroft",
+          "building": "apartments",
+          "building:levels": "4"
+        }
+      },
+      {
+        "type": "way",
+        "id": 68422892,
+        "center": {
+          "lat": 51.5388851,
+          "lon": -0.0992018
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housename": "Fircroft",
+          "building": "apartments",
+          "building:levels": "4"
+        }
+      },
+      {
+        "type": "way",
+        "id": 68424246,
+        "center": {
+          "lat": 51.5381726,
+          "lon": -0.0991425
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:housenumber": "74,72A",
+          "addr:street": "Essex Road",
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 68431708,
+        "center": {
+          "lat": 51.5381943,
+          "lon": -0.1005153
+        },
+        "tags": {
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 68431709,
+        "center": {
+          "lat": 51.5379506,
+          "lon": -0.1003805
+        },
+        "tags": {
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 250671811,
+        "center": {
+          "lat": 51.5386161,
+          "lon": -0.1012037
+        },
+        "tags": {
+          "building": "house"
+        }
+      },
+      {
+        "type": "way",
+        "id": 250671813,
+        "center": {
+          "lat": 51.5366438,
+          "lon": -0.1022418
+        },
+        "tags": {
+          "building": "apartments",
+          "fixme": "Break up into separate buildings using cadastral parcel layer"
+        }
+      },
+      {
+        "type": "way",
+        "id": 250671815,
+        "center": {
+          "lat": 51.5374257,
+          "lon": -0.1019468
+        },
+        "tags": {
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 250671817,
+        "center": {
+          "lat": 51.5369336,
+          "lon": -0.1013203
+        },
+        "tags": {
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 250671818,
+        "center": {
+          "lat": 51.5373264,
+          "lon": -0.1015676
+        },
+        "tags": {
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 259657090,
+        "center": {
+          "lat": 51.5364801,
+          "lon": -0.1042893
+        },
+        "tags": {
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 288355244,
+        "center": {
+          "lat": 51.5405502,
+          "lon": -0.10289
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "159",
+          "addr:postcode": "N1 1US",
+          "addr:street": "Upper Street",
+          "brand": "Shelter",
+          "brand:wikidata": "Q7493943",
+          "building": "apartments",
+          "name": "Shelter",
+          "opening_hours": "Mo-Sa 10:00-18:00; Su 11:00-17:00",
+          "shop": "charity",
+          "source": "Survey of 2014-06-16"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021312,
+        "center": {
+          "lat": 51.5371385,
+          "lon": -0.1047134
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "1",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021313,
+        "center": {
+          "lat": 51.537138,
+          "lon": -0.1052153
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "10",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021314,
+        "center": {
+          "lat": 51.5371379,
+          "lon": -0.1052712
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "11",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021315,
+        "center": {
+          "lat": 51.5371385,
+          "lon": -0.1047692
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "2",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021316,
+        "center": {
+          "lat": 51.5371385,
+          "lon": -0.104825
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "3",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021317,
+        "center": {
+          "lat": 51.5371384,
+          "lon": -0.1048807
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "4",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021318,
+        "center": {
+          "lat": 51.5371383,
+          "lon": -0.1049365
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "5",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021319,
+        "center": {
+          "lat": 51.5371382,
+          "lon": -0.1049923
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "6",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021320,
+        "center": {
+          "lat": 51.5371382,
+          "lon": -0.1050481
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "7",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021321,
+        "center": {
+          "lat": 51.537138,
+          "lon": -0.1051038
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "8",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 317021322,
+        "center": {
+          "lat": 51.537138,
+          "lon": -0.1051596
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "9",
+          "addr:postcode": "N1 0YW",
+          "addr:street": "Water Tower Place",
+          "building": "house",
+          "house": "terraced"
+        }
+      },
+      {
+        "type": "way",
+        "id": 457424347,
+        "center": {
+          "lat": 51.5402651,
+          "lon": -0.1005499
+        },
+        "tags": {
+          "building": "apartments"
+        }
+      },
+      {
+        "type": "way",
+        "id": 933923893,
+        "center": {
+          "lat": 51.5363808,
+          "lon": -0.1007076
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:country": "GB",
+          "addr:housenumber": "11-13",
+          "addr:postcode": "N1 8HX",
+          "addr:street": "Elliott's Place",
+          "addr:suburb": "Islington",
+          "building": "apartments",
+          "building:levels": "3"
+        }
+      },
+      {
+        "type": "way",
+        "id": 1218238520,
+        "center": {
+          "lat": 51.538009,
+          "lon": -0.1015698
+        },
+        "tags": {
+          "addr:city": "London",
+          "addr:postcode": "N1 2RR",
+          "building": "house",
+          "building:levels": "2",
+          "ref:GB:uprn": "5300086269",
+          "roof:levels": "1",
+          "source:addr:postcode": "ONSUD;OS Open UPRN"
+        }
+      },
+      {
+        "type": "relation",
+        "id": 74096,
+        "center": {
+          "lat": 51.5387115,
+          "lon": -0.1043154
+        },
+        "tags": {
+          "building": "apartments",
+          "name": "8 Esther Anne Place",
+          "type": "multipolygon"
+        }
+      }
+    ]
+  }
+}

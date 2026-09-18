@@ -64,3 +64,10 @@ Pinned in ticket 05:
 | Package | Version | Reason |
 | --- | --- | --- |
 | zod | 4.6.5 | Direct dependency of `apps/web` for query and body validation in the server routes (already in the table above; added here when it became a real dependency). |
+
+Pinned in ticket 04, verified with `npm view` on 2026-09-17:
+
+| Package | Version | Reason |
+| --- | --- | --- |
+| p-limit | 7.3.2 | Concurrency limit in the `@house-cost/open-data` HTTP client (already listed above; now a dependency of `packages/open-data`). |
+| @types/node | 26.6.1 | devDependency of `packages/open-data` so `fetch`, `Response` and `node:fs` (recording script) typecheck under pnpm's strict `node_modules`; same version as `apps/web`. |
