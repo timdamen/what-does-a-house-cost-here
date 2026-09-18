@@ -1,7 +1,17 @@
+import { fileURLToPath } from 'node:url';
 import { version } from './package.json';
 
 /** Identifies this deployment to the open-data services (Nominatim requires it). */
 const defaultUserAgent = `what-does-a-house-cost-here/${version} (+https://github.com/timdamen/what-does-a-house-cost-here)`;
+
+/**
+ * True on Vercel (the platform and `vercel build` set `VERCEL=1`, which also makes Nitro pick its
+ * `vercel` preset) and for an explicit `NITRO_PRESET=vercel` build. Vercel's project root is the
+ * repository root (`vercel.json` there), and Vercel looks for the Build Output API directory at
+ * `<project root>/.vercel/output`, while Nitro's preset writes it next to this app. Redirect it.
+ */
+const buildingForVercel = Boolean(process.env.VERCEL) || process.env.NITRO_PRESET === 'vercel';
+const vercelOutputDir = fileURLToPath(new URL('../../.vercel/output', import.meta.url));
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -49,6 +59,13 @@ export default defineNuxtConfig({
     // Pre-compress `.output/public` (brotli and gzip) so the node server sends `_nuxt` assets
     // compressed; the Lighthouse budgets in `budget.json` are transfer sizes.
     compressPublicAssets: true,
+    ...(buildingForVercel ? { output: { dir: vercelOutputDir } } : {}),
+    vercel: {
+      // Written to the server function's `.vc-config.json`. Cold Overpass-bound routes take
+      // 2-5.5 s (ticket 11), so the function needs well over Vercel's 10 s default; the runtime
+      // matches `.nvmrc` (Nitro 2.13 would otherwise fall back to `nodejs22.x`).
+      functions: { maxDuration: 30, runtime: 'nodejs24.x' },
+    },
   },
 
   hooks: {
