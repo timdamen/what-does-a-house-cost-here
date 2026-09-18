@@ -25,6 +25,7 @@ const { position: userPosition } = useGeolocation();
 const config = useRuntimeConfig();
 
 const {
+  result: housesResult,
   houses,
   truncated,
   cap,
@@ -33,6 +34,7 @@ const {
   refresh: refreshHouses,
 } = useHouses(location, radius);
 const {
+  result: factsResult,
   facts,
   countryCode,
   status: factsStatus,
@@ -117,6 +119,23 @@ function onHeaderKeydown(event: KeyboardEvent) {
     searchOpen.value = false;
   }
 }
+
+// Neighbourhood Facts (ticket 10): provenance for "About this data" and the Amenity the map
+// should point at. A new Location drops the focus; ADR-0006 collapses the sheet to half so the
+// map is visible when an Amenity is focused.
+const factsProvenance = computed(() => factsResult.value?.provenance ?? null);
+const housesProvenance = computed(() => housesResult.value?.provenance ?? null);
+const amenityFocus = ref<Location | null>(null);
+
+function onFocusAmenity(target: Location) {
+  // A fresh object so tapping the same Amenity again reveals it again.
+  amenityFocus.value = { lat: target.lat, lng: target.lng };
+  sheetSnap.value = 'half';
+}
+
+watch(location, () => {
+  amenityFocus.value = null;
+});
 </script>
 
 <template>
@@ -168,6 +187,7 @@ function onHeaderKeydown(event: KeyboardEvent) {
         :selected-house-id="selectedHouseId"
         :user-position="userPosition"
         :country-code="countryCode"
+        :amenity-focus="amenityFocus"
         peek-height="var(--sheet-peek)"
         :test-hook="config.public.testHooks"
         @select="onSelect"
@@ -233,14 +253,14 @@ function onHeaderKeydown(event: KeyboardEvent) {
           </p>
           <USkeleton v-else class="h-4 w-28" />
         </div>
-        <div
-          v-if="factsStatus !== 'success'"
-          class="grid grid-cols-2 gap-2"
-          aria-busy="true"
-          data-testid="neighbourhood-skeleton"
-        >
-          <USkeleton v-for="n in 4" :key="n" class="h-20 w-full" />
-        </div>
+        <NeighbourhoodFacts
+          :facts="facts"
+          :provenance="factsProvenance"
+          :houses-provenance="housesProvenance"
+          :status="factsStatus"
+          :country-code="countryCode"
+          @focus-amenity="onFocusAmenity"
+        />
       </section>
     </BottomSheet>
   </div>
