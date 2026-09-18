@@ -1,6 +1,6 @@
 # 03 Domain package: types, ports, geo helpers, fixture providers
 
-Status: ready-for-agent
+Status: done
 Type: task
 Blocked by: 02
 
@@ -21,3 +21,13 @@ Spec sections "Data Provider port" and glossary; user story 50. Build `@house-co
 
 - `pnpm quality` green. Contract test passes against the fixture provider.
 - `packages/domain/README.md` documents the port in a few lines.
+
+## Comments
+
+- Done. `pnpm quality` green; 40 domain tests including the contract suite against the fixture provider. No new dependencies.
+- Public API (`@house-cost/domain`, `exports["."]` -> `src/index.ts`): types `Location`, `SearchArea`, `House`, `HouseAddress`, `BuildingType`, `PriceSignal` (adds `houseId` so signals join back to Houses), `NeighbourhoodFacts`, `NeighbourhoodHierarchy`, `PriceSummary`, `Amenity`, `AmenityClass`, `HousingMix`, `Provenance`, `GeocodeResult`; unions as consts `BUILDING_TYPES`, `PRICE_SIGNAL_KINDS`, `PRICE_SIGNAL_SCOPES`, `AMENITY_CLASSES`.
+- Ports: `DataProvider`, `Geocoder`, `ProviderResult<T>`, `HouseSearchResult` (`data`, `cap`, `truncated`, `provenance`), `NeighbourhoodFactsResult`, `PriceSignalsResult`, `GeocodeSearchResult`, `HOUSE_CAP` (300). Errors: `UpstreamError` class (`kind: 'upstream'`, `service`, `retryable`, `toJSON`), `isUpstreamError`.
+- Geo: `haversineMetres`, `walkingMinutes` (`WALKING_SPEED_METRES_PER_MINUTE` 80, `WALKING_DETOUR_FACTOR` 1.3), `boundingBox` -> `{ south, west, north, east }`, `isWithinArea`, `roundLocation` (`LOCATION_DECIMALS` 4), `offsetLocation`, `EARTH_RADIUS_METRES`. Format: `formatPrice`, `formatPriceAbbreviated` (`€312k`, `€1.3M`, locale-positioned symbol), `localeForCountryCode`, `DEFAULT_LOCALE`. Helpers for adapters: `countHousingMix`, `isBuildingType`.
+- Fixtures: `createFixtureProvider({ now?, houseCount?, cap? })`, `createFixtureGeocoder({ now? })`, `AMSTERDAM_CENTRE` (122 Houses, EUR signals on about half, full facts), `SYDNEY_CENTRE` (58 Houses, `AU`, `priceSummary: null`, no signals), `FIXTURE_SOURCE` (`'fixture'`), `FIXTURE_PLACES`. Nearest fixture area serves any Location; `houseCount: 400` exercises the cap.
+- Subpath `@house-cost/domain/testing` (`exports["./testing"]` -> `src/testing.ts`, re-exporting `test/contract/data-provider.contract.ts`): `runDataProviderContract(name, factory)` where the factory returns `{ provider, pricedArea, unpricedArea }` (sync or async). Verified importable from `@house-cost/open-data` tests under pnpm strict `node_modules`; keep it out of app code because it imports Vitest.
+- `DOMAIN_PACKAGE_NAME` is kept because `apps/web/server/api/health.get.ts` and `@house-cost/open-data` still import it.
