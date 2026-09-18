@@ -19,7 +19,7 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  modules: ['@nuxt/ui', '@nuxt/image', '@nuxt/fonts', '@nuxt/icon', '@nuxt/test-utils/module'],
+  modules: ['@nuxt/ui', '@nuxt/image', '@nuxt/icon', '@nuxt/test-utils/module'],
 
   css: ['~/assets/css/main.css'],
 
