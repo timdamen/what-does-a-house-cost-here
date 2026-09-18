@@ -3,28 +3,35 @@ import {
   HOUSE_CAP,
   roundLocation,
   type DataProvider,
-  type House,
+  type HouseRef,
   type Location,
   type Provenance,
   type SearchArea,
 } from '@house-cost/domain';
 
 import { createHttpClient, type FetchLike, type HttpClient } from './http-client';
-import { createNominatimClient, NOMINATIM_SOURCE, NOMINATIM_URL } from './nominatim';
+import { createTtlMemo } from './memo';
+import {
+  createNominatimClient,
+  NOMINATIM_SOURCE,
+  NOMINATIM_URL,
+  type NominatimClient,
+} from './nominatim';
 import { fetchAmenities } from './overpass/amenities';
 import { OVERPASS_SOURCE, OVERPASS_URL } from './overpass/client';
-import { searchHousesOverpass } from './overpass/houses';
+import { searchHousesOverpass, type OverpassHouseSearch } from './overpass/houses';
 import { createLandRegistryAdapter, LAND_REGISTRY_URL } from './prices/land-registry-gb';
-import { createPriceRegistry, type PriceAdapter, type PriceRegistry } from './prices/registry';
+import { createPriceRegistry, type PriceAdapter } from './prices/registry';
 
 /** Default concurrency across all upstream services. */
 export const DEFAULT_CONCURRENCY = 2;
 
 /**
- * Radius, in metres, within which `getNeighbourhoodFacts` gathers amenities and the housing mix.
- * Matches the app's default Search Radius.
+ * How long a `searchHouses` answer is kept so `getNeighbourhoodFacts` for the same Search Area
+ * (the app requests both at once) reuses it instead of running the Overpass query twice.
  */
-export const DEFAULT_FACTS_RADIUS_METRES = 500;
+export const HOUSES_MEMO_TTL_MS = 10 * 60 * 1000;
+const HOUSES_MEMO_ENTRIES = 64;
 
 export interface OpenDataOptions {
   /** Identifying `User-Agent`, e.g. `what-does-a-house-cost-here/0.1 (+https://example.org)`. */
@@ -38,39 +45,38 @@ export interface OpenDataOptions {
   overpassUrl?: string;
   nominatimUrl?: string;
   landRegistryUrl?: string;
-  /** See `DEFAULT_FACTS_RADIUS_METRES`. */
-  factsRadiusMetres?: number;
   /** Replaces the default price adapters (HM Land Registry for `GB`). */
   priceAdapters?: readonly PriceAdapter[];
 }
 
-interface OpenDataRuntime {
+/**
+ * What the provider and the geocoder share: one HTTP client (so the concurrency limit holds
+ * across both) and one Nominatim client (so its single-slot, once-per-second gate does too).
+ * Build it once per process with `createOpenDataRuntime` and hand it to both factories.
+ */
+export interface OpenDataRuntime {
   client: HttpClient;
+  nominatim: NominatimClient;
   now: () => Date;
   overpassUrl: string;
-  nominatimUrl: string;
-  registry: PriceRegistry;
-  factsRadiusMetres: number;
+  landRegistryUrl: string;
+  priceAdapters: readonly PriceAdapter[] | undefined;
 }
 
-/** Resolves options to defaults and builds the shared HTTP client. Also used by the geocoder. */
+/** Resolves options to defaults and builds the shared HTTP and Nominatim clients. */
 export function createOpenDataRuntime(options: OpenDataOptions): OpenDataRuntime {
   const client = createHttpClient({
     userAgent: options.userAgent,
     concurrency: options.concurrency ?? DEFAULT_CONCURRENCY,
     ...(options.fetch ? { fetch: options.fetch } : {}),
   });
-  const now = options.now ?? (() => new Date());
-  const adapters = options.priceAdapters ?? [
-    createLandRegistryAdapter({ client, url: options.landRegistryUrl ?? LAND_REGISTRY_URL, now }),
-  ];
   return {
     client,
-    now,
+    nominatim: createNominatimClient(client, options.nominatimUrl ?? NOMINATIM_URL),
+    now: options.now ?? (() => new Date()),
     overpassUrl: options.overpassUrl ?? OVERPASS_URL,
-    nominatimUrl: options.nominatimUrl ?? NOMINATIM_URL,
-    registry: createPriceRegistry(adapters),
-    factsRadiusMetres: options.factsRadiusMetres ?? DEFAULT_FACTS_RADIUS_METRES,
+    landRegistryUrl: options.landRegistryUrl ?? LAND_REGISTRY_URL,
+    priceAdapters: options.priceAdapters,
   };
 }
 
@@ -84,33 +90,45 @@ export function createOpenDataRuntime(options: OpenDataOptions): OpenDataRuntime
  * or `nominatim` when only the country lookup ran.
  *
  * Locations are rounded to 4 decimals before any upstream call so equal inputs produce equal
- * requests (and cache keys).
+ * requests (and cache keys). The Houses of a Search Area are memoised for `HOUSES_MEMO_TTL_MS`
+ * because the facts need them too (the Housing Mix and the register's postcodes) and the app
+ * asks for Houses and facts at the same moment.
  */
-export function createOpenDataProvider(options: OpenDataOptions): DataProvider {
-  const runtime = createOpenDataRuntime(options);
-  const { client, now, overpassUrl, registry } = runtime;
-  const nominatim = createNominatimClient(client, runtime.nominatimUrl);
+export function createOpenDataProvider(runtime: OpenDataRuntime): DataProvider {
+  const { client, nominatim, now, overpassUrl } = runtime;
+  const registry = createPriceRegistry(
+    runtime.priceAdapters ?? [
+      createLandRegistryAdapter({ client, url: runtime.landRegistryUrl, now }),
+    ],
+  );
+  const housesMemo = createTtlMemo<OverpassHouseSearch>({
+    ttlMs: HOUSES_MEMO_TTL_MS,
+    maxEntries: HOUSES_MEMO_ENTRIES,
+    now: () => now().getTime(),
+  });
 
   const provenance = (source: string): Provenance => ({ source, fetchedAt: now().toISOString() });
 
+  /** Houses of a rounded Search Area, shared between the two operations that need them. */
+  const housesIn = (area: SearchArea) =>
+    housesMemo.get(areaKey(area), () => searchHousesOverpass(client, overpassUrl, area, HOUSE_CAP));
+
   return {
     async searchHouses(area) {
-      const rounded = roundArea(area);
-      const result = await searchHousesOverpass(client, overpassUrl, rounded, HOUSE_CAP);
+      const result = await housesIn(roundArea(area));
       return { ...result, provenance: provenance(OVERPASS_SOURCE) };
     },
 
-    async getNeighbourhoodFacts(location) {
-      const centre = roundLocation(location);
-      const area: SearchArea = { centre, radiusMetres: runtime.factsRadiusMetres };
+    async getNeighbourhoodFacts(area) {
+      const rounded = roundArea(area);
       const [place, houses, amenities] = await Promise.all([
-        nominatim.reverse(centre),
-        searchHousesOverpass(client, overpassUrl, area, HOUSE_CAP),
-        fetchAmenities(client, overpassUrl, area),
+        nominatim.reverse(rounded.centre),
+        housesIn(rounded),
+        fetchAmenities(client, overpassUrl, rounded),
       ]);
 
       const adapter = registry.adapterFor(place.hierarchy.countryCode);
-      const priceSummary = adapter ? await adapter.getPriceSummary(area, houses.data) : null;
+      const priceSummary = adapter ? await adapter.getPriceSummary(houses.data) : null;
       const sources = [NOMINATIM_SOURCE, OVERPASS_SOURCE, ...(adapter ? [adapter.source] : [])];
 
       return {
@@ -140,8 +158,12 @@ function roundArea(area: SearchArea): SearchArea {
   return { centre: roundLocation(area.centre), radiusMetres: area.radiusMetres };
 }
 
+function areaKey(area: SearchArea): string {
+  return `${area.centre.lat}:${area.centre.lng}:${area.radiusMetres}`;
+}
+
 /** Arithmetic mean of the House locations; good enough to pick a country. */
-function centroid(houses: readonly House[]): Location {
+function centroid(houses: readonly HouseRef[]): Location {
   let lat = 0;
   let lng = 0;
   for (const house of houses) {

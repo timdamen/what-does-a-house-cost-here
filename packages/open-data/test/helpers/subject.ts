@@ -1,6 +1,12 @@
 import type { Location, SearchArea } from '@house-cost/domain';
 
-import { createOpenDataProvider, type OpenDataOptions } from '../../src/provider';
+import { createNominatimGeocoder } from '../../src/geocoder';
+import {
+  createOpenDataProvider,
+  createOpenDataRuntime,
+  type OpenDataOptions,
+  type OpenDataRuntime,
+} from '../../src/provider';
 import { createFixtureFetch, type FixtureFetch } from './fixture-fetch';
 
 /** Centres the fixtures were recorded around (see `scripts/record-fixtures.ts`). */
@@ -29,19 +35,25 @@ export const FIXED_NOW = new Date('2024-01-15T12:00:00Z');
 export const TEST_USER_AGENT = 'house-cost-tests/0.0.0 (+https://example.test)';
 
 export interface TestSubject {
+  runtime: OpenDataRuntime;
   provider: ReturnType<typeof createOpenDataProvider>;
+  geocoder: ReturnType<typeof createNominatimGeocoder>;
   fetch: FixtureFetch;
 }
 
-/** The open-data provider wired to the fixture stub, with radii matching the recordings. */
+/** The open-data runtime, provider and geocoder wired to the fixture stub and the fixed clock. */
 export function createTestSubject(overrides: Partial<OpenDataOptions> = {}): TestSubject {
   const fetch = createFixtureFetch();
-  const provider = createOpenDataProvider({
+  const runtime = createOpenDataRuntime({
     userAgent: TEST_USER_AGENT,
     fetch,
     now: () => FIXED_NOW,
-    factsRadiusMetres: RECORDED_RADIUS_METRES,
     ...overrides,
   });
-  return { provider, fetch };
+  return {
+    runtime,
+    provider: createOpenDataProvider(runtime),
+    geocoder: createNominatimGeocoder(runtime),
+    fetch,
+  };
 }
